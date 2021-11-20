@@ -24,6 +24,9 @@ function onImageError(event) {
 
 function populateVehicles(idx) {
 	if (!vehicleElements) {
+		vehicleMinIdx = 0;
+		vehicleMaxIdx = numVehicles - 1;
+		vehicleIdx = 0;
 		vehicleElements = [];
 
 		let container = app.querySelector(".veh-item-container");
@@ -43,11 +46,39 @@ function populateVehicles(idx) {
 			label.textContent = vehicle.model;
 
 			item.classList.add("veh-item");
-			if (i == 0) item.classList.add("veh-selected");
+			if (i == 0) 
+				item.classList.add("veh-selected");
 			item.appendChild(image);
 			item.appendChild(label);
 			container.appendChild(item);
 			vehicleElements.push(item);
+		}
+
+		return;
+	}
+
+	let selectedVehicle = vehicleElements[vehicleIdx - vehicleMinIdx];
+	vehicleMinIdx = 0;
+	vehicleMaxIdx = numVehicles - 1;
+	vehicleIdx = 0;
+
+	for (let i = 0; i < vehicleElements.length; i++) {
+		let item = vehicleElements[i];
+		let image = item.children[0];
+		let label = item.children[1];
+		let vehicle = data.vehicles[idx][i];
+
+		if (!vehicle)
+			continue;
+
+		image.onerror = onImageError;
+		image.src = `../img/${vehicle.model}.png`;
+
+		label.textContent = vehicle.model;
+
+		if (i == 0) {
+			selectedVehicle.classList.remove("veh-selected");
+			item.classList.add("veh-selected");
 		}
 	}
 }
