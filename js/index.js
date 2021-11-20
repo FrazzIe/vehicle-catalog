@@ -21,6 +21,7 @@ function populateCategories() {
 
 	item.classList.add("class-item", "class-selected");
 	item.textContent = data.categories[0];
+	item.dataset.idx = 0;
 
 	container.appendChild(item);
 
@@ -29,6 +30,7 @@ function populateCategories() {
 
 		item.classList.add("class-item");
 		item.textContent = data.categories[i];
+		item.dataset.idx = i;
 
 		container.appendChild(item);
 	}	
