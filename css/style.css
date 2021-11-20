@@ -38,7 +38,6 @@ body {
 .class-item.class-selected {
 	background-color: rgb(52, 152, 219);
 	color: white;
-	flex-grow: 1.2;
 }
 
 .class-item:nth-child(even) {
