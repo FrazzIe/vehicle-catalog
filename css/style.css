@@ -126,6 +126,7 @@ body {
 	border: solid rgba(0, 0, 0, 0.5);
 	border-width: 0 15px 15px 0;	
 	padding: 3px;
+	z-index: 1;
 }
 
 .veh-arrow:hover {
