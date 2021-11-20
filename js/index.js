@@ -17,6 +17,23 @@ function show(val) {
 		app.style.display = "none";
 }
 
+function onVehicleClicked(event) {
+	let target = event.currentTarget;
+	let idx = target.dataset.idx;
+
+	if (!vehicleElements[idx])
+		return;
+
+	let selectedVehicle = vehicleElements[vehicleIdx - vehicleMinIdx];
+
+	if (target == selectedVehicle)
+		return;
+	
+	selectedVehicle.classList.remove("veh-selected");
+	target.classList.add("veh-selected");
+	vehicleIdx = vehicleMinIdx + idx;
+}
+
 function onImageError(event) {
 	let target = event.currentTarget;
 	target.onerror = null;
@@ -47,8 +64,10 @@ function populateVehicles(idx) {
 			label.textContent = vehicle.model;
 
 			item.classList.add("veh-item");
-			if (i == 0) 
+			if (i == 0)
 				item.classList.add("veh-selected");
+			item.dataset.idx = i;
+			item.onclick = onVehicleClicked;
 			item.appendChild(image);
 			item.appendChild(label);
 			container.appendChild(item);
