@@ -18,8 +18,9 @@ function show(val) {
 }
 
 function onImageError(event) {
-	event.target.onerror = null;
-	event.target.src = "../img/default.png";
+	let target = event.currentTarget;
+	target.onerror = null;
+	target.src = "../img/default.png";
 }
 
 function populateVehicles(idx) {
@@ -84,7 +85,7 @@ function populateVehicles(idx) {
 }
 
 function onCategoryClicked(event) {
-	let target = event.target;
+	let target = event.currentTarget;
 	let idx = target.dataset.idx;
 
 	if (data.vehicles.length <= idx)
