@@ -1,7 +1,13 @@
 import { data } from "./data.js";
 
+const numVehicles = 5;
+
 let app = document.getElementById("app");
 let selectedCategory;
+let vehicleElements;
+let vehicleMinIdx;
+let vehicleMaxIdx;
+let vehicleIdx;
 
 function show(val) {
 	let show = val === true;
@@ -9,6 +15,41 @@ function show(val) {
 		app.style.display = "initial";
 	else
 		app.style.display = "none";
+}
+
+function onImageError(event) {
+	event.target.onerror = null;
+	event.target.src = "../img/default.png";
+}
+
+function populateVehicles(idx) {
+	if (!vehicleElements) {
+		vehicleElements = [];
+
+		let container = app.querySelector(".veh-item-container");
+
+		for (let i = 0; i < numVehicles; i++) {
+			let item = document.createElement("div");
+			let image = document.createElement("img");
+			let label = document.createElement("div");
+			let vehicle = data.vehicles[idx][i];
+
+			if (!vehicle)
+				continue;
+
+			image.onerror = onImageError;
+			image.src = `../img/${vehicle.model}.png`;
+
+			label.textContent = vehicle.model;
+
+			item.classList.add("veh-item");
+			if (i == 0) item.classList.add("veh-selected");
+			item.appendChild(image);
+			item.appendChild(label);
+			container.appendChild(item);
+			vehicleElements.push(item);
+		}
+	}
 }
 
 function onCategoryClicked(event) {
@@ -24,6 +65,8 @@ function onCategoryClicked(event) {
 
 	selectedCategory = target;
 	selectedCategory.classList.add("class-selected");
+
+	populateVehicles(idx);
 }
 
 function populateCategories() {
@@ -42,17 +85,21 @@ function populateCategories() {
 
 	container.appendChild(item);
 	selectedCategory = item;
+	
+	if (numCategories > 1) {
+		for (let i = 1; i < numCategories; i++) {
+			let item = document.createElement("button");
 
-	for (let i = 1; i < numCategories; i++) {
-		let item = document.createElement("button");
+			item.classList.add("class-item");
+			item.textContent = data.categories[i];
+			item.dataset.idx = i;
+			item.onclick = onCategoryClicked;
 
-		item.classList.add("class-item");
-		item.textContent = data.categories[i];
-		item.dataset.idx = i;
-		item.onclick = onCategoryClicked;
-
-		container.appendChild(item);
+			container.appendChild(item);
+		}
 	}
+
+	populateVehicles(0);
 }
 
 function init() {
