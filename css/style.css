@@ -1,0 +1,152 @@
+body {
+	padding: 0px;
+	margin: 0px;
+	background-image: url("../img/bg.png");
+	background-size: auto;
+}
+
+.slide-container {
+	position: absolute;
+	bottom: 0%;
+	width: 100%;
+	height: 35%;
+}
+
+.class-container {
+	width: 100%;
+	height: 15%;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+}
+
+.class-item {
+	width: 20%;
+	height: 100%;	
+	border: 2px solid rgb(52, 152, 219);
+	background-color: rgb(245, 245, 245);
+	flex-grow: 1;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: medium;
+}
+
+.class-item:hover {
+	background-color: rgb(52, 152, 219);
+	color: white;
+}
+
+.class-item.class-selected {
+	background-color: rgb(52, 152, 219);
+	color: white;
+}
+
+.class-item:nth-child(even) {
+	border-left: none;
+	border-right: none;
+}
+
+.class-item:first-child {
+	border-left: none;
+}
+
+.class-item:last-child {
+	border-right: none;
+}
+
+.veh-item-container {
+	width: 100%;
+	height: 85%;
+	background-color: rgba(140, 140, 140, 0.8);
+	/* top: 50%;
+	transform: translateY(-50%); */
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	justify-content: space-around;
+	align-items: center;
+}
+
+.veh-item {
+	position: relative;
+	flex: 1;
+	width: 25%;
+	height: 80%;
+	border: 2px solid;
+	transition: all 0.3s ease;
+	margin-left: 5px;
+	margin-right: 5px;
+}
+
+.veh-item:hover {
+	border-color: #3498DB;
+	width: 40%;
+	height: 85%;
+	flex-grow: 1.08;
+}
+
+.veh-item.veh-selected {
+	width: 40%;
+	height: 95%;
+	flex-grow: 1.2;
+	border-color: #3498DB;
+	border-width: 3px;
+}
+
+.veh-item img {
+	width: 100%;
+	height: 100%;
+}
+
+.veh-item div {
+	position: absolute;
+	bottom: 0%;
+	left: 0%;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: larger;
+	background-color: black;
+	color: white;
+	padding: 2.5px;
+	transition: all 0.3s ease;
+}
+
+.veh-item.veh-selected div {
+	background-color: #3498DB;
+}
+
+.veh-item:hover div {
+	background-color: #3498DB;
+}
+
+.veh-arrow {
+	position: absolute;
+	display: inline-block;
+	width: 75px;
+	height: 75px;
+	border: solid rgba(0, 0, 0, 0.5);
+	border-width: 0 15px 15px 0;	
+	padding: 3px;
+}
+
+.veh-arrow:hover {
+	border-color: rgba(0, 0, 0, 0.8);
+}
+
+.veh-arrow.left {
+	left: 2%;
+	transform: rotate(135deg);
+}
+
+.veh-arrow.right {
+	right: 2%;
+	transform: rotate(-45deg);
+}
+
+.info-container {
+	position: absolute;
+	top: 32.5%;
+	transform: translateY(-50%);
+	right: 5%;
+	width: 25%;
+	height: 40%;
+	background-color: rgba(0, 0, 0, 0.24);
+}
