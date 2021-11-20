@@ -21,11 +21,11 @@ body {
 }
 
 .class-item {
+	flex: 1;
 	width: 20%;
 	height: 100%;	
 	border: 2px solid rgb(52, 152, 219);
 	background-color: rgb(245, 245, 245);
-	flex-grow: 1;
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: medium;
 }
@@ -38,6 +38,7 @@ body {
 .class-item.class-selected {
 	background-color: rgb(52, 152, 219);
 	color: white;
+	flex-grow: 1.2;
 }
 
 .class-item:nth-child(even) {
