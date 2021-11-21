@@ -20,9 +20,16 @@ function changeSlider(category, increment) {
 	if (!data.vehicles[category])
 		return;
 
-	let idx = vehicleIdx + increment; //0-4 + (amount) // 3 (4) + 3 = 6 (7) 6 - (5 - 1) = 2  // 3 + 8 = 11 (12) - (5 - 1) = 7
+	let idx = vehicleIdx + increment;
 
-	//if change will past max
+	if (idx >= 0 && idx < vehicleIndexes.length) {
+		vehicleElements[vehicleIdx].classList.remove("veh-selected");
+		vehicleElements[idx].classList.add("veh-selected");
+		vehicleIdx = idx;
+		return;
+	}
+
+	//if change will pass max
 	if (idx >= vehicleIndexes.length) {
 		//amount of items to remove from array
 		let deleteCount = increment;
@@ -47,6 +54,7 @@ function changeSlider(category, increment) {
 		idx = vehicleIndexes.length - 1;
 	}
 
+	//if change will pass min
 	if (idx < 0) {
 		//amount of items to remove from array
 		let deleteCount = increment;
@@ -54,9 +62,7 @@ function changeSlider(category, increment) {
 		if (deleteCount < -vehicleIndexes.length)
 			deleteCount = -vehicleIndexes.length;
 
-		console.log(`delete: ${deleteCount}`);
 		for (let i = increment; i < 0; i++) {
-			console.log(`increment: ${i}`);
 			let firstIdx = vehicleIndexes[0];
 			let newIdx = firstIdx - 1;
 
@@ -103,7 +109,7 @@ function setupArrows() {
 	rightArrow.onclick = function(event) {
 		console.log(event);
 		let category = selectedCategory.dataset.idx;
-		changeSlider(category, 5);
+		changeSlider(category, 1);
 	}
 }
 
