@@ -18,7 +18,10 @@ function show(val) {
 
 function onVehicleClicked(event) {
 	let target = event.currentTarget;
-	let idx = target.dataset.idx;
+	let idx = parseInt(target.dataset.idx);
+
+	if (isNaN(idx))
+		return;
 
 	if (!vehicleElements[idx])
 		return;
