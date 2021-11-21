@@ -5,8 +5,7 @@ const numVehicles = 5;
 let app = document.getElementById("app");
 let selectedCategory;
 let vehicleElements;
-let vehicleMinIdx;
-let vehicleMaxIdx;
+let vehicleIndexes;
 let vehicleIdx;
 
 function show(val) {
@@ -24,14 +23,14 @@ function onVehicleClicked(event) {
 	if (!vehicleElements[idx])
 		return;
 
-	let selectedVehicle = vehicleElements[vehicleIdx - vehicleMinIdx];
+	let selectedVehicle = vehicleElements[vehicleIdx];
 
 	if (target == selectedVehicle)
 		return;
 	
 	selectedVehicle.classList.remove("veh-selected");
 	target.classList.add("veh-selected");
-	vehicleIdx = vehicleMinIdx + idx;
+	vehicleIdx = idx;
 }
 
 function onImageError(event) {
@@ -42,10 +41,9 @@ function onImageError(event) {
 
 function populateVehicles(idx) {
 	if (!vehicleElements) {
-		vehicleMinIdx = 0;
-		vehicleMaxIdx = numVehicles - 1;
-		vehicleIdx = 0;
 		vehicleElements = [];
+		vehicleIndexes = [];
+		vehicleIdx = 0;
 
 		let container = app.querySelector(".veh-item-container");
 
@@ -72,14 +70,14 @@ function populateVehicles(idx) {
 			item.appendChild(label);
 			container.appendChild(item);
 			vehicleElements.push(item);
+			vehicleIndexes.push(i);
 		}
 
 		return;
 	}
 
-	let selectedVehicle = vehicleElements[vehicleIdx - vehicleMinIdx];
-	vehicleMinIdx = 0;
-	vehicleMaxIdx = numVehicles - 1;
+	let selectedVehicle = vehicleElements[vehicleIdx];
+	vehicleIndexes = [];
 	vehicleIdx = 0;
 
 	for (let i = 0; i < vehicleElements.length; i++) {
@@ -100,6 +98,8 @@ function populateVehicles(idx) {
 			selectedVehicle.classList.remove("veh-selected");
 			item.classList.add("veh-selected");
 		}
+
+		vehicleIndexes.push(i);
 	}
 }
 
