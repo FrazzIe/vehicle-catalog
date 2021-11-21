@@ -97,11 +97,13 @@ function setupArrows() {
 	leftArrow.onclick = function(event) {
 		console.log(event);
 		let category = selectedCategory.dataset.idx;
+		changeSlider(category, -1);
 	}
 	
 	rightArrow.onclick = function(event) {
 		console.log(event);
 		let category = selectedCategory.dataset.idx;
+		changeSlider(category, 5);
 	}
 }
 
