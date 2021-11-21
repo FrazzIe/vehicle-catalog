@@ -100,16 +100,12 @@ function setupArrows() {
 	let leftArrow = document.querySelector(".veh-arrow.left");
 	let rightArrow = document.querySelector(".veh-arrow.right");
 
-	leftArrow.onclick = function(event) {
-		console.log(event);
-		let category = selectedCategory.dataset.idx;
-		changeSlider(category, -1);
+	leftArrow.onclick = function() {
+		changeSlider(selectedCategory.dataset.idx, -1);
 	}
 	
-	rightArrow.onclick = function(event) {
-		console.log(event);
-		let category = selectedCategory.dataset.idx;
-		changeSlider(category, 1);
+	rightArrow.onclick = function() {
+		changeSlider(selectedCategory.dataset.idx, 1);
 	}
 }
 
