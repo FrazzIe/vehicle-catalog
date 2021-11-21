@@ -16,6 +16,80 @@ function show(val) {
 		app.style.display = "none";
 }
 
+function changeSlider(category, increment) {
+	if (!data.vehicles[category])
+		return;
+
+	let idx = vehicleIdx + increment; //0-4 + (amount) // 3 (4) + 3 = 6 (7) 6 - (5 - 1) = 2  // 3 + 8 = 11 (12) - (5 - 1) = 7
+
+	//if change will past max
+	if (idx >= vehicleIndexes.length) {
+		//amount of items to remove from array
+		let deleteCount = increment;
+
+		if (deleteCount > vehicleIndexes.length)
+			deleteCount = vehicleIndexes.length;
+		
+		//add each new item in
+		for (let i = 0; i < increment; i++) {
+			let lastIdx = vehicleIndexes[vehicleIndexes.length - 1];
+			let newIdx = lastIdx + 1;
+
+			if (newIdx >= data.vehicles[category].length)
+				newIdx -= data.vehicles[category].length;
+			
+			vehicleIndexes.push(newIdx);
+		}
+
+		//delete redundent items
+		vehicleIndexes.splice(0, deleteCount);
+
+		idx = vehicleIndexes.length - 1;
+	}
+
+	if (idx < 0) {
+		//amount of items to remove from array
+		let deleteCount = increment;
+		
+		if (deleteCount < -vehicleIndexes.length)
+			deleteCount = -vehicleIndexes.length;
+
+		console.log(`delete: ${deleteCount}`);
+		for (let i = increment; i < 0; i++) {
+			console.log(`increment: ${i}`);
+			let firstIdx = vehicleIndexes[0];
+			let newIdx = firstIdx - 1;
+
+			if (newIdx < 0)
+				newIdx = data.vehicles[category].length - 1;
+
+			vehicleIndexes.splice(0, 0, newIdx);
+		}
+
+		//delete redundent items
+		vehicleIndexes.splice(deleteCount);
+
+		idx = 0;
+	}
+
+	for (let i = 0; i < vehicleIndexes.length; i++) {
+		let item = vehicleElements[i];
+		let image = item.children[0];
+		let label = item.children[1];
+		let vehicle = data.vehicles[category][vehicleIndexes[i]];
+
+		if (!vehicle)
+			continue;
+
+		image.onerror = onImageError;
+		image.src = `../img/${vehicle.model}.png`;
+
+		label.textContent = vehicle.model;
+	}
+
+	vehicleIdx = idx;
+}
+
 function setupArrows() {
 	let leftArrow = document.querySelector(".veh-arrow.left");
 	let rightArrow = document.querySelector(".veh-arrow.right");
