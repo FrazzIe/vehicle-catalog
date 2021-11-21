@@ -18,7 +18,12 @@ function show(val) {
 		app.style.display = "none";
 }
 
-function changeSlider(category, increment) {
+function changeSlider(increment, _category) {
+	let category = _category;
+
+	if (!_category && selectedCategory)
+		category = selectedCategory.dataset.idx;
+
 	if (!data.vehicles[category])
 		return;
 
@@ -123,11 +128,11 @@ function setupArrows() {
 	let rightArrow = document.querySelector(".veh-arrow.right");
 
 	leftArrow.onclick = function() {
-		changeSlider(selectedCategory.dataset.idx, -1);
+		changeSlider(-1);
 	}
 	
 	rightArrow.onclick = function() {
-		changeSlider(selectedCategory.dataset.idx, 1);
+		changeSlider(1);
 	}
 }
 
