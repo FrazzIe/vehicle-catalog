@@ -135,6 +135,10 @@ function onImageError(event) {
 	target.src = "../img/default.png";
 }
 
+function onImageDrag() {
+	return false;
+}
+
 function populateVehicles(idx) {
 	if (!vehicleElements) {
 		vehicleElements = [];
@@ -154,7 +158,7 @@ function populateVehicles(idx) {
 
 			image.onerror = onImageError;
 			image.src = `../img/${vehicle.model}.png`;
-
+			image.ondragstart = onImageDrag;
 			label.textContent = vehicle.model;
 
 			item.classList.add("veh-item");
