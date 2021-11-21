@@ -2,6 +2,7 @@ import { data } from "./data.js";
 import { startGamepadListener, stopGamepadListener } from "./gamepad.js";
 
 const numVehicles = 5;
+const buttonThreshold = 0.12;
 
 let app = document.getElementById("app");
 let selectedCategory;
@@ -95,6 +96,26 @@ function changeSlider(category, increment) {
 	}
 
 	vehicleIdx = idx;
+}
+
+function onGamepadButtonPressed(buttonIdx, value, data) {
+	console.log(buttonIdx, value, data);
+}
+
+function onGamepadTick(gamepads) {
+	for (let idx in gamepads) {
+		let pad = gamepads[idx];
+
+		if (pad.mapping != "standard")
+			continue;
+
+		for (let i = 0; i < pad.buttons.length; i++) {
+			let value = pad.buttons[i].value || pad.buttons[i];
+
+			if (value && value > buttonThreshold)
+				onGamepadButtonPressed(i, value, pad.buttons[i]);
+		}
+	}
 }
 
 function setupArrows() {
@@ -258,6 +279,7 @@ function init() {
 	// show(false);
 	populateCategories();
 	setupArrows();
+	startGamepadListener(onGamepadTick);
 }
 
 init();
