@@ -1,4 +1,5 @@
 import { data } from "./data.js";
+import { startGamepadListener, stopGamepadListener } from "./gamepad.js";
 
 const numVehicles = 5;
 
