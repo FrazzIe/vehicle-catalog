@@ -16,6 +16,21 @@ function show(val) {
 		app.style.display = "none";
 }
 
+function setupArrows() {
+	let leftArrow = document.querySelector(".veh-arrow.left");
+	let rightArrow = document.querySelector(".veh-arrow.right");
+
+	leftArrow.onclick = function(event) {
+		console.log(event);
+		let category = selectedCategory.dataset.idx;
+	}
+	
+	rightArrow.onclick = function(event) {
+		console.log(event);
+		let category = selectedCategory.dataset.idx;
+	}
+}
+
 function onVehicleClicked(event) {
 	let target = event.currentTarget;
 	let idx = parseInt(target.dataset.idx);
@@ -159,6 +174,7 @@ function populateCategories() {
 function init() {
 	// show(false);
 	populateCategories();
+	setupArrows();
 }
 
 init();
