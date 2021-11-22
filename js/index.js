@@ -21,6 +21,7 @@ function show(val) {
 		app.style.display = "none";
 }
 
+// issue: select middle use changeSlider(+4) only item 0,1 should change so [numVehicles - (current index + 1)]
 function changeSlider(increment, _category) {
 	let category = _category;
 
