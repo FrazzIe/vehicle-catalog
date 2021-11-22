@@ -6,7 +6,8 @@ const buttonThreshold = 0.12;
 const buttonInterval = 200;
 
 let app = document.getElementById("app");
-let selectedCategory;
+let categoryElements;
+let categoryIdx;
 let vehicleElements;
 let vehicleIndexes;
 let vehicleIdx;
@@ -23,8 +24,8 @@ function show(val) {
 function changeSlider(increment, _category) {
 	let category = _category;
 
-	if (!_category && selectedCategory)
-		category = selectedCategory.dataset.idx;
+	if (!_category && categoryIdx)
+		category = categoryIdx;
 
 	if (!data.vehicles[category])
 		return;
@@ -111,7 +112,6 @@ function changeSlider(increment, _category) {
 }
 
 function onGamepadButtonPressed(buttonIdx, value, data) {
-	console.log(buttonIdx, value, data);
 	let now = performance.now();
 
 	if (buttonIntervals[buttonIdx] && now - buttonIntervals[buttonIdx] <= buttonInterval) {
@@ -267,18 +267,21 @@ function populateVehicles(idx) {
 
 function onCategoryClicked(event) {
 	let target = event.currentTarget;
-	let idx = target.dataset.idx;
+	let idx = parseInt(target.dataset.idx);
+
+	if (isNaN(idx))
+		return;
 
 	if (data.vehicles.length <= idx)
 		return;
 
-	if (selectedCategory != null) {
-		selectedCategory.classList.remove("class-selected");
-	}
+	if (categoryElements[categoryIdx])
+		categoryElements[categoryIdx].classList.remove("class-selected");
 
-	selectedCategory = target;
-	selectedCategory.classList.add("class-selected");
+	if (categoryElements[idx])
+		categoryElements[idx].classList.add("class-selected");
 
+	categoryIdx = idx;
 	populateVehicles(idx);
 }
 
@@ -287,32 +290,26 @@ function populateCategories() {
 	let numCategories = data.categories.length;
 
 	if (numCategories == 0)
-		return;
-	
-	let item = document.createElement("button");
+		return;		
 
-	item.classList.add("class-item", "class-selected");
-	item.textContent = data.categories[0];
-	item.dataset.idx = 0;
-	item.onclick = onCategoryClicked;
+	categoryElements = [];
+	categoryIdx = 0;
 
-	container.appendChild(item);
-	selectedCategory = item;
-	
-	if (numCategories > 1) {
-		for (let i = 1; i < numCategories; i++) {
-			let item = document.createElement("button");
+	for (let i = 0; i < numCategories; i++) {
+		let item = document.createElement("button");
 
-			item.classList.add("class-item");
-			item.textContent = data.categories[i];
-			item.dataset.idx = i;
-			item.onclick = onCategoryClicked;
-
-			container.appendChild(item);
-		}
+		item.classList.add("class-item");
+		item.textContent = data.categories[i];
+		item.dataset.idx = i;
+		item.onclick = onCategoryClicked;
+		
+		container.appendChild(item);
+		categoryElements.push(item);
 	}
 
-	populateVehicles(0);
+	categoryElements[categoryIdx].classList.add("class-selected");
+
+	populateVehicles(categoryIdx);
 }
 
 function init() {
