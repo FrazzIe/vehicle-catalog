@@ -3,12 +3,14 @@ import { startGamepadListener, stopGamepadListener } from "./gamepad.js";
 
 const numVehicles = 5;
 const buttonThreshold = 0.12;
+const buttonInterval = 200;
 
 let app = document.getElementById("app");
 let selectedCategory;
 let vehicleElements;
 let vehicleIndexes;
 let vehicleIdx;
+let buttonIntervals = [];
 
 function show(val) {
 	let show = val === true;
@@ -105,6 +107,13 @@ function changeSlider(increment, _category) {
 
 function onGamepadButtonPressed(buttonIdx, value, data) {
 	console.log(buttonIdx, value, data);
+	let now = performance.now();
+
+	if (buttonIntervals[buttonIdx] && now - buttonIntervals[buttonIdx] <= buttonInterval) {
+		return;
+	}
+
+	buttonIntervals[buttonIdx] = now;
 }
 
 function onGamepadTick(gamepads) {
