@@ -21,6 +21,29 @@ function show(val) {
 		app.style.display = "none";
 }
 
+function changeCategory(increment) {
+	let idx = (Math.abs(increment) % data.categories.length);
+
+	if (increment < 0)
+		idx = categoryIdx - idx;
+	else
+		idx = categoryIdx + idx;
+
+	if (idx >= data.categories.length)
+		idx -= data.categories.length;
+	if (idx < 0)
+		idx = data.categories.length + idx;
+	console.log(categoryIdx, idx, increment, (Math.abs(increment) % data.categories.length));
+	if (categoryElements[categoryIdx])
+		categoryElements[categoryIdx].classList.remove("class-selected");
+
+	if (categoryElements[idx])
+		categoryElements[idx].classList.add("class-selected");
+
+	categoryIdx = idx;
+	populateVehicles(idx);
+}
+
 // issue: select middle use changeSlider(+4) only item 0,1 should change so [numVehicles - (current index + 1)]
 function changeSlider(increment, _category) {
 	let category = _category;
