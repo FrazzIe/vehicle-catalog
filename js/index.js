@@ -44,9 +44,6 @@ function changeSlider(increment, _category) {
 		//amount of items to remove from array
 		let deleteCount = increment;
 
-		if (deleteCount > vehicleIndexes.length)
-			deleteCount = vehicleIndexes.length;
-		
 		//add each new item in
 		for (let i = 0; i < increment; i++) {
 			let lastIdx = vehicleIndexes[vehicleIndexes.length - 1];
@@ -68,9 +65,6 @@ function changeSlider(increment, _category) {
 	if (idx < 0) {
 		//amount of items to remove from array
 		let deleteCount = increment;
-		
-		if (deleteCount < -vehicleIndexes.length)
-			deleteCount = -vehicleIndexes.length;
 
 		for (let i = increment; i < 0; i++) {
 			let firstIdx = vehicleIndexes[0];
