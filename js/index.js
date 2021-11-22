@@ -33,7 +33,7 @@ function changeCategory(increment) {
 		idx -= data.categories.length;
 	if (idx < 0)
 		idx = data.categories.length + idx;
-	console.log(categoryIdx, idx, increment, (Math.abs(increment) % data.categories.length));
+
 	if (categoryElements[categoryIdx])
 		categoryElements[categoryIdx].classList.remove("class-selected");
 
