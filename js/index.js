@@ -116,6 +116,10 @@ function onGamepadButtonPressed(buttonIdx, value, data) {
 	buttonIntervals[buttonIdx] = now;
 }
 
+function onGameButtonReleased(buttonIdx, value, data) {
+	delete buttonIntervals[buttonIdx];
+}
+
 function onGamepadTick(gamepads) {
 	for (let idx in gamepads) {
 		let pad = gamepads[idx];
@@ -128,6 +132,8 @@ function onGamepadTick(gamepads) {
 
 			if (value && value > buttonThreshold)
 				onGamepadButtonPressed(i, value, pad.buttons[i]);
+			else
+				onGameButtonReleased(i, value, pad.buttons[i]);
 		}
 	}
 }
