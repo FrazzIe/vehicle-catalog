@@ -100,6 +100,11 @@ function changeSlider(increment, _category) {
 		image.src = `../img/${vehicle.model}.png`;
 
 		label.textContent = vehicle.model;
+
+		if (i == idx) {
+			vehicleElements[vehicleIdx].classList.remove("veh-selected");
+			item.classList.add("veh-selected");
+		}
 	}
 
 	vehicleIdx = idx;
