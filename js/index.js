@@ -24,7 +24,7 @@ function show(val) {
 function changeSlider(increment, _category) {
 	let category = _category;
 
-	if (!_category && categoryIdx)
+	if (!_category && categoryIdx != null)
 		category = categoryIdx;
 
 	if (!data.vehicles[category])
