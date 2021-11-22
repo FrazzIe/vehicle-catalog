@@ -114,6 +114,21 @@ function onGamepadButtonPressed(buttonIdx, value, data) {
 	}
 
 	buttonIntervals[buttonIdx] = now;
+
+	switch(buttonIdx) {
+		case 14:
+			changeSlider(-1);
+			break;
+		case 15:
+			changeSlider(1);
+			break;
+		case 4:
+			changeSlider(-5);
+			break;
+		case 5:
+			changeSlider(5);
+			break;
+	}
 }
 
 function onGameButtonReleased(buttonIdx, value, data) {
