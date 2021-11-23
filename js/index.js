@@ -121,6 +121,17 @@ function changeSlider(increment, _category) {
 	vehicleIdx = idx;
 }
 
+function onKeyDown(event) {
+	if (event.defaultPrevented)
+		return;
+
+	switch(event.key) {
+
+	}
+
+	event.preventDefault();
+}
+
 function onGamepadButtonPressed(buttonIdx, value, data) {
 	let now = performance.now();
 
