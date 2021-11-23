@@ -13,14 +13,6 @@ let vehicleIndexes;
 let vehicleIdx;
 let buttonIntervals = [];
 
-function show(val) {
-	let show = val === true;
-	if (show)
-		app.style.display = "initial";
-	else
-		app.style.display = "none";
-}
-
 function changeCategory(increment) {
 	let idx = (Math.abs(increment) % data.categories.length);
 
@@ -328,6 +320,14 @@ function populateCategories() {
 	categoryElements[categoryIdx].classList.add("selected");
 
 	populateVehicles(categoryIdx);
+}
+
+function show(val) {
+	let show = val === true;
+	if (show)
+		app.style.display = "initial";
+	else
+		app.style.display = "none";
 }
 
 function init() {
