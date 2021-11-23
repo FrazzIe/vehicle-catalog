@@ -350,7 +350,6 @@ function init() {
 	// show(false);
 	populateCategories();
 	setupArrows();
-	startGamepadListener(onGamepadTick);
 }
 
 init();
