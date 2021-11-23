@@ -153,24 +153,24 @@ function onKeyDown(event) {
 		return;
 
 	switch(event.key) {
-		case "W":
+		case "w":
 		case "ArrowUp":
 			useSlider = false;
 			toggleHighlight(categoryElements[categoryIdx]);
 			break;
-		case "S":
+		case "s":
 		case "ArrowDown":
 			useSlider = true;
 			toggleHighlight(vehicleElements[vehicleIdx]);
 			break;
-		case "A":
+		case "a":
 		case "ArrowLeft":
 			if (useSlider)
 				changeSlider(-1);
 			else
 				changeCategory(-1);
 			break;
-		case "D":
+		case "d":
 		case "ArrowRight":
 			if (useSlider)
 				changeSlider(1);
