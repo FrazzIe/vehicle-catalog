@@ -146,10 +146,10 @@ function onGamepadButtonPressed(buttonIdx, value, data) {
 			changeSlider(1);
 			break;
 		case 4:
-			changeSlider(-5);
+			changeCategory(-1);
 			break;
 		case 5:
-			changeSlider(5);
+			changeCategory(1);			
 			break;
 	}
 }
