@@ -134,6 +134,21 @@ function toggleHighlight(element) {
 	}, 200);
 }
 
+function onWheel(event) {
+	if (event.deltaY < 0) {
+		if (useSlider)
+			changeSlider(-1);
+		else
+			changeCategory(-1);
+	}
+	else if (event.deltaY > 0) {
+		if (useSlider)
+			changeSlider(1);
+		else
+			changeCategory(1);
+	}
+}
+
 function onKeyDown(event) {
 	if (event.defaultPrevented)
 		return;
@@ -374,10 +389,12 @@ function show(val) {
 	if (show) {
 		app.style.display = "initial";
 		window.addEventListener("keydown", onKeyDown, false);
+		window.addEventListener("wheel", onWheel, false);
 		startGamepadListener(onGamepadTick);
 	} else {
 		app.style.display = "none";
 		window.removeEventListener("keydown", onKeyDown);
+		window.removeEventListener("wheel", onWheel);
 		stopGamepadListener();
 	}
 }
