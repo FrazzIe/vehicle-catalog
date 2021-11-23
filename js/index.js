@@ -12,6 +12,7 @@ let vehicleElements;
 let vehicleIndexes;
 let vehicleIdx;
 let buttonIntervals = [];
+let useSlider = false;
 
 function changeCategory(increment) {
 	let idx = (Math.abs(increment) % data.categories.length);
@@ -121,12 +122,47 @@ function changeSlider(increment, _category) {
 	vehicleIdx = idx;
 }
 
+function toggleHighlight(element) {
+	if (!element)
+		return;
+	
+	element.classList.add("active");
+
+	setTimeout(function() {
+		console.log("remove?")
+		element.classList.remove("active");
+	}, 200);
+}
+
 function onKeyDown(event) {
 	if (event.defaultPrevented)
 		return;
 
 	switch(event.key) {
-
+		case "W":
+		case "ArrowUp":
+			useSlider = false;
+			toggleHighlight(categoryElements[categoryIdx]);
+			break;
+		case "S":
+		case "ArrowDown":
+			useSlider = true;
+			toggleHighlight(vehicleElements[vehicleIdx]);
+			break;
+		case "A":
+		case "ArrowLeft":
+			if (useSlider)
+				changeSlider(-1);
+			else
+				changeCategory(-1);
+			break;
+		case "D":
+		case "ArrowRight":
+			if (useSlider)
+				changeSlider(1);
+			else
+				changeCategory(1);
+			break;
 	}
 
 	event.preventDefault();
@@ -347,7 +383,8 @@ function show(val) {
 }
 
 function init() {
-	// show(false);
+	show(false);
+	show(true);
 	populateCategories();
 	setupArrows();
 }
