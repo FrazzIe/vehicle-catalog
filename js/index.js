@@ -335,10 +335,15 @@ function populateCategories() {
 
 function show(val) {
 	let show = val === true;
-	if (show)
+	if (show) {
 		app.style.display = "initial";
-	else
+		window.addEventListener("keydown", onKeyDown, false);
+		startGamepadListener(onGamepadTick);
+	} else {
 		app.style.display = "none";
+		window.removeEventListener("keydown", onKeyDown);
+		stopGamepadListener();
+	}
 }
 
 function init() {
