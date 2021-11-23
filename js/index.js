@@ -35,10 +35,10 @@ function changeCategory(increment) {
 		idx = data.categories.length + idx;
 
 	if (categoryElements[categoryIdx])
-		categoryElements[categoryIdx].classList.remove("class-selected");
+		categoryElements[categoryIdx].classList.remove("selected");
 
 	if (categoryElements[idx])
-		categoryElements[idx].classList.add("class-selected");
+		categoryElements[idx].classList.add("selected");
 
 	categoryIdx = idx;
 	populateVehicles(idx);
@@ -57,8 +57,8 @@ function changeSlider(increment, _category) {
 	let idx = vehicleIdx + increment;
 
 	if (idx >= 0 && idx < vehicleIndexes.length) {
-		vehicleElements[vehicleIdx].classList.remove("veh-selected");
-		vehicleElements[idx].classList.add("veh-selected");
+		vehicleElements[vehicleIdx].classList.remove("selected");
+		vehicleElements[idx].classList.add("selected");
 		vehicleIdx = idx;
 		return;
 	}
@@ -121,8 +121,8 @@ function changeSlider(increment, _category) {
 		label.textContent = vehicle.model;
 
 		if (i == idx) {
-			vehicleElements[vehicleIdx].classList.remove("veh-selected");
-			item.classList.add("veh-selected");
+			vehicleElements[vehicleIdx].classList.remove("selected");
+			item.classList.add("selected");
 		}
 	}
 
@@ -177,8 +177,8 @@ function onGamepadTick(gamepads) {
 }
 
 function setupArrows() {
-	let leftArrow = document.querySelector(".veh-arrow.left");
-	let rightArrow = document.querySelector(".veh-arrow.right");
+	let leftArrow = document.querySelector(".arrow-container .arrow.left");
+	let rightArrow = document.querySelector(".arrow-container .arrow.right");
 
 	leftArrow.onclick = function() {
 		changeSlider(-1);
@@ -204,8 +204,8 @@ function onVehicleClicked(event) {
 	if (target == selectedVehicle)
 		return;
 	
-	selectedVehicle.classList.remove("veh-selected");
-	target.classList.add("veh-selected");
+	selectedVehicle.classList.remove("selected");
+	target.classList.add("selected");
 	vehicleIdx = idx;
 }
 
@@ -225,7 +225,7 @@ function populateVehicles(idx) {
 		vehicleIndexes = [];
 		vehicleIdx = 0;
 
-		let container = app.querySelector(".veh-item-container");
+		let container = app.querySelector(".item-container");
 
 		for (let i = 0; i < numVehicles; i++) {
 			let item = document.createElement("div");
@@ -241,9 +241,9 @@ function populateVehicles(idx) {
 			image.ondragstart = onImageDrag;
 			label.textContent = vehicle.model;
 
-			item.classList.add("veh-item");
+			item.classList.add("item");
 			if (i == 0)
-				item.classList.add("veh-selected");
+				item.classList.add("selected");
 			item.dataset.idx = i;
 			item.onclick = onVehicleClicked;
 			item.appendChild(image);
@@ -275,8 +275,8 @@ function populateVehicles(idx) {
 		label.textContent = vehicle.model;
 
 		if (i == 0) {
-			selectedVehicle.classList.remove("veh-selected");
-			item.classList.add("veh-selected");
+			selectedVehicle.classList.remove("selected");
+			item.classList.add("selected");
 		}
 
 		vehicleIndexes.push(i);
@@ -294,17 +294,17 @@ function onCategoryClicked(event) {
 		return;
 
 	if (categoryElements[categoryIdx])
-		categoryElements[categoryIdx].classList.remove("class-selected");
+		categoryElements[categoryIdx].classList.remove("selected");
 
 	if (categoryElements[idx])
-		categoryElements[idx].classList.add("class-selected");
+		categoryElements[idx].classList.add("selected");
 
 	categoryIdx = idx;
 	populateVehicles(idx);
 }
 
 function populateCategories() {
-	let container = app.querySelector(".class-container");
+	let container = app.querySelector(".category-container");
 	let numCategories = data.categories.length;
 
 	if (numCategories == 0)
@@ -316,7 +316,7 @@ function populateCategories() {
 	for (let i = 0; i < numCategories; i++) {
 		let item = document.createElement("button");
 
-		item.classList.add("class-item");
+		item.classList.add("item");
 		item.textContent = data.categories[i];
 		item.dataset.idx = i;
 		item.onclick = onCategoryClicked;
@@ -325,7 +325,7 @@ function populateCategories() {
 		categoryElements.push(item);
 	}
 
-	categoryElements[categoryIdx].classList.add("class-selected");
+	categoryElements[categoryIdx].classList.add("selected");
 
 	populateVehicles(categoryIdx);
 }
