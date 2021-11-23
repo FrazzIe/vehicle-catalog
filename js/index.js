@@ -3,7 +3,7 @@ import { startGamepadListener, stopGamepadListener } from "./gamepad.js";
 
 const numVehicles = 5;
 const buttonThreshold = 0.12;
-const buttonInterval = 200;
+const buttonInterval = 140;
 
 let app = document.getElementById("app");
 let categoryElements;
