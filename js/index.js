@@ -129,7 +129,6 @@ function toggleHighlight(element) {
 	element.classList.add("active");
 
 	setTimeout(function() {
-		console.log("remove?")
 		element.classList.remove("active");
 	}, 200);
 }
