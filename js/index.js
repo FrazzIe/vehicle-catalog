@@ -4,6 +4,8 @@ import { startGamepadListener, stopGamepadListener } from "./gamepad.js";
 const numVehicles = 5;
 const buttonThreshold = 0.12;
 const buttonInterval = 140;
+const axesThreshold = 0.2;
+const axesInterval = 160;
 
 let app = document.getElementById("app");
 let categoryElements;
@@ -12,6 +14,7 @@ let vehicleElements;
 let vehicleIndexes;
 let vehicleIdx;
 let buttonIntervals = [];
+let axesIntervals = [];
 let useSlider = false;
 
 function changeCategory(increment) {
@@ -211,6 +214,36 @@ function onGameButtonReleased(buttonIdx, value, data) {
 	delete buttonIntervals[buttonIdx];
 }
 
+function onGamepadAxisActive(axisId, value) {
+	
+	let now = performance.now();
+
+	if (axesIntervals[axisId] && now - axesIntervals[axisId] <= axesInterval) {
+		return;
+	}
+
+	axesIntervals[axisId] = now;
+
+	switch(axisId) {
+		case 0:
+			let increment = value < 0 ? -1 : 1;
+			if (useSlider)
+					changeSlider(increment)
+				else
+					changeCategory(increment)
+			break;
+		case 3:
+			if (value < 0) {
+				useSlider = false;
+				toggleHighlight(categoryElements[categoryIdx]);
+			} else {
+				useSlider = true;
+				toggleHighlight(vehicleElements[vehicleIdx]);
+			}
+			break;			
+	}
+}
+
 function onGamepadTick(gamepads) {
 	for (let idx in gamepads) {
 		let pad = gamepads[idx];
@@ -225,6 +258,11 @@ function onGamepadTick(gamepads) {
 				onGamepadButtonPressed(i, value, pad.buttons[i]);
 			else
 				onGameButtonReleased(i, value, pad.buttons[i]);
+		}
+
+		for (let i = 0; i < pad.axes.length; i++) {
+			if (pad.axes[i] > axesThreshold || pad.axes[i] < -axesThreshold)
+				onGamepadAxisActive(i, pad.axes[i]);
 		}
 	}
 }
