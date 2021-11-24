@@ -112,7 +112,7 @@ function changeSlider(increment, _category) {
 			continue;
 
 		image.onerror = onImageError;
-		image.src = `../img/${vehicle.model}.png`;
+		image.src = `./img/${vehicle.model}.png`;
 
 		label.textContent = vehicle.model;
 
@@ -303,7 +303,7 @@ function onVehicleClicked(event) {
 function onImageError(event) {
 	let target = event.currentTarget;
 	target.onerror = null;
-	target.src = "../img/default.png";
+	target.src = "./img/default.png";
 }
 
 function onImageDrag() {
@@ -328,7 +328,7 @@ function populateVehicles(idx) {
 				continue;
 
 			image.onerror = onImageError;
-			image.src = `../img/${vehicle.model}.png`;
+			image.src = `./img/${vehicle.model}.png`;
 			image.ondragstart = onImageDrag;
 			label.textContent = vehicle.model;
 
@@ -361,7 +361,7 @@ function populateVehicles(idx) {
 			continue;
 
 		image.onerror = onImageError;
-		image.src = `../img/${vehicle.model}.png`;
+		image.src = `./img/${vehicle.model}.png`;
 
 		label.textContent = vehicle.model;
 
