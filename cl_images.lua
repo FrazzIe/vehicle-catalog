@@ -20,7 +20,7 @@ function RemoveHud()
 		ThefeedHideThisFrame()
 
 		SetWeather("EXTRASUNNY")
-		NetworkOverrideClockTime(18, 0, 0)
+		NetworkOverrideClockTime(12, 0, 0)
 
 		Citizen.Wait(0);
 	end
