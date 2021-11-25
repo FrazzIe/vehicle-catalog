@@ -42,6 +42,20 @@ function captureVehicleImage(serverEndpoint, gameView, vehicle) {
 	let endpoint = serverEndpoint.split(':');
 	if (pattern.test(endpoint[0]))
 		serverEndpoint = `127.0.0.1:${endpoint[1]}`;
+
+	console.log(`https://${serverEndpoint}/${resourceName}`);
+
+	fetch(`http://${serverEndpoint}/${resourceName}/upload`, {
+		method: "POST",
+		mode: "cors",
+		body: formData
+	}).then(function(response) {
+		return response.json();
+	}).then(function(data) {
+		console.log(data);
+	}).catch(function(err) {
+		console.log(err);
+	});
 	// upload somewhere
 }
 
