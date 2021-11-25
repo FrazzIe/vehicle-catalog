@@ -38,6 +38,14 @@ function generateVehicleImages(data) {
 	}
 
 	gameView.animationFrame = void 0;
+
+	fetch(`http://${resourceName}/endImage`, {
+		method: "POST"
+	}).then(function(response) {
+
+	}).catch(function(err) {
+
+	})
 }
 
 export { generateVehicleImages }
