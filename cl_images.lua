@@ -6,6 +6,8 @@ local coords = {
 	}
 }
 local hideHud = false
+local cameraHandle = nil
+local lastVehicle = nil
 
 function RemoveHud()
 	hideHud = true
@@ -33,29 +35,45 @@ function SetWeather(weatherType)
     SetWeatherTypePersist(weatherType)
 end
 
-RegisterCommand("generate_vehicle_images", function(src, args, raw)
-	Citizen.CreateThread(RemoveHud)
+RegisterNUICallback("setupImage", function(data, cb)
+	if lastVehicle ~= nil then
+		DeleteVehicle(lastVehicle)
+	end
 
-	local handle = CreateCam("DEFAULT_SCRIPTED_CAMERA", true)
-	SetCamCoord(handle, coords.camera.pos.x, coords.camera.pos.y, coords.camera.pos.z)
-	SetCamRot(handle, coords.camera.rot.x, coords.camera.rot.y, coords.camera.rot.z, 2)
-	SetCamFov(handle, 45.0)
-	SetCamActive(handle, true)
-	RenderScriptCams(true, false, 0, 1, 0)
+	local model = data.model
+	
+	RequestModel(model)
 
-	RequestModel("entity2")
-
-	while not HasModelLoaded("entity2") do
+	while not HasModelLoaded(model) do
 		Citizen.Wait(200)
 	end
 
-	local vehicle = CreateVehicle("entity2", coords.vehicle.x, coords.vehicle.y, coords.vehicle.z, coords.vehicle.w, true, false)
-	Citizen.Wait(10000)
+	lastVehicle = CreateVehicle(model, coords.vehicle.x, coords.vehicle.y, coords.vehicle.z, coords.vehicle.w, true, false)
 
-	DeleteVehicle(vehicle)
+	Citizen.Wait(500)
 
-	SetCamActive(handle, false)
+	cb("ok")
+end)
+
+RegisterNUICallback("endImage", function(data, cb)
+	SetCamActive(cameraHandle, false)
 	RenderScriptCams(false, false, 0, 1, 0)
 
 	hideHud = false
+
+	cb("ok")
+end)
+
+RegisterCommand("generate_vehicle_images", function(src, args, raw)
+	Citizen.CreateThread(RemoveHud)
+	
+	cameraHandle = CreateCam("DEFAULT_SCRIPTED_CAMERA", true)
+	SetCamCoord(cameraHandle, coords.camera.pos.x, coords.camera.pos.y, coords.camera.pos.z)
+	SetCamRot(cameraHandle, coords.camera.rot.x, coords.camera.rot.y, coords.camera.rot.z, 2)
+	SetCamFov(cameraHandle, 45.0)
+	SetCamActive(cameraHandle, true)
+	RenderScriptCams(true, false, 0, 1, 0)
+
+	SendNUIMessage({ type = "GenerateVehicleImages", payload = {} })
+end)
 end)
