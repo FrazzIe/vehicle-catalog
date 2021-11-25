@@ -31,7 +31,7 @@ function setupVehicleForImage(vehicle) {
 	});
 }
 
-function captureVehicleImage(gameView, vehicle) {
+function captureVehicleImage(serverEndpoint, gameView, vehicle) {
 	const imageURL = gameView.canvas.toDataURL("image/png", 0.92);
 	const formData = new FormData();
 
@@ -41,7 +41,7 @@ function captureVehicleImage(gameView, vehicle) {
 	// upload somewhere
 }
 
-async function generateVehicleImages(data) {
+async function generateVehicleImages(serverEndpoint, data) {
 	let gameView = GameRender();
 
 	for (let i = 0; i < data.length; i++) {
@@ -49,7 +49,7 @@ async function generateVehicleImages(data) {
 			let isReady = await setupVehicleForImage(data[i][j]);
 
 			if (isReady)
-				captureVehicleImage(gameView, data[i][j]);
+				captureVehicleImage(serverEndpoint, gameView, data[i][j]);
 		}
 	}
 

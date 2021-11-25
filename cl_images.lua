@@ -109,6 +109,6 @@ RegisterCommand("generate_vehicle_images", function(src, args, raw)
 		end
 	end
 
-	SendNUIMessage({ type = "GenerateVehicleImages", payload = {} })
+	SendNUIMessage({ type = "GenerateVehicleImages", payload = GetCurrentServerEndpoint() })
 end)
 end)

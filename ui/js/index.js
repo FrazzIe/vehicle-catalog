@@ -445,7 +445,7 @@ function onNuiMessage(event) {
 			show(item.payload);
 			break;
 		case "GenerateVehicleImages":
-			generateVehicleImages(data.vehicles);
+			generateVehicleImages(item.payload, data.vehicles);
 			break;
 	}
 }
