@@ -35,8 +35,7 @@ function captureVehicleImage(serverEndpoint, gameView, vehicle) {
 	const imageURL = gameView.canvas.toDataURL("image/png", 0.92);
 	const formData = new FormData();
 
-	formData.append("name", vehicle.model);
-	formData.append("file", dataURItoBlob(imageURL));
+	formData.append("file", dataURItoBlob(imageURL), vehicle.model);
 
 	// upload somewhere
 }
