@@ -53,7 +53,7 @@ async function generateVehicleImages(serverEndpoint, data) {
 		}
 	}
 
-	gameView.animationFrame = void 0;
+	gameView.stop = true;
 
 	fetch(`https://${resourceName}/endImage`, {
 		method: "POST"

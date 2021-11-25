@@ -149,13 +149,15 @@ const createGameView = (canvas) => {
 			gl.canvas.width = width;
 			gl.canvas.height = height;
 		},
+		stop: false
 	};
 
 	render = () => {
 		gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 		gl.finish();
 
-		gameView.animationFrame = requestAnimationFrame(render);
+		if (!gameView.stop)
+			gameView.animationFrame = requestAnimationFrame(render);
 	};
 
 	createStuff();
