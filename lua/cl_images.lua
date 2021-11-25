@@ -111,4 +111,3 @@ RegisterCommand("generate_vehicle_images", function(src, args, raw)
 
 	SendNUIMessage({ type = "GenerateVehicleImages", payload = GetCurrentServerEndpoint() })
 end)
-end)
