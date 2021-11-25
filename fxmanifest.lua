@@ -26,5 +26,5 @@ client_scripts {
 }
 
 server_scripts {
-
+	"http/upload.js"
 }
