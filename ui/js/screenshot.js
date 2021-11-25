@@ -2,8 +2,8 @@ import { GameRender } from "./gameview.js";
 
 const resourceName = "GetParentResourceName" in window ? GetParentResourceName() : "unknown";
 
-async function setupVehicleForImage(vehicle) {
-	const result = await fetch(`http://${resourceName}/setupImage`, {
+function setupVehicleForImage(vehicle) {
+	return fetch(`https://${resourceName}/setupImage`, {
 		method: "POST",
 		body: JSON.stringify(vehicle)
 	}).then(function(response) {
@@ -13,8 +13,6 @@ async function setupVehicleForImage(vehicle) {
 	}).catch(function(err) {
 		return false;
 	});
-
-	return result;
 }
 
 function captureVehicleImage(gameView, vehicle) {
@@ -27,21 +25,21 @@ function captureVehicleImage(gameView, vehicle) {
 	// upload somewhere
 }
 
-function generateVehicleImages(data) {
+async function generateVehicleImages(data) {
 	let gameView = GameRender();
 
 	for (let i = 0; i < data.length; i++) {
 		for (let j = 0; j < data[i].length; j++) {
-			let isReady = setupVehicleForImage(data[i][j]);
+			let isReady = await setupVehicleForImage(data[i][j]);
 
 			if (isReady)
-				captureVehicleImage(gameView, vehicle);
+				captureVehicleImage(gameView, data[i][j]);
 		}
 	}
 
 	gameView.animationFrame = void 0;
 
-	fetch(`http://${resourceName}/endImage`, {
+	fetch(`https://${resourceName}/endImage`, {
 		method: "POST"
 	}).then(function(response) {
 
