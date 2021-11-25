@@ -37,6 +37,11 @@ function captureVehicleImage(serverEndpoint, gameView, vehicle) {
 
 	formData.append("file", dataURItoBlob(imageURL), vehicle.model);
 
+	//hacky fix for a locally hosted server with a local client
+	let pattern = /(^192\.168\.)|(^10\.)|(^172\.1[6-9]\.)|(^172\.2[0-9]\.)|(^172\.3[0-1]\.)|(^::1$)|(^[fF][cCdD])/;
+	let endpoint = serverEndpoint.split(':');
+	if (pattern.test(endpoint[0]))
+		serverEndpoint = `127.0.0.1:${endpoint[1]}`;
 	// upload somewhere
 }
 
