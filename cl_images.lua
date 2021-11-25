@@ -7,6 +7,8 @@ local coords = {
 }
 local hideHud = false
 local cameraHandle = nil
+local lastPed = nil
+local lastPedCoords = nil
 local lastVehicle = nil
 
 function RemoveHud()
@@ -24,6 +26,10 @@ function RemoveHud()
 		SetWeather("EXTRASUNNY")
 		NetworkOverrideClockTime(12, 0, 0)
 
+		for i = 0, 2 do
+			DisableAllControlActions(i)
+		end
+
 		Citizen.Wait(0);
 	end
 end
@@ -37,8 +43,14 @@ end
 
 RegisterNUICallback("setupImage", function(data, cb)
 	if lastVehicle ~= nil then
+		SetEntityCoords(lastVehicle, -4000.0, -4000.0, -4000.0)
+		SetEntityAsMissionEntity(lastVehicle, false, true)
 		DeleteVehicle(lastVehicle)
+
+		lastVehicle = nil
 	end
+
+	Citizen.Wait(500)
 
 	local model = data.model
 	
@@ -48,7 +60,9 @@ RegisterNUICallback("setupImage", function(data, cb)
 		Citizen.Wait(200)
 	end
 
-	lastVehicle = CreateVehicle(model, coords.vehicle.x, coords.vehicle.y, coords.vehicle.z, coords.vehicle.w, true, false)
+	lastVehicle = CreateVehicle(model, coords.vehicle.x, coords.vehicle.y, coords.vehicle.z, coords.vehicle.w, false, false)
+	SetVehicleOnGroundProperly(lastVehicle)
+	SetModelAsNoLongerNeeded(model)
 
 	Citizen.Wait(500)
 
@@ -56,6 +70,12 @@ RegisterNUICallback("setupImage", function(data, cb)
 end)
 
 RegisterNUICallback("endImage", function(data, cb)
+	if lastPed ~= nil then
+		SetEntityCoords(lastPed, lastPedCoords.x, lastPedCoords.y, lastPedCoords.z)
+		ResetEntityAlpha(lastPed)
+		FreezeEntityPosition(lastPed, false)
+	end
+
 	SetCamActive(cameraHandle, false)
 	RenderScriptCams(false, false, 0, 1, 0)
 
@@ -67,12 +87,27 @@ end)
 RegisterCommand("generate_vehicle_images", function(src, args, raw)
 	Citizen.CreateThread(RemoveHud)
 	
+	lastPed = PlayerPedId()
+	lastPedCoords = GetEntityCoords(lastPed)
+	SetEntityCoords(lastPed, coords.camera.pos.x, coords.camera.pos.y, coords.camera.pos.z)
+	FreezeEntityPosition(lastPed, true)
+	SetEntityAlpha(lastPed, 0)
+
 	cameraHandle = CreateCam("DEFAULT_SCRIPTED_CAMERA", true)
 	SetCamCoord(cameraHandle, coords.camera.pos.x, coords.camera.pos.y, coords.camera.pos.z)
 	SetCamRot(cameraHandle, coords.camera.rot.x, coords.camera.rot.y, coords.camera.rot.z, 2)
 	SetCamFov(cameraHandle, 45.0)
 	SetCamActive(cameraHandle, true)
 	RenderScriptCams(true, false, 0, 1, 0)
+
+	local interior = GetInteriorAtCoords(coords.camera.x, coords.camera.y, coords.camera.z)
+
+	if interior ~= 0 then
+		PinInteriorInMemory(interior)
+		while not IsInteriorReady(interior) do
+			Citizen.Wait(200)
+		end
+	end
 
 	SendNUIMessage({ type = "GenerateVehicleImages", payload = {} })
 end)
