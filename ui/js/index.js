@@ -1,5 +1,6 @@
 import { data } from "./data.js";
 import { startGamepadListener, stopGamepadListener } from "./gamepad.js";
+import { generateVehicleImages } from "./screenshot.js";
 
 const numVehicles = 5;
 const buttonThreshold = 0.12;
@@ -436,7 +437,22 @@ function show(val) {
 	}
 }
 
+function onNuiMessage(event) {
+	const item = event.data || event.detail;
+
+	switch(item.type) {
+		case "Show":
+			show(item.payload);
+			break;
+		case "GenerateVehicleImages":
+			generateVehicleImages(data.vehicles);
+			break;
+	}
+}
+
 function init() {
+	window.addEventListener("message", onNuiMessage, false);
+
 	show(false);
 	show(true);
 	populateCategories();
