@@ -10,6 +10,8 @@ async function setupVehicleForImage(vehicle) {
 		return response.json();
 	}).then(function(data) {
 		return data === "ok";
+	}).catch(function(err) {
+		return false;
 	});
 
 	return result;
