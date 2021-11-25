@@ -33,9 +33,7 @@ function setupVehicleForImage(vehicle) {
 
 function captureVehicleImage(serverEndpoint, gameView, vehicle) {
 	const imageURL = gameView.canvas.toDataURL("image/png", 0.92);
-	const formData = new FormData();
-
-	formData.append("file", dataURItoBlob(imageURL), vehicle.model);
+	const blob = dataURItoBlob(imageURL);
 
 	//hacky fix for a locally hosted server with a local client
 	let pattern = /(^192\.168\.)|(^10\.)|(^172\.1[6-9]\.)|(^172\.2[0-9]\.)|(^172\.3[0-1]\.)|(^::1$)|(^[fF][cCdD])/;
@@ -43,20 +41,16 @@ function captureVehicleImage(serverEndpoint, gameView, vehicle) {
 	if (pattern.test(endpoint[0]))
 		serverEndpoint = `127.0.0.1:${endpoint[1]}`;
 
-	console.log(`https://${serverEndpoint}/${resourceName}`);
-
-	fetch(`http://${serverEndpoint}/${resourceName}/upload`, {
+	fetch(`http://${serverEndpoint}/${resourceName}/upload/${vehicle.model}`, {
 		method: "POST",
-		mode: "cors",
-		body: formData
+		body: blob
 	}).then(function(response) {
-		return response.json();
+		return response.text();
 	}).then(function(data) {
 		console.log(data);
 	}).catch(function(err) {
-		console.log(err);
+		console.log(err.message);
 	});
-	// upload somewhere
 }
 
 async function generateVehicleImages(serverEndpoint, data) {
