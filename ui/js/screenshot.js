@@ -37,7 +37,7 @@ function setupVehicleForImage(vehicle) {
 		method: "POST",
 		body: JSON.stringify(vehicle)
 	}).then(function(response) {
-		return response.text();
+		return response.json();
 	}).then(function(data) {
 		return data === "ok";
 	}).catch(function(err) {
