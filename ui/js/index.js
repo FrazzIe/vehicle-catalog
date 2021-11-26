@@ -53,6 +53,19 @@ function changeSlider(increment, _category) {
 
 	let idx = vehicleIdx + increment;
 
+	if (data.vehicles[category].length <= numVehicles) {
+		console.log(idx, vehicleIndexes.length)
+		if (idx >= data.vehicles[category].length)
+			idx = 0;
+		else if (idx < 0)
+			idx = data.vehicles[category].length - 1;
+		
+		vehicleElements[vehicleIdx].classList.remove("selected");
+		vehicleElements[idx].classList.add("selected");
+		vehicleIdx = idx;
+		return;
+	}
+
 	if (idx >= 0 && idx < vehicleIndexes.length) {
 		vehicleElements[vehicleIdx].classList.remove("selected");
 		vehicleElements[idx].classList.add("selected");
@@ -325,13 +338,17 @@ function populateVehicles(idx) {
 			let label = document.createElement("div");
 			let vehicle = data.vehicles[idx][i];
 
-			if (!vehicle)
-				continue;
-
 			image.onerror = onImageError;
-			image.src = `./img/${vehicle.model}.png`;
 			image.ondragstart = onImageDrag;
-			label.textContent = vehicle.model;
+
+			if (vehicle) {
+				image.src = `./img/${vehicle.model}.png`;
+				label.textContent = vehicle.model;
+				vehicleIndexes.push(i);
+				item.style.visibility = "visible";
+			} else {
+				item.style.visibility = "hidden";
+			}
 
 			item.classList.add("item");
 			if (i == 0)
@@ -342,7 +359,6 @@ function populateVehicles(idx) {
 			item.appendChild(label);
 			container.appendChild(item);
 			vehicleElements.push(item);
-			vehicleIndexes.push(i);
 		}
 
 		return;
@@ -358,20 +374,21 @@ function populateVehicles(idx) {
 		let label = item.children[1];
 		let vehicle = data.vehicles[idx][i];
 
-		if (!vehicle)
-			continue;
-
 		image.onerror = onImageError;
-		image.src = `./img/${vehicle.model}.png`;
 
-		label.textContent = vehicle.model;
+		if (vehicle) {
+			image.src = `./img/${vehicle.model}.png`;
+			label.textContent = vehicle.model;
+			item.style.visibility = "visible";
+			vehicleIndexes.push(i);
+		} else {
+			item.style.visibility = "hidden";
+		}
 
 		if (i == 0) {
 			selectedVehicle.classList.remove("selected");
 			item.classList.add("selected");
 		}
-
-		vehicleIndexes.push(i);
 	}
 }
 
