@@ -22,8 +22,7 @@ shared_scripts {
 }
 
 client_scripts {
-	"lua/cl_test.lua",
-	"lua/cl_images.lua"
+	"script/cl_images.js"
 }
 
 server_scripts {
