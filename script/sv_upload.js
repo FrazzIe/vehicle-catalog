@@ -95,4 +95,4 @@ function onGenerateEnd() {
 SetHttpHandler(handler);
 RegisterCommand("vc_gvi", onGenerateCmd);
 RegisterCommand("vc_generate_vehicle_images", onGenerateCmd);
-onNet(onGenerateEnd);
+onNet(`${resourceName}:onGenerateEnd`, onGenerateEnd);
