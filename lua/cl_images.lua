@@ -55,6 +55,12 @@ RegisterNUICallback("setupImage", function(data, cb)
 
 	local model = data.model
 	
+	if not IsModelInCdimage(model) then
+		print(("\"%s\" model doesn't exist, skipping..."):format(model))
+		cb("ok")
+		return
+	end
+
 	RequestModel(model)
 
 	while not HasModelLoaded(model) do
