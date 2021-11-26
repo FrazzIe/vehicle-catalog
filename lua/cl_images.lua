@@ -57,7 +57,7 @@ RegisterNUICallback("setupImage", function(data, cb)
 	
 	if not IsModelInCdimage(model) then
 		print(("\"%s\" model doesn't exist, skipping..."):format(model))
-		cb("ok")
+		cb("skip")
 		return
 	end
 
