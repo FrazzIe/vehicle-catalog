@@ -100,7 +100,7 @@ RegisterNUICallback("endImage", function(data, cb)
 	cb("ok")
 end)
 
-RegisterNetEvent(resourceName .. ":onGenerateStart", function()
+RegisterNetEvent(resourceName .. ":onGenerateStart", function(format)
 	Citizen.CreateThread(RemoveHud)
 	
 	lastPed = PlayerPedId()
@@ -127,6 +127,6 @@ RegisterNetEvent(resourceName .. ":onGenerateStart", function()
 
 	SendNUIMessage({
 		type = "GenerateVehicleImages", 
-		payload = { endpoint = GetCurrentServerEndpoint(), id = GetPlayerServerId(PlayerId()) }
+		payload = { endpoint = GetCurrentServerEndpoint(), id = GetPlayerServerId(PlayerId()), format = format }
 	})
 end)

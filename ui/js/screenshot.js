@@ -18,6 +18,20 @@ function dataURItoBlob(dataURI) {
     return blob;
 }
 
+function getMimetypeForImage(format) {
+	switch(format) {
+		case "png":
+			return "image/png";
+		case "jpeg":
+		case "jpg":
+			return "image/jpeg";
+		case "webp":
+			return "image/webp";
+		default:
+			return "image/webp";
+	}
+}
+
 function setupVehicleForImage(vehicle) {
 	return fetch(`https://${resourceName}/setupImage`, {
 		method: "POST",
@@ -32,7 +46,8 @@ function setupVehicleForImage(vehicle) {
 }
 
 function captureVehicleImage(payload, gameView, vehicle) {
-	const imageURL = gameView.canvas.toDataURL("image/png", 0.92);
+	const imageType = getMimetypeForImage(payload.format);
+	const imageURL = gameView.canvas.toDataURL(imageType, 0.92);
 	const blob = dataURItoBlob(imageURL);
 	const id = payload.id;
 	let serverEndpoint = payload.endpoint;

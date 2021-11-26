@@ -5,6 +5,7 @@ const path = require("path");
 const acceptedMimetypes = {
 	"image/png": ".png",
 	"image/jpeg": ".jpeg",
+	"image/webp": ".webp"
 }
 const outputFolder = "generated_images";
 const accessControl = {};
@@ -76,13 +77,13 @@ function handler(req, res) {
 	}, "binary");
 }
 
-function onGenerateCmd(src) {
+function onGenerateCmd(src, args) {
 	if (src == 0)
 		return;
 	
 	accessControl[src] = true;
 
-	emitNet(`${resourceName}:onGenerateStart`, src);
+	emitNet(`${resourceName}:onGenerateStart`, src, args[0]);
 }
 
 function onGenerateEnd() {
