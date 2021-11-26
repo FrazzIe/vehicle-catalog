@@ -125,6 +125,9 @@ RegisterNetEvent(resourceName .. ":onGenerateStart", function(format)
 		end
 	end
 
+	RemoveDecalsInRange(coords.camera.pos.x, coords.camera.pos.y, coords.camera.pos.z, 25.0)
+	ClearAreaOfVehicles(coords.camera.pos.x, coords.camera.pos.y, coords.camera.pos.z, 25.0, false, false, false, false, false)
+
 	SendNUIMessage({
 		type = "GenerateVehicleImages", 
 		payload = { endpoint = GetCurrentServerEndpoint(), id = GetPlayerServerId(PlayerId()), format = format }
