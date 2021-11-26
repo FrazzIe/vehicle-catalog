@@ -282,8 +282,8 @@ function onGamepadTick(gamepads) {
 }
 
 function setupArrows() {
-	let leftArrow = document.querySelector(".arrow-container .arrow.left");
-	let rightArrow = document.querySelector(".arrow-container .arrow.right");
+	let leftArrow = document.getElementById("arrow-left");
+	let rightArrow = document.getElementById("arrow-right");
 
 	leftArrow.onclick = function() {
 		changeSlider(-1);
