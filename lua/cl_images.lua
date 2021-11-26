@@ -68,7 +68,9 @@ RegisterNUICallback("setupImage", function(data, cb)
 	end
 
 	lastVehicle = CreateVehicle(model, coords.vehicle.x, coords.vehicle.y, coords.vehicle.z, coords.vehicle.w, false, false)
+	FreezeEntityPosition(lastVehicle, true)
 	SetVehicleOnGroundProperly(lastVehicle)
+	SetEntityCollision(lastVehicle, false, true)
 	SetModelAsNoLongerNeeded(model)
 
 	Citizen.Wait(500)
