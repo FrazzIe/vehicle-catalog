@@ -77,6 +77,14 @@ RegisterNUICallback("setupImage", function(data, cb)
 end)
 
 RegisterNUICallback("endImage", function(data, cb)
+	if lastVehicle ~= nil then
+		SetEntityCoords(lastVehicle, -4000.0, -4000.0, -4000.0)
+		SetEntityAsMissionEntity(lastVehicle, false, true)
+		DeleteVehicle(lastVehicle)
+
+		lastVehicle = nil
+	end
+
 	if lastPed ~= nil then
 		SetEntityCoords(lastPed, lastPedCoords.x, lastPedCoords.y, lastPedCoords.z)
 		ResetEntityAlpha(lastPed)
