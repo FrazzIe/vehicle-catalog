@@ -116,7 +116,7 @@ RegisterNetEvent(resourceName .. ":onGenerateStart", function(format)
 	SetCamActive(cameraHandle, true)
 	RenderScriptCams(true, false, 0, 1, 0)
 
-	local interior = GetInteriorAtCoords(coords.camera.x, coords.camera.y, coords.camera.z)
+	local interior = GetInteriorAtCoords(coords.camera.pos.x, coords.camera.pos.y, coords.camera.pos.z)
 
 	if interior ~= 0 then
 		PinInteriorInMemory(interior)
