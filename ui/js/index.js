@@ -1,4 +1,4 @@
-import { data } from "./data.js";
+import { data } from "../../sh_config.js";
 import { startGamepadListener, stopGamepadListener } from "./gamepad.js";
 import { generateVehicleImages } from "./screenshot.js";
 

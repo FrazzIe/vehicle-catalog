@@ -13,7 +13,8 @@ files {
 	"ui/index.html",
 	"ui/css/*.css",
 	"ui/js/*.js",
-	"ui/img/*.*"
+	"ui/img/*.*",
+	"sh_config.js"
 }
 
 shared_scripts {
