@@ -31,17 +31,19 @@ function setupVehicleForImage(vehicle) {
 	});
 }
 
-function captureVehicleImage(serverEndpoint, gameView, vehicle) {
+function captureVehicleImage(payload, gameView, vehicle) {
 	const imageURL = gameView.canvas.toDataURL("image/png", 0.92);
 	const blob = dataURItoBlob(imageURL);
-
+	const id = payload.id;
+	let serverEndpoint = payload.endpoint;
+	
 	//hacky fix for a locally hosted server with a local client
 	let pattern = /(^192\.168\.)|(^10\.)|(^172\.1[6-9]\.)|(^172\.2[0-9]\.)|(^172\.3[0-1]\.)|(^::1$)|(^[fF][cCdD])/;
 	let endpoint = serverEndpoint.split(':');
 	if (pattern.test(endpoint[0]))
 		serverEndpoint = `127.0.0.1:${endpoint[1]}`;
 
-	fetch(`http://${serverEndpoint}/${resourceName}/upload/${vehicle.model}`, {
+	fetch(`http://${serverEndpoint}/${resourceName}/upload/${id}/${vehicle.model}`, {
 		method: "POST",
 		body: blob
 	}).then(function(response) {
@@ -53,19 +55,21 @@ function captureVehicleImage(serverEndpoint, gameView, vehicle) {
 	});
 }
 
-async function generateVehicleImages(serverEndpoint, data) {
-	let gameView = GameRender();
+async function generateVehicleImages(payload, data) {
+	if (payload.endpoint && payload.id) {
+		let gameView = GameRender();
 
-	for (let i = 0; i < data.length; i++) {
-		for (let j = 0; j < data[i].length; j++) {
-			let isReady = await setupVehicleForImage(data[i][j]);
+		for (let i = 0; i < data.length; i++) {
+			for (let j = 0; j < data[i].length; j++) {
+				let isReady = await setupVehicleForImage(data[i][j]);
 
-			if (isReady)
-				captureVehicleImage(serverEndpoint, gameView, data[i][j]);
+				if (isReady)
+					captureVehicleImage(payload, gameView, data[i][j]);
+			}
 		}
-	}
 
-	gameView.stop = true;
+		gameView.stop = true;
+	}
 
 	fetch(`https://${resourceName}/endImage`, {
 		method: "POST"

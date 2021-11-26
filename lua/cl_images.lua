@@ -10,6 +10,7 @@ local cameraHandle = nil
 local lastPed = nil
 local lastPedCoords = nil
 local lastVehicle = nil
+local resourceName = GetCurrentResourceName()
 
 function RemoveHud()
 	hideHud = true
@@ -81,10 +82,11 @@ RegisterNUICallback("endImage", function(data, cb)
 
 	hideHud = false
 
+	TriggerServerEvent(resourceName .. ":onGenerateEnd")
 	cb("ok")
 end)
 
-RegisterCommand("generate_vehicle_images", function(src, args, raw)
+RegisterNetEvent(resourceName .. ":onGenerateStart", function()
 	Citizen.CreateThread(RemoveHud)
 	
 	lastPed = PlayerPedId()
@@ -109,5 +111,8 @@ RegisterCommand("generate_vehicle_images", function(src, args, raw)
 		end
 	end
 
-	SendNUIMessage({ type = "GenerateVehicleImages", payload = GetCurrentServerEndpoint() })
+	SendNUIMessage({
+		type = "GenerateVehicleImages", 
+		payload = { endpoint = GetCurrentServerEndpoint(), id = GetPlayerServerId(PlayerId()) }
+	})
 end)

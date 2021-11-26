@@ -8,6 +8,7 @@ const acceptedMimetypes = {
 }
 const outputFolder = "generated_images";
 const accessControl = {};
+const resourceName = GetCurrentResourceName();
 
 function handler(req, res) {
 	req.path = path.normalize(req.path);
@@ -45,7 +46,7 @@ function handler(req, res) {
 	
 	let fileName = pathParams[3];
 	let fileExt = acceptedMimetypes[req.headers["Content-Type"]];
-	let filePath = path.join(GetResourcePath(GetCurrentResourceName()), outputFolder, fileName + fileExt);
+	let filePath = path.join(GetResourcePath(resourceName), outputFolder, fileName + fileExt);
 
 	req.setDataHandler(async function(body) {
 		const blob = new buf.Blob([body], {
@@ -75,4 +76,22 @@ function handler(req, res) {
 	}, "binary");
 }
 
+function onGenerateCmd(src) {
+	if (src == 0)
+		return;
+	
+	accessControl[src] = true;
+
+	emitNet(`${resourceName}:onGenerateStart`, src);
+}
+
+function onGenerateEnd() {
+	const src = global.source;
+
+	delete accessControl[src];
+}
+
 SetHttpHandler(handler);
+RegisterCommand("vc_gvi", onGenerateCmd);
+RegisterCommand("vc_generate_vehicle_images", onGenerateCmd);
+onNet(onGenerateEnd);
