@@ -24,7 +24,7 @@ function setVehicleIdx(idx) {
 
 	fetch(`https://${resourceName}/indexChanged`, {
 		method: "POST",
-		body: JSON.stringify()
+		body: JSON.stringify(data.vehicles[category][idx] ?? { error: true })
 	}).then(function(response) {
 		return response.json();
 	}).then(function(data) {
