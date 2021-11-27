@@ -11,10 +11,6 @@ function setWeather(weatherType) {
 	SetWeatherTypePersist(weatherType);
 }
 
-function delay(ms) {
-	return new Promise(res => setTimeout(res, ms));
-}
-
 async function removeHud() {
 	for (let i = 1; i < 22; i++)
 		HideHudComponentThisFrame(i);
