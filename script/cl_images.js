@@ -78,8 +78,7 @@ function init() {
 			FreezeEntityPosition(lastPed, false);
 		}
 
-		SetCamActive(cameraHandle, false);
-		RenderScriptCams(false, false, 0, 1, 0);
+		removeCamera(cameraHandle);
 
 		if (hudTick) {
 			clearTick(hudTick);
@@ -99,12 +98,7 @@ function init() {
 		FreezeEntityPosition(lastPed, true);
 		SetEntityAlpha(lastPed, 0);
 
-		cameraHandle = CreateCam("DEFAULT_SCRIPTED_CAMERA", true);
-		SetCamCoord(cameraHandle, config.images.camera.pos.x, config.images.camera.pos.y, config.images.camera.pos.z);
-		SetCamRot(cameraHandle, config.images.camera.rot.x, config.images.camera.rot.y, config.images.camera.rot.z, 2);
-		SetCamFov(cameraHandle, 45.0);
-		SetCamActive(cameraHandle, true);
-		RenderScriptCams(true, false, 0, 1, 0);
+		cameraHandle = setupCamera(config.images.camera);
 
 		let interior = GetInteriorAtCoords(config.images.camera.pos.x, config.images.camera.pos.y, config.images.camera.pos.z);
 
