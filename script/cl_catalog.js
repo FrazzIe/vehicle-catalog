@@ -47,8 +47,10 @@ function init() {
 	
 	}
 	
+	RegisterNuiCallbackType("close");
 	RegisterNuiCallbackType("indexChanged");
 	
+	on("__cfx_nui:close", onClose);
 	on("__cfx_nui:indexChanged", onIndexChanged);
 }
 
