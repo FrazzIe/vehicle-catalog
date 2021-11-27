@@ -1,5 +1,6 @@
 function init() {
 	let data;
+	let cameraHandle;
 
 	function checkData(_data) {
 		if (!_data)
@@ -30,6 +31,8 @@ function init() {
 			return;
 		}
 
+		cameraHandle = setupCamera(data.camera);
+
 		SendNuiMessage(JSON.stringify({
 			type: "Show",
 			payload: true
@@ -37,7 +40,7 @@ function init() {
 	}
 	
 	function onClose() {
-	
+		removeCamera(cameraHandle);
 	}
 	
 	function onSelectVehicle(data, cb) {
