@@ -210,6 +210,10 @@ function onKeyDown(event) {
 			else
 				changeCategory(1);
 			break;
+		case "Escape":
+		case "Backspace":
+			show(false);
+			break;
 	}
 
 	event.preventDefault();
@@ -236,6 +240,10 @@ function onGamepadButtonPressed(buttonIdx, value, data) {
 			break;
 		case 5:
 			changeCategory(1);			
+			break;
+		case 1:
+		case 8:
+			show(false);
 			break;
 	}
 }
@@ -468,6 +476,16 @@ function show(val) {
 		window.removeEventListener("keydown", onKeyDown);
 		window.removeEventListener("wheel", onWheel);
 		stopGamepadListener();
+
+		fetch(`https://${resourceName}/close`, {
+			method: "POST",
+		}).then(function(response) {
+			return response.json();
+		}).then(function(data) {
+			console.log(data);
+		}).catch(function(err) {
+			console.log(err);
+		});
 	}
 }
 
