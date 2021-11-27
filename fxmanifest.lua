@@ -22,6 +22,7 @@ shared_scripts {
 }
 
 client_scripts {
+	"script/cl_config.js",
 	"script/cl_images.js"
 }
 

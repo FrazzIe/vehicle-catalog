@@ -1,16 +1,8 @@
-const coords = {
-	vehicle: { x: 225.13684082031, y: -992.03826904297, z: -98.999984741211, w: 223.19395446777 },
-	camera: {
-		pos: { x: 231.40397644043, y: -993.36932373047, z: -97.884582519531 },
-		rot: { x: -12.725121498108, y: 0.0, z: 79.173896789551 }
-	}
-};
 let hudTick;
 let cameraHandle;
 let lastPed;
 let lastPedCoords;
 let lastVehicle;
-let resourceName = GetCurrentResourceName();
 
 function setWeather(weatherType) {
 	ClearWeatherTypePersist();
@@ -63,7 +55,7 @@ async function onSetupImage(data, cb) {
 		await delay(200);
 	}
 
-	lastVehicle = CreateVehicle(model, coords.vehicle.x, coords.vehicle.y, coords.vehicle.z, coords.vehicle.w, false, false);
+	lastVehicle = CreateVehicle(model, config.images.vehicle.x, config.images.vehicle.y, config.images.vehicle.z, config.images.vehicle.w, false, false);
 	FreezeEntityPosition(lastVehicle, true);
 	SetVehicleOnGroundProperly(lastVehicle);
 	SetEntityCollision(lastVehicle, false, true);
@@ -106,18 +98,18 @@ async function onGenerateStart(format) {
 	
 	lastPed = PlayerPedId();
 	lastPedCoords = GetEntityCoords(lastPed);
-	SetEntityCoords(lastPed, coords.camera.pos.x, coords.camera.pos.y, coords.camera.pos.z);
+	SetEntityCoords(lastPed, config.images.camera.pos.x, config.images.camera.pos.y, config.images.camera.pos.z);
 	FreezeEntityPosition(lastPed, true);
 	SetEntityAlpha(lastPed, 0);
 
 	cameraHandle = CreateCam("DEFAULT_SCRIPTED_CAMERA", true);
-	SetCamCoord(cameraHandle, coords.camera.pos.x, coords.camera.pos.y, coords.camera.pos.z);
-	SetCamRot(cameraHandle, coords.camera.rot.x, coords.camera.rot.y, coords.camera.rot.z, 2);
+	SetCamCoord(cameraHandle, config.images.camera.pos.x, config.images.camera.pos.y, config.images.camera.pos.z);
+	SetCamRot(cameraHandle, config.images.camera.rot.x, config.images.camera.rot.y, config.images.camera.rot.z, 2);
 	SetCamFov(cameraHandle, 45.0);
 	SetCamActive(cameraHandle, true);
 	RenderScriptCams(true, false, 0, 1, 0);
 
-	let interior = GetInteriorAtCoords(coords.camera.pos.x, coords.camera.pos.y, coords.camera.pos.z);
+	let interior = GetInteriorAtCoords(config.images.camera.pos.x, config.images.camera.pos.y, config.images.camera.pos.z);
 
 	if (interior != 0) {
 		PinInteriorInMemory(interior)
@@ -126,8 +118,8 @@ async function onGenerateStart(format) {
 		}
 	}
 
-	RemoveDecalsInRange(coords.camera.pos.x, coords.camera.pos.y, coords.camera.pos.z, 25.0);
-	ClearAreaOfVehicles(coords.camera.pos.x, coords.camera.pos.y, coords.camera.pos.z, 25.0, false, false, false, false, false);
+	RemoveDecalsInRange(config.images.camera.pos.x, config.images.camera.pos.y, config.images.camera.pos.z, 25.0);
+	ClearAreaOfVehicles(config.images.camera.pos.x, config.images.camera.pos.y, config.images.camera.pos.z, 25.0, false, false, false, false, false);
 
 	SendNuiMessage(JSON.stringify({
 		type: "GenerateVehicleImages", 
@@ -140,4 +132,4 @@ RegisterNuiCallbackType("endImage");
 
 on("__cfx_nui:setupImage", onSetupImage);
 on("__cfx_nui:endImage", onEndImage);
-onNet(`${resourceName}:onGenerateStart`, onGenerateStart);
+onNet(`${config.resourceName}:onGenerateStart`, onGenerateStart);
