@@ -347,7 +347,7 @@ const data = {
 			{ model: "zombiea" },
 			{ model: "zombieb" }
 		]
-	]
+	],
 }
 
 export { data };

@@ -14,7 +14,7 @@ files {
 	"ui/css/*.css",
 	"ui/js/*.js",
 	"ui/img/*.*",
-	"sh_config.js"
+	"vehicles.js"
 }
 
 shared_scripts {
