@@ -7,8 +7,9 @@ const buttonThreshold = 0.12;
 const buttonInterval = 140;
 const axesThreshold = 0.2;
 const axesInterval = 160;
+const resourceName = "GetParentResourceName" in window ? GetParentResourceName() : "unknown";
+const app = document.getElementById("app");
 
-let app = document.getElementById("app");
 let categoryElements;
 let categoryIdx;
 let vehicleElements;
@@ -17,6 +18,21 @@ let vehicleIdx;
 let buttonIntervals = [];
 let axesIntervals = [];
 let useSlider = false;
+
+function setVehicleIdx(idx) {
+	vehicleIdx = idx;
+
+	fetch(`https://${resourceName}/indexChanged`, {
+		method: "POST",
+		body: JSON.stringify()
+	}).then(function(response) {
+		return response.json();
+	}).then(function(data) {
+		console.log(data)
+	}).catch(function(err) {
+		console.log(err);
+	});
+}
 
 function changeCategory(increment) {
 	let idx = (Math.abs(increment) % data.categories.length);
@@ -62,14 +78,14 @@ function changeSlider(increment, _category) {
 		
 		vehicleElements[vehicleIdx].classList.remove("selected");
 		vehicleElements[idx].classList.add("selected");
-		vehicleIdx = idx;
+		setVehicleIdx(idx);
 		return;
 	}
 
 	if (idx >= 0 && idx < vehicleIndexes.length) {
 		vehicleElements[vehicleIdx].classList.remove("selected");
 		vehicleElements[idx].classList.add("selected");
-		vehicleIdx = idx;
+		setVehicleIdx(idx);
 		return;
 	}
 
@@ -136,7 +152,7 @@ function changeSlider(increment, _category) {
 		}
 	}
 
-	vehicleIdx = idx;
+	setVehicleIdx(idx);
 }
 
 function toggleHighlight(element) {
@@ -311,7 +327,7 @@ function onVehicleClicked(event) {
 	
 	selectedVehicle.classList.remove("selected");
 	target.classList.add("selected");
-	vehicleIdx = idx;
+	setVehicleIdx(idx);
 }
 
 function onImageError(event) {
@@ -366,7 +382,6 @@ function populateVehicles(idx) {
 
 	let selectedVehicle = vehicleElements[vehicleIdx];
 	vehicleIndexes = [];
-	vehicleIdx = 0;
 
 	for (let i = 0; i < vehicleElements.length; i++) {
 		let item = vehicleElements[i];
@@ -390,6 +405,8 @@ function populateVehicles(idx) {
 			item.classList.add("selected");
 		}
 	}
+
+	setVehicleIdx(0);
 }
 
 function onCategoryClicked(event) {
