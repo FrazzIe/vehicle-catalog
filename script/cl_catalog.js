@@ -43,13 +43,13 @@ function init() {
 		removeCamera(cameraHandle);
 	}
 	
-	function onSelectVehicle(data, cb) {
+	function onIndexChanged(data, cb) {
 	
 	}
 	
-	RegisterNuiCallbackType("selectVehicle");
+	RegisterNuiCallbackType("indexChanged");
 	
-	on("__cfx_nui:selectVehicle", onSelectVehicle);
+	on("__cfx_nui:indexChanged", onIndexChanged);
 }
 
 init();
