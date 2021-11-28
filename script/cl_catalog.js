@@ -4,22 +4,26 @@ function init() {
 	let cameraHandle;
 	let activeModel;
 	let entities = [];
+	let setOffset = false;
 
 	function checkData(_data) {
 		if (!_data)
 			return [false, "No data received"];
 		
-		if (!_data.camera)
-			return [false, "No camera data received"];
-		
-		if (!_data.camera.pos || isNaN(_data.camera.pos.x) || isNaN(_data.camera.pos.y) || isNaN(_data.camera.pos.z))
-			return [false, "No camera position recieved"];
-
-		if (!_data.camera.rot || isNaN(_data.camera.rot.x) || isNaN(_data.camera.rot.y) || isNaN(_data.camera.rot.z))
-			return [false, "No camera rotation received"];
-
 		if (!_data.vehicle || isNaN(_data.vehicle.x) || isNaN(_data.vehicle.y) || isNaN(_data.vehicle.z) || isNaN(_data.vehicle.w))
 			return [false, "No vehicle position received"];
+		
+		if (!_data.offset)
+			return [false, "No offsets received"];
+
+		if (!_data.offset.attach || isNaN(_data.offset.attach.x) || isNaN(_data.offset.attach.y) || isNaN(_data.offset.attach.z))
+			return [false, "No attach offset position received"];
+
+		if (!_data.offset.point || isNaN(_data.offset.point.x) || isNaN(_data.offset.point.y) || isNaN(_data.offset.point.z))
+			return [false, "No point offset position received"];
+
+		if (!_data.updateOffset)
+			_data.updateOffset = false;
 
 		data = _data;
 
@@ -28,7 +32,6 @@ function init() {
 
 	async function showVehicle(model) {
 		while(entities.length) {
-			console.log(`"${entities.length}" pop pop`);
 			DeleteEntity(entities.pop());
 		}
 
@@ -40,7 +43,7 @@ function init() {
 		}
 
 		if (activeModel != model) {
-			console.log(`"${model}" is no longer active, unloading..`)
+			console.log(`"${model}" is no longer active, unloading..`);
 			SetModelAsNoLongerNeeded(model);
 			return;
 		}
@@ -52,12 +55,18 @@ function init() {
 		SetModelAsNoLongerNeeded(model);
 
 		if (activeModel != model) {
-			console.log(`"${model}" is no longer active, deleting..`)
+			console.log(`"${model}" is no longer active, deleting..`);
 			DeleteEntity(handle);
 			return;
 		}
 
 		entities.push(handle);
+
+		if (!setOffset || data.updateOffset) {
+			setOffset = true;
+			AttachCamToEntity(cameraHandle, handle, data.offset.attach.x, data.offset.attach.y, data.offset.attach.z, true);
+			PointCamAtEntity(cameraHandle, handle, data.offset.point.x, data.offset.point.y, data.offset.point.z, true);
+		}
 	}
 
 	function onTick() {
@@ -73,7 +82,7 @@ function init() {
 		}
 
 		tick = setTick(onTick);
-		cameraHandle = setupCamera(data.camera);
+		cameraHandle = setupCamera();
 		SetNuiFocus(true, true);
 
 		SendNuiMessage(JSON.stringify({
@@ -91,11 +100,17 @@ function init() {
 		}
 
 		SetNuiFocus(false, false);
+		setOffset = false;
 
 		cb("ok");
 	}
 	
 	function onIndexChanged(data, cb) {
+		if (data.error) {
+			cb("error");
+			return;
+		}
+
 		activeModel = data.model;
 		showVehicle(data.model);
 		cb("ok");

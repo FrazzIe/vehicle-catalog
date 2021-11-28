@@ -5,8 +5,11 @@ function delay(ms) {
 function setupCamera(data) {
 	let handle = CreateCam("DEFAULT_SCRIPTED_CAMERA", true);
 
-	SetCamCoord(handle, data.pos.x, data.pos.y, data.pos.z);
-	SetCamRot(handle, data.rot.x, data.rot.y, data.rot.z, 2);
+	if (data != null) {
+		SetCamCoord(handle, data.pos.x, data.pos.y, data.pos.z);
+		SetCamRot(handle, data.rot.x, data.rot.y, data.rot.z, 2);
+	}
+
 	SetCamFov(handle, 45.0);
 	SetCamActive(handle, true);
 	RenderScriptCams(true, false, 0, 1, 0);
