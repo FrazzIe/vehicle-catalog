@@ -22,7 +22,7 @@ let useSlider = false;
 function setVehicleIdx(idx) {
 	vehicleIdx = idx;
 
-	if (!data.vehicles[categoryIdx] || !vehicleIndexes[idx])
+	if (data.vehicles[categoryIdx] == null || vehicleIndexes[idx] == null)
 		return;
 
 	fetch(`https://${resourceName}/indexChanged`, {
