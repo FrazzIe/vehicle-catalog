@@ -471,6 +471,7 @@ function show(val) {
 		window.addEventListener("keydown", onKeyDown, false);
 		window.addEventListener("wheel", onWheel, false);
 		startGamepadListener(onGamepadTick);
+		setVehicleIdx(vehicleIdx);
 	} else {
 		app.style.display = "none";
 		window.removeEventListener("keydown", onKeyDown);
