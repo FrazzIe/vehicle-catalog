@@ -25,6 +25,9 @@ function init() {
 		if (!_data.updateOffset)
 			_data.updateOffset = false;
 
+		if (!_data.offsetLength)
+			_data.offsetLength = false;
+
 		data = _data;
 
 		return [true];
@@ -64,7 +67,14 @@ function init() {
 
 		if (!setOffset || data.updateOffset) {
 			setOffset = true;
-			AttachCamToEntity(cameraHandle, handle, data.offset.attach.x, data.offset.attach.y, data.offset.attach.z, true);
+			let length = 0;
+
+			if (data.offsetLength) {
+				let dimensions = GetModelDimensions(model);
+				length = (dimensions[1][1] - dimensions[0][1]) / 2;
+			}
+
+			AttachCamToEntity(cameraHandle, handle, data.offset.attach.x, length + data.offset.attach.y, data.offset.attach.z, true);
 			PointCamAtEntity(cameraHandle, handle, data.offset.point.x, data.offset.point.y, data.offset.point.z, true);
 		}
 	}
