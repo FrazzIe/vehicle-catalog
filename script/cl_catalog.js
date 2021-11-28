@@ -38,6 +38,7 @@ function init() {
 
 		tick = setTick(onTick);
 		cameraHandle = setupCamera(data.camera);
+		SetNuiFocus(true, true);
 
 		SendNuiMessage(JSON.stringify({
 			type: "Show",
@@ -45,13 +46,17 @@ function init() {
 		}));
 	}
 	
-	function onClose() {
+	function onClose(data, cb) {
 		removeCamera(cameraHandle);
 
 		if (tick) {
 			clearTick(tick);
 			tick = null;
 		}
+
+		SetNuiFocus(false, false);
+
+		cb("ok");
 	}
 	
 	function onIndexChanged(data, cb) {
