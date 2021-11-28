@@ -2,6 +2,8 @@ function init() {
 	let data;
 	let tick;
 	let cameraHandle;
+	let activeModel;
+	let entities = [];
 
 	function checkData(_data) {
 		if (!_data)
@@ -22,6 +24,40 @@ function init() {
 		data = _data;
 
 		return [true];
+	}
+
+	async function showVehicle(model) {
+		while(entities.length) {
+			console.log(`"${entities.length}" pop pop`);
+			DeleteEntity(entities.pop());
+		}
+
+		let [loaded, err] = await loadModel(model);
+
+		if (!loaded) {
+			console.log(`${err}, skipping...`);
+			return;
+		}
+
+		if (activeModel != model) {
+			console.log(`"${model}" is no longer active, unloading..`)
+			SetModelAsNoLongerNeeded(model);
+			return;
+		}
+
+		let handle = CreateVehicle(model, data.vehicle.x, data.vehicle.y, data.vehicle.z, data.vehicle.w, false, false);
+		FreezeEntityPosition(handle, true);
+		SetVehicleOnGroundProperly(handle);
+		SetEntityCollision(handle, false, true);
+		SetModelAsNoLongerNeeded(model);
+
+		if (activeModel != model) {
+			console.log(`"${model}" is no longer active, deleting..`)
+			DeleteEntity(handle);
+			return;
+		}
+
+		entities.push(handle);
 	}
 
 	function onTick() {
@@ -60,7 +96,9 @@ function init() {
 	}
 	
 	function onIndexChanged(data, cb) {
-	
+		activeModel = data.model;
+		showVehicle(data.model);
+		cb("ok");
 	}
 	
 	RegisterNuiCallbackType("close");
