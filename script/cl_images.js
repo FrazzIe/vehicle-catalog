@@ -35,7 +35,7 @@ function init() {
 
 		let model = data.model;
 		let [loaded, err] = await loadModel(model);
-		
+
 		if (!loaded) {
 			console.log(`${err}, skipping...`);
 			return;
@@ -74,7 +74,7 @@ function init() {
 			tick = null;
 		}
 
-		TriggerServerEvent(`${resourceName}:onGenerateEnd`);
+		TriggerServerEvent(`${config.resourceName}:onGenerateEnd`);
 		cb("ok");
 	}
 
