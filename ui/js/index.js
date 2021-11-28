@@ -22,9 +22,12 @@ let useSlider = false;
 function setVehicleIdx(idx) {
 	vehicleIdx = idx;
 
+	if (!data.vehicles[categoryIdx] || !vehicleIndexes[idx])
+		return;
+
 	fetch(`https://${resourceName}/indexChanged`, {
 		method: "POST",
-		body: JSON.stringify(data.vehicles[categoryIdx][idx] ?? { error: true })
+		body: JSON.stringify(data.vehicles[categoryIdx][vehicleIndexes[idx]] ?? { error: true })
 	}).then(function(response) {
 		return response.json();
 	}).then(function(data) {
