@@ -1,5 +1,6 @@
 function init() {
 	let data;
+	let tick;
 	let cameraHandle;
 
 	function checkData(_data) {
@@ -23,6 +24,10 @@ function init() {
 		return [true];
 	}
 
+	function onTick() {
+		removeHud();
+	}
+
 	function onOpen(_data) {
 		let [success, err] = checkData(_data);
 
@@ -31,6 +36,7 @@ function init() {
 			return;
 		}
 
+		tick = setTick(onTick);
 		cameraHandle = setupCamera(data.camera);
 
 		SendNuiMessage(JSON.stringify({
@@ -41,6 +47,11 @@ function init() {
 	
 	function onClose() {
 		removeCamera(cameraHandle);
+
+		if (tick) {
+			clearTick(tick);
+			tick = null;
+		}
 	}
 	
 	function onIndexChanged(data, cb) {
