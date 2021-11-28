@@ -34,17 +34,11 @@ function init() {
 		await delay(500);
 
 		let model = data.model;
+		let [loaded, err] = await loadModel(model);
 		
-		if (!IsModelInCdimage(model)) {
-			console.log(`"${model}" model doesn't exist, skipping...`);
-			cb("skip");
+		if (!loaded) {
+			console.log(`${err}, skipping...`);
 			return;
-		}
-
-		RequestModel(model);
-
-		while (!HasModelLoaded(model)) {
-			await delay(200);
 		}
 
 		lastVehicle = CreateVehicle(model, config.images.vehicle.x, config.images.vehicle.y, config.images.vehicle.z, config.images.vehicle.w, false, false);

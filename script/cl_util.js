@@ -28,3 +28,18 @@ function removeHud() {
 	RemoveMultiplayerHudCash();
 	ThefeedHideThisFrame();
 }
+
+async function loadModel(model) {
+	if (!IsModelInCdimage(model))
+		return [false, `"${model}" model doesn't exist`];
+
+	let gameTime = GetGameTimer();
+
+	RequestModel(model);
+
+	while (!HasModelLoaded(model) && GetGameTimer() - gameTime < 10000) {
+		await delay(200);
+	}
+
+	return [HasModelLoaded(model), `"${model}" took too long to load`];
+}
