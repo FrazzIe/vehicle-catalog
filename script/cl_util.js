@@ -19,3 +19,12 @@ function removeCamera(handle) {
 	RenderScriptCams(false, false, 0, 1, 0);
 	DestroyCam(handle, false);
 }
+
+function removeHud() {
+	for (let i = 1; i < 22; i++)
+		HideHudComponentThisFrame(i);
+
+	HideHudAndRadarThisFrame();
+	RemoveMultiplayerHudCash();
+	ThefeedHideThisFrame();
+}

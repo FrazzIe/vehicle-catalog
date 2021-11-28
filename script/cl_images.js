@@ -1,5 +1,5 @@
 function init() {
-	let hudTick;
+	let tick;
 	let cameraHandle;
 	let lastPed;
 	let lastPedCoords;
@@ -12,13 +12,8 @@ function init() {
 		SetWeatherTypePersist(weatherType);
 	}
 
-	async function removeHud() {
-		for (let i = 1; i < 22; i++)
-			HideHudComponentThisFrame(i);
-
-		HideHudAndRadarThisFrame();
-		RemoveMultiplayerHudCash();
-		ThefeedHideThisFrame();
+	async function onTick() {
+		removeHud();
 
 		setWeather("EXTRASUNNY");
 		NetworkOverrideClockTime(12, 0, 0);
@@ -80,9 +75,9 @@ function init() {
 
 		removeCamera(cameraHandle);
 
-		if (hudTick) {
-			clearTick(hudTick);
-			hudTick = null;
+		if (tick) {
+			clearTick(tick);
+			tick = null;
 		}
 
 		TriggerServerEvent(`${resourceName}:onGenerateEnd`);
@@ -90,7 +85,7 @@ function init() {
 	}
 
 	async function onGenerateStart(format) {
-		hudTick = setTick(removeHud);
+		tick = setTick(onTick);
 		
 		lastPed = PlayerPedId();
 		lastPedCoords = GetEntityCoords(lastPed);
