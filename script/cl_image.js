@@ -1,8 +1,6 @@
 function init() {
 	let tick;
 	let cameraHandle;
-	let lastPed;
-	let lastPedCoords;
 	let lastVehicle;
 
 	function setWeather(weatherType) {
@@ -46,21 +44,16 @@ function init() {
 	}
 
 	async function onEndImage(data, cb) {
-		if (lastVehicle) {
-			SetEntityCoords(lastVehicle, -4000.0, -4000.0, -4000.0);
-			SetEntityAsMissionEntity(lastVehicle, false, true);
-			DeleteVehicle(lastVehicle);
+		let ped = PlayerPedId();
+		let pos = GetEntityCoords(ped);
 
+		if (lastVehicle) {
+			DeleteEntity(lastVehicle);
 			lastVehicle = null;
 		}
 
-		if (lastPed) {
-			SetEntityCoords(lastPed, lastPedCoords.x, lastPedCoords.y, lastPedCoords.z);
-			ResetEntityAlpha(lastPed);
-			FreezeEntityPosition(lastPed, false);
-		}
-
 		removeCamera(cameraHandle);
+		SetFocusPosAndVel(pos[0], pos[1], pos[2], 0.0, 0.0, 0.0);
 
 		if (tick) {
 			clearTick(tick);
@@ -73,24 +66,8 @@ function init() {
 
 	async function onGenerateStart(format) {
 		tick = setTick(onTick);
-		
-		lastPed = PlayerPedId();
-		lastPedCoords = GetEntityCoords(lastPed);
-		SetEntityCoords(lastPed, config.images.camera.pos.x, config.images.camera.pos.y, config.images.camera.pos.z);
-		FreezeEntityPosition(lastPed, true);
-		SetEntityAlpha(lastPed, 0);
-
 		cameraHandle = setupCamera(config.images.camera);
-
-		let interior = GetInteriorAtCoords(config.images.camera.pos.x, config.images.camera.pos.y, config.images.camera.pos.z);
-
-		if (interior != 0) {
-			PinInteriorInMemory(interior)
-			while (!IsInteriorReady(interior)) {
-				await delay(200);
-			}
-		}
-
+		SetFocusPosAndVel(config.images.vehicle.x, config.images.vehicle.y, config.images.vehicle.z, 0.0, 0.0, 0.0);
 		RemoveDecalsInRange(config.images.camera.pos.x, config.images.camera.pos.y, config.images.camera.pos.z, 25.0);
 		ClearAreaOfVehicles(config.images.camera.pos.x, config.images.camera.pos.y, config.images.camera.pos.z, 25.0, false, false, false, false, false);
 
