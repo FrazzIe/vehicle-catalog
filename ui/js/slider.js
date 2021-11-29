@@ -207,6 +207,8 @@ function populateVehicles(idx) {
 			vehicleElements.push(item);
 		}
 
+		if (onVehicleChanged)
+			onVehicleChanged(idx);
 		return;
 	}
 
