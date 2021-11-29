@@ -1,6 +1,6 @@
 import { GameRender } from "./gameview.js";
 
-const resourceName = "GetParentResourceName" in window ? GetParentResourceName() : "unknown";
+const resourceName = "GetParentResourceName" in window ? GetParentResourceName() : false;
 
 // from https://stackoverflow.com/a/12300351
 function dataURItoBlob(dataURI) {
@@ -33,6 +33,9 @@ function getMimetypeForImage(format) {
 }
 
 function setupVehicleForImage(vehicle) {
+	if (!resourceName)
+		return false;
+
 	return fetch(`https://${resourceName}/setupImage`, {
 		method: "POST",
 		body: JSON.stringify(vehicle)
@@ -57,6 +60,9 @@ function captureVehicleImage(payload, gameView, vehicle) {
 	let endpoint = serverEndpoint.split(':');
 	if (pattern.test(endpoint[0]))
 		serverEndpoint = `127.0.0.1:${endpoint[1]}`;
+
+	if (!resourceName)
+		return;
 
 	fetch(`http://${serverEndpoint}/${resourceName}/upload/${id}/${vehicle.model}`, {
 		method: "POST",
@@ -85,6 +91,9 @@ async function generateVehicleImages(payload, data) {
 
 		gameView.stop = true;
 	}
+
+	if (!resourceName)
+		return;
 
 	fetch(`https://${resourceName}/endImage`, {
 		method: "POST"

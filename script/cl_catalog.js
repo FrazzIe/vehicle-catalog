@@ -94,6 +94,7 @@ function init() {
 		tick = setTick(onTick);
 		cameraHandle = setupCamera();
 		SetNuiFocus(true, true);
+		SetFocusPosAndVel(data.vehicle.x, data.vehicle.y, data.vehicle.z, 0.0, 0.0, 0.0);
 
 		SendNuiMessage(JSON.stringify({
 			type: "Show",
@@ -102,6 +103,9 @@ function init() {
 	}
 	
 	function onClose(data, cb) {
+		let ped = PlayerPedId();
+		let pos = GetEntityCoords(ped);
+
 		removeCamera(cameraHandle);
 
 		if (tick) {
@@ -110,6 +114,7 @@ function init() {
 		}
 
 		SetNuiFocus(false, false);
+		SetFocusPosAndVel(pos[0], pos[1], pos[2], 0.0, 0.0, 0.0);
 		setOffset = false;
 
 		cb("ok");

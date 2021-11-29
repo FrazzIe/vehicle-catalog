@@ -1,4 +1,7 @@
 const data = {
+	image: {
+		fileType: ".webp"
+	},
 	categories: [
 		"Compacts",
 		"Coupes",
@@ -169,7 +172,7 @@ const data = {
 			{ model: "blade" },
 			{ model: "buccaneer" },
 			{ model: "buccaneer2" },
-			{ model: "stallion2" },
+			{ model: "stalion2" },
 			{ model: "chino" },
 			{ model: "chino2" },
 			{ model: "coquette3" },
@@ -201,7 +204,7 @@ const data = {
 			{ model: "sabregt2" },
 			{ model: "slamvan" },
 			{ model: "slamvan3" },
-			{ model: "stallion" },
+			{ model: "stalion" },
 			{ model: "tampa" },
 			{ model: "virgo" },
 			{ model: "virgo2" },

@@ -1,161 +1,43 @@
+// TODO: Vehicle information panel (stats, name)
+// TODO: Select vehicle button
+// TODO: Exit/Close button
+// TODO: Fetch vehicle label names
+// TODO: Optional vehicle price support (show price of vehicle next to label)
 import { data } from "../../vehicles.js";
 import { startGamepadListener, stopGamepadListener } from "./gamepad.js";
 import { generateVehicleImages } from "./screenshot.js";
+import { setCategories, changeCategory, populateCategories, setOnCategoryChangedCallback, getSelectedCategoryElement } from "./category.js";
+import { setVehicles, setImageType, setVehicleIdx, changeSlider, populateVehicles, setOnVehicleChangedCallback, getSelectedVehicleElement } from "./slider.js";
 
-const numVehicles = 5;
-const buttonThreshold = 0.12;
+
 const buttonInterval = 140;
-const axesThreshold = 0.2;
 const axesInterval = 160;
-const resourceName = "GetParentResourceName" in window ? GetParentResourceName() : "unknown";
+const resourceName = "GetParentResourceName" in window ? GetParentResourceName() : false;
 const app = document.getElementById("app");
 
-let categoryElements;
 let categoryIdx;
-let vehicleElements;
-let vehicleIndexes;
 let vehicleIdx;
 let buttonIntervals = [];
 let axesIntervals = [];
 let useSlider = false;
 
-function setVehicleIdx(idx) {
-	vehicleIdx = idx;
-
-	if (data.vehicles[categoryIdx] == null || vehicleIndexes[idx] == null)
-		return;
-
-	fetch(`https://${resourceName}/indexChanged`, {
-		method: "POST",
-		body: JSON.stringify(data.vehicles[categoryIdx][vehicleIndexes[idx]] ?? { error: true })
-	}).then(function(response) {
-		return response.json();
-	}).then(function(data) {
-		console.log(data)
-	}).catch(function(err) {
-		console.log(err);
-	});
-}
-
-function changeCategory(increment) {
-	let idx = (Math.abs(increment) % data.categories.length);
-
-	if (increment < 0)
-		idx = categoryIdx - idx;
-	else
-		idx = categoryIdx + idx;
-
-	if (idx >= data.categories.length)
-		idx -= data.categories.length;
-	if (idx < 0)
-		idx = data.categories.length + idx;
-
-	if (categoryElements[categoryIdx])
-		categoryElements[categoryIdx].classList.remove("selected");
-
-	if (categoryElements[idx])
-		categoryElements[idx].classList.add("selected");
-
-	categoryIdx = idx;
-	populateVehicles(idx);
-}
-
-// issue: select middle use changeSlider(+4) only item 0,1 should change so [numVehicles - (current index + 1)]
-function changeSlider(increment, _category) {
-	let category = _category;
-
-	if (!_category && categoryIdx != null)
-		category = categoryIdx;
-
-	if (!data.vehicles[category])
-		return;
-
-	let idx = vehicleIdx + increment;
-
-	if (data.vehicles[category].length <= numVehicles) {
-		console.log(idx, vehicleIndexes.length)
-		if (idx >= data.vehicles[category].length)
-			idx = 0;
-		else if (idx < 0)
-			idx = data.vehicles[category].length - 1;
-		
-		vehicleElements[vehicleIdx].classList.remove("selected");
-		vehicleElements[idx].classList.add("selected");
-		setVehicleIdx(idx);
-		return;
+function getImageType() {
+	switch(data.image.fileType) {
+		case "png":
+		case ".png":
+			return ".png";
+		case ".jpg":		
+		case "jpg":
+			return ".jpg";
+		case ".jpeg":
+		case "jpeg":
+			return ".jpeg";
+		case "webp":
+		case ".webp":
+			return ".webp";
+		default:
+			return ".png";
 	}
-
-	if (idx >= 0 && idx < vehicleIndexes.length) {
-		vehicleElements[vehicleIdx].classList.remove("selected");
-		vehicleElements[idx].classList.add("selected");
-		setVehicleIdx(idx);
-		return;
-	}
-
-	//if change will pass max
-	if (idx >= vehicleIndexes.length) {
-		//amount of items to remove from array
-		let deleteCount = increment;
-
-		//add each new item in
-		for (let i = 0; i < increment; i++) {
-			let lastIdx = vehicleIndexes[vehicleIndexes.length - 1];
-			let newIdx = lastIdx + 1;
-
-			if (newIdx >= data.vehicles[category].length)
-				newIdx -= data.vehicles[category].length;
-			
-			vehicleIndexes.push(newIdx);
-		}
-
-		//delete redundent items
-		vehicleIndexes.splice(0, deleteCount);
-
-		idx = vehicleIndexes.length - 1;
-	}
-
-	//if change will pass min
-	if (idx < 0) {
-		//amount of items to remove from array
-		let deleteCount = increment;
-
-		for (let i = increment; i < 0; i++) {
-			let firstIdx = vehicleIndexes[0];
-			let newIdx = firstIdx - 1;
-
-			if (newIdx < 0)
-				newIdx = data.vehicles[category].length - 1;
-
-			vehicleIndexes.splice(0, 0, newIdx);
-		}
-
-		//delete redundent items
-		vehicleIndexes.splice(deleteCount);
-
-		idx = 0;
-	}
-
-	for (let i = 0; i < vehicleIndexes.length; i++) {
-		let item = vehicleElements[i];
-		let image = item.children[0];
-		let label = item.children[1];
-		let vehicle = data.vehicles[category][vehicleIndexes[i]];
-
-		if (!vehicle)
-			continue;
-
-		image.onerror = onImageError;
-		image.src = `./img/${vehicle.model}.png`;
-
-		label.textContent = vehicle.model;
-
-		if (i == idx) {
-			vehicleElements[vehicleIdx].classList.remove("selected");
-			item.classList.add("selected");
-		}
-	}
-
-	setVehicleIdx(idx);
 }
 
 function toggleHighlight(element) {
@@ -192,12 +74,12 @@ function onKeyDown(event) {
 		case "w":
 		case "ArrowUp":
 			useSlider = false;
-			toggleHighlight(categoryElements[categoryIdx]);
+			toggleHighlight(getSelectedCategoryElement());
 			break;
 		case "s":
 		case "ArrowDown":
 			useSlider = true;
-			toggleHighlight(vehicleElements[vehicleIdx]);
+			toggleHighlight(getSelectedVehicleElement());
 			break;
 		case "a":
 		case "ArrowLeft":
@@ -255,8 +137,7 @@ function onGameButtonReleased(buttonIdx, value, data) {
 	delete buttonIntervals[buttonIdx];
 }
 
-function onGamepadAxisActive(axisId, value) {
-	
+function onGamepadAxisActive(axisId, value) {	
 	let now = performance.now();
 
 	if (axesIntervals[axisId] && now - axesIntervals[axisId] <= axesInterval) {
@@ -276,35 +157,12 @@ function onGamepadAxisActive(axisId, value) {
 		case 3:
 			if (value < 0) {
 				useSlider = false;
-				toggleHighlight(categoryElements[categoryIdx]);
+				toggleHighlight(getSelectedCategoryElement());
 			} else {
 				useSlider = true;
-				toggleHighlight(vehicleElements[vehicleIdx]);
+				toggleHighlight(getSelectedVehicleElement());
 			}
 			break;			
-	}
-}
-
-function onGamepadTick(gamepads) {
-	for (let idx in gamepads) {
-		let pad = gamepads[idx];
-
-		if (pad.mapping != "standard")
-			continue;
-
-		for (let i = 0; i < pad.buttons.length; i++) {
-			let value = pad.buttons[i].value || pad.buttons[i];
-
-			if (value && value > buttonThreshold)
-				onGamepadButtonPressed(i, value, pad.buttons[i]);
-			else
-				onGameButtonReleased(i, value, pad.buttons[i]);
-		}
-
-		for (let i = 0; i < pad.axes.length; i++) {
-			if (pad.axes[i] > axesThreshold || pad.axes[i] < -axesThreshold)
-				onGamepadAxisActive(i, pad.axes[i]);
-		}
 	}
 }
 
@@ -321,165 +179,35 @@ function setupArrows() {
 	}
 }
 
-function onVehicleClicked(event) {
-	let target = event.currentTarget;
-	let idx = parseInt(target.dataset.idx);
-
-	if (isNaN(idx))
-		return;
-
-	if (!vehicleElements[idx])
-		return;
-
-	let selectedVehicle = vehicleElements[vehicleIdx];
-
-	if (target == selectedVehicle)
-		return;
-	
-	selectedVehicle.classList.remove("selected");
-	target.classList.add("selected");
-	setVehicleIdx(idx);
-}
-
-function onImageError(event) {
-	let target = event.currentTarget;
-	target.onerror = null;
-	target.src = "./img/default.png";
-}
-
-function onImageDrag() {
-	return false;
-}
-
-function populateVehicles(idx) {
-	if (!vehicleElements) {
-		vehicleElements = [];
-		vehicleIndexes = [];
-		vehicleIdx = 0;
-
-		let container = app.querySelector(".item-container");
-
-		for (let i = 0; i < numVehicles; i++) {
-			let item = document.createElement("div");
-			let image = document.createElement("img");
-			let label = document.createElement("div");
-			let vehicle = data.vehicles[idx][i];
-
-			image.onerror = onImageError;
-			image.ondragstart = onImageDrag;
-
-			if (vehicle) {
-				image.src = `./img/${vehicle.model}.png`;
-				label.textContent = vehicle.model;
-				vehicleIndexes.push(i);
-				item.style.visibility = "visible";
-			} else {
-				item.style.visibility = "hidden";
-			}
-
-			item.classList.add("item");
-			if (i == 0)
-				item.classList.add("selected");
-			item.dataset.idx = i;
-			item.onclick = onVehicleClicked;
-			item.appendChild(image);
-			item.appendChild(label);
-			container.appendChild(item);
-			vehicleElements.push(item);
-		}
-
-		return;
-	}
-
-	let selectedVehicle = vehicleElements[vehicleIdx];
-	vehicleIndexes = [];
-
-	for (let i = 0; i < vehicleElements.length; i++) {
-		let item = vehicleElements[i];
-		let image = item.children[0];
-		let label = item.children[1];
-		let vehicle = data.vehicles[idx][i];
-
-		image.onerror = onImageError;
-
-		if (vehicle) {
-			image.src = `./img/${vehicle.model}.png`;
-			label.textContent = vehicle.model;
-			item.style.visibility = "visible";
-			vehicleIndexes.push(i);
-		} else {
-			item.style.visibility = "hidden";
-		}
-
-		if (i == 0) {
-			selectedVehicle.classList.remove("selected");
-			item.classList.add("selected");
-		}
-	}
-
-	setVehicleIdx(0);
-}
-
-function onCategoryClicked(event) {
-	let target = event.currentTarget;
-	let idx = parseInt(target.dataset.idx);
-
-	if (isNaN(idx))
-		return;
-
-	if (data.vehicles.length <= idx)
-		return;
-
-	if (categoryElements[categoryIdx])
-		categoryElements[categoryIdx].classList.remove("selected");
-
-	if (categoryElements[idx])
-		categoryElements[idx].classList.add("selected");
-
+function onCategoryChanged(idx) {
 	categoryIdx = idx;
 	populateVehicles(idx);
 }
 
-function populateCategories() {
-	let container = app.querySelector(".category-container");
-	let numCategories = data.categories.length;
-
-	if (numCategories == 0)
-		return;		
-
-	categoryElements = [];
-	categoryIdx = 0;
-
-	for (let i = 0; i < numCategories; i++) {
-		let item = document.createElement("button");
-
-		item.classList.add("item");
-		item.textContent = data.categories[i];
-		item.dataset.idx = i;
-		item.onclick = onCategoryClicked;
-		
-		container.appendChild(item);
-		categoryElements.push(item);
-	}
-
-	categoryElements[categoryIdx].classList.add("selected");
-
-	populateVehicles(categoryIdx);
+function onVehicleChanged(idx) {
+	vehicleIdx = idx;
 }
 
-function show(val) {
+function show(val, preventRequest = false) {
 	let show = val === true;
 	if (show) {
-		app.style.display = "initial";
+		app.style.display = "block";
 		window.addEventListener("keydown", onKeyDown, false);
 		window.addEventListener("wheel", onWheel, false);
-		startGamepadListener(onGamepadTick);
+		startGamepadListener({
+			onGamepadButtonPressed: onGamepadButtonPressed,
+			onGameButtonReleased: onGameButtonReleased,
+			onGamepadAxisActive: onGamepadAxisActive
+		});
 		setVehicleIdx(vehicleIdx);
 	} else {
 		app.style.display = "none";
 		window.removeEventListener("keydown", onKeyDown);
 		window.removeEventListener("wheel", onWheel);
 		stopGamepadListener();
+
+		if (!resourceName || preventRequest)
+			return;
 
 		fetch(`https://${resourceName}/close`, {
 			method: "POST",
@@ -509,8 +237,13 @@ function onNuiMessage(event) {
 function init() {
 	window.addEventListener("message", onNuiMessage, false);
 
-	show(false);
+	show(false, true);
 	show(true);
+	setCategories(data.categories);
+	setVehicles(data.vehicles);
+	setImageType(getImageType());
+	setOnCategoryChangedCallback(onCategoryChanged);
+	setOnVehicleChangedCallback(onVehicleChanged);
 	populateCategories();
 	setupArrows();
 }
