@@ -56,7 +56,7 @@ function setVehicleIdx(idx) {
 	if (vehicles[categoryIdx] == null || vehicleIndexes[idx] == null)
 		return;
 
-	if (!resourceName)
+	if (resourceName == false)
 		return;
 
 	fetch(`https://${resourceName}/indexChanged`, {

@@ -33,7 +33,7 @@ function getMimetypeForImage(format) {
 }
 
 function setupVehicleForImage(vehicle) {
-	if (!resourceName)
+	if (resourceName == false)
 		return false;
 
 	return fetch(`https://${resourceName}/setupImage`, {
@@ -61,7 +61,7 @@ function captureVehicleImage(payload, gameView, vehicle) {
 	if (pattern.test(endpoint[0]))
 		serverEndpoint = `127.0.0.1:${endpoint[1]}`;
 
-	if (!resourceName)
+	if (resourceName == false)
 		return;
 
 	fetch(`http://${serverEndpoint}/${resourceName}/upload/${id}/${vehicle.model}`, {
@@ -92,7 +92,7 @@ async function generateVehicleImages(payload, data) {
 		gameView.stop = true;
 	}
 
-	if (!resourceName)
+	if (resourceName == false)
 		return;
 
 	fetch(`https://${resourceName}/endImage`, {

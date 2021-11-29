@@ -206,7 +206,7 @@ function show(val, preventRequest = false) {
 		window.removeEventListener("wheel", onWheel);
 		stopGamepadListener();
 
-		if (!resourceName || preventRequest)
+		if (resourceName == false || preventRequest)
 			return;
 
 		fetch(`https://${resourceName}/close`, {
