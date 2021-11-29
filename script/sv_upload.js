@@ -7,9 +7,15 @@ const acceptedMimetypes = {
 	"image/jpeg": ".jpeg",
 	"image/webp": ".webp"
 }
+const acceptedFileTypes = {
+	".png": "image/png",
+	".jpeg": "image/jpeg",
+	".webp": "image/webp"	
+}
 const imageFolder = "images";
 const accessControl = {};
 const resourceName = GetCurrentResourceName();
+const cachedFiles = {};
 
 function handlePost(req, res) {
 	req.path = path.normalize(req.path);
@@ -72,7 +78,52 @@ function handlePost(req, res) {
 }
 
 function handleGet(req, res) {
+	req.path = path.normalize(req.path);
+	const pathParams = req.path.split(path.sep);
 
+	if (pathParams.length != 3) {
+		res.writeHead(400);
+		res.send("Invalid route");
+		return;
+	}
+
+	if (pathParams[0] != "" && pathParams[1] != "images") {		
+		res.writeHead(404);
+		res.send("Not found.");
+		return;
+	}
+
+	let fileName = pathParams[2];
+	let fileExt = path.extname(fileName);
+
+	if (!acceptedFileTypes[fileExt]) {
+		res.writeHead(415);
+		res.send(`Unsupported media type: ${fileExt}`);
+		return;
+	}
+
+	if (cachedFiles[fileName]) {
+		res.writeHead(200, { "Content-Type:": acceptedFileTypes[fileExt] });
+		res.send(cachedFiles[fileName]);
+		return;
+	}
+
+	let filePath = path.join(GetResourcePath(resourceName), imageFolder, fileName);
+
+	fs.readFile(filePath, function(error, data) {
+		if (error) {
+			console.log(error);
+			res.writeHead(404);
+			res.send("Not found.");
+			return;
+		}
+
+		let image = `data:${acceptedFileTypes[fileExt]};base64,${data.toString("base64")}`;
+		cachedFiles[fileName] = image;
+
+		res.writeHead(200, { "Content-Type:": acceptedFileTypes[fileExt] });
+		res.send(image);
+	})
 }
 
 // TODO: Allow image GET request w/ caching?
