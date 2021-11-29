@@ -165,7 +165,7 @@ function changeSlider(increment, _category) {
 			continue;
 
 		image.onerror = onImageError;
-		image.src = `./img/${vehicle.model}${imageType}`;
+		image.src = `./img/${vehicle.model}${vehicle.fileType ?? imageType}`;
 
 		label.textContent = vehicle.model;
 
@@ -389,7 +389,7 @@ function populateVehicles(idx) {
 			image.ondragstart = onImageDrag;
 
 			if (vehicle) {
-				image.src = `./img/${vehicle.model}${imageType}`;
+				image.src = `./img/${vehicle.model}${vehicle.fileType ?? imageType}`;
 				label.textContent = vehicle.model;
 				vehicleIndexes.push(i);
 				item.style.visibility = "visible";
@@ -423,7 +423,7 @@ function populateVehicles(idx) {
 		image.onerror = onImageError;
 
 		if (vehicle) {
-			image.src = `./img/${vehicle.model}${imageType}`;
+			image.src = `./img/${vehicle.model}${vehicle.fileType ?? imageType}`;
 			label.textContent = vehicle.model;
 			item.style.visibility = "visible";
 			vehicleIndexes.push(i);
