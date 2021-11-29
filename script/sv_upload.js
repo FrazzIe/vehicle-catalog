@@ -7,7 +7,7 @@ const acceptedMimetypes = {
 	"image/jpeg": ".jpeg",
 	"image/webp": ".webp"
 }
-const outputFolder = "generated_images";
+const imageFolder = "images";
 const accessControl = {};
 const resourceName = GetCurrentResourceName();
 
@@ -48,7 +48,7 @@ function handler(req, res) {
 	
 	let fileName = pathParams[3];
 	let fileExt = acceptedMimetypes[req.headers["Content-Type"]];
-	let filePath = path.join(GetResourcePath(resourceName), outputFolder, fileName + fileExt);
+	let filePath = path.join(GetResourcePath(resourceName), imageFolder, fileName + fileExt);
 
 	req.setDataHandler(async function(body) {
 		const blob = new buf.Blob([body], {
