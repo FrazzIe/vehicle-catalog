@@ -51,11 +51,7 @@ function init() {
 			return;
 		}
 
-		let handle = CreateVehicle(model, data.vehicle.x, data.vehicle.y, data.vehicle.z, data.vehicle.w, false, false);
-		FreezeEntityPosition(handle, true);
-		SetVehicleOnGroundProperly(handle);
-		SetEntityCollision(handle, false, true);
-		SetModelAsNoLongerNeeded(model);
+		spawnVehicle(data.vehicle);
 
 		if (activeModel != model) {
 			console.log(`"${model}" is no longer active, deleting..`);

@@ -24,10 +24,7 @@ function init() {
 
 	async function onSetupImage(data, cb) {
 		if (lastVehicle) {
-			SetEntityCoords(lastVehicle, -4000.0, -4000.0, -4000.0);
-			SetEntityAsMissionEntity(lastVehicle, false, true);
-			DeleteVehicle(lastVehicle);
-
+			DeleteEntity(lastVehicle);
 			lastVehicle = null;
 		}
 
@@ -41,11 +38,7 @@ function init() {
 			return;
 		}
 
-		lastVehicle = CreateVehicle(model, config.images.vehicle.x, config.images.vehicle.y, config.images.vehicle.z, config.images.vehicle.w, false, false);
-		FreezeEntityPosition(lastVehicle, true);
-		SetVehicleOnGroundProperly(lastVehicle);
-		SetEntityCollision(lastVehicle, false, true);
-		SetModelAsNoLongerNeeded(model);
+		lastVehicle = spawnVehicle(config.images.vehicle);
 
 		await delay(500);
 
