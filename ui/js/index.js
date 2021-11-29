@@ -1,3 +1,8 @@
+// TODO: Vehicle information panel (stats, name)
+// TODO: Select vehicle button
+// TODO: Exit/Close button
+// TODO: Fetch vehicle label names
+// TODO: Optional vehicle price support (show price of vehicle next to label)
 import { data } from "../../vehicles.js";
 import { startGamepadListener, stopGamepadListener } from "./gamepad.js";
 import { generateVehicleImages } from "./screenshot.js";

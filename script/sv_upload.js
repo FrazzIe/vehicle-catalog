@@ -11,6 +11,7 @@ const outputFolder = "generated_images";
 const accessControl = {};
 const resourceName = GetCurrentResourceName();
 
+// TODO: Allow image GET request w/ caching?
 function handler(req, res) {
 	req.path = path.normalize(req.path);
 	const pathParams = req.path.split(path.sep);
