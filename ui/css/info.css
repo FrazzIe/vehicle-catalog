@@ -1,0 +1,9 @@
+.info-container {
+	position: absolute;
+	top: 32.5%;
+	transform: translateY(-50%);
+	right: 5%;
+	width: 25%;
+	height: 40%;
+	background-color: rgba(0, 0, 0, 0.24);
+}
