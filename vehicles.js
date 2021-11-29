@@ -1,4 +1,7 @@
 const data = {
+	image: {
+		fileType: ".webp"
+	},
 	categories: [
 		"Compacts",
 		"Coupes",

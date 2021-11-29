@@ -7,6 +7,7 @@ const buttonThreshold = 0.12;
 const buttonInterval = 140;
 const axesThreshold = 0.2;
 const axesInterval = 160;
+const imageType = getImageType();
 const resourceName = "GetParentResourceName" in window ? GetParentResourceName() : "unknown";
 const app = document.getElementById("app");
 
@@ -18,6 +19,25 @@ let vehicleIdx;
 let buttonIntervals = [];
 let axesIntervals = [];
 let useSlider = false;
+
+function getImageType() {
+	switch(data.image.fileType) {
+		case "png":
+		case ".png":
+			return ".png";
+		case ".jpg":		
+		case "jpg":
+			return ".jpg";
+		case ".jpeg":
+		case "jpeg":
+			return ".jpeg";
+		case "webp":
+		case ".webp":
+			return ".webp";
+		default:
+			return ".png";
+	}
+}
 
 function setVehicleIdx(idx) {
 	vehicleIdx = idx;
@@ -145,7 +165,7 @@ function changeSlider(increment, _category) {
 			continue;
 
 		image.onerror = onImageError;
-		image.src = `./img/${vehicle.model}.png`;
+		image.src = `./img/${vehicle.model}${imageType}`;
 
 		label.textContent = vehicle.model;
 
@@ -369,7 +389,7 @@ function populateVehicles(idx) {
 			image.ondragstart = onImageDrag;
 
 			if (vehicle) {
-				image.src = `./img/${vehicle.model}.png`;
+				image.src = `./img/${vehicle.model}${imageType}`;
 				label.textContent = vehicle.model;
 				vehicleIndexes.push(i);
 				item.style.visibility = "visible";
@@ -403,7 +423,7 @@ function populateVehicles(idx) {
 		image.onerror = onImageError;
 
 		if (vehicle) {
-			image.src = `./img/${vehicle.model}.png`;
+			image.src = `./img/${vehicle.model}${imageType}`;
 			label.textContent = vehicle.model;
 			item.style.visibility = "visible";
 			vehicleIndexes.push(i);
