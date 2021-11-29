@@ -38,7 +38,7 @@ function init() {
 			return;
 		}
 
-		lastVehicle = spawnVehicle(config.images.vehicle);
+		lastVehicle = spawnVehicle(model, config.images.vehicle);
 
 		await delay(500);
 

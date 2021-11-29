@@ -47,7 +47,7 @@ async function loadModel(model) {
 	return [HasModelLoaded(model), `"${model}" took too long to load`];
 }
 
-function spawnVehicle(pos) {
+function spawnVehicle(model, pos) {
 	let handle = CreateVehicle(model, pos.x, pos.y, pos.z, pos.w, false, false);
 	FreezeEntityPosition(handle, true);
 	SetVehicleOnGroundProperly(handle);

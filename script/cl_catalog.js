@@ -51,7 +51,7 @@ function init() {
 			return;
 		}
 
-		spawnVehicle(data.vehicle);
+		let handle = spawnVehicle(model, data.vehicle);
 
 		if (activeModel != model) {
 			console.log(`"${model}" is no longer active, deleting..`);
