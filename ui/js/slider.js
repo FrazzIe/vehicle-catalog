@@ -2,7 +2,8 @@ const numVehicles = 5;
 const resourceName = "GetParentResourceName" in window ? GetParentResourceName() : false;
 
 let vehicles = [];
-let imageType;
+let imageType = ".webp";
+let vehicleLabels = {};
 let vehicleElements;
 let vehicleIndexes;
 let vehicleIdx;
@@ -45,6 +46,21 @@ function setVehicles(data) {
 
 function setImageType(data) {
 	imageType = data;
+}
+
+function setVehicleLabels(data) {
+	vehicleLabels = data;
+
+	for (let i = 0; i < vehicleIndexes.length; i++) {
+		let item = vehicleElements[i];
+		let label = item.children[1];
+		let vehicle = vehicles[categoryIdx][vehicleIndexes[i]];
+
+		if (!vehicle)
+			continue;
+
+		label.textContent = vehicleLabels[vehicle.model] ?? vehicle.model;
+	}
 }
 
 function setVehicleIdx(idx) {
@@ -157,7 +173,7 @@ function changeSlider(increment, _category) {
 		image.onerror = onImageError;
 		image.src = `./img/${vehicle.model}${vehicle.fileType ?? imageType}`;
 
-		label.textContent = vehicle.model;
+		label.textContent = vehicleLabels[vehicle.model] ?? vehicle.model;
 
 		if (i == idx) {
 			vehicleElements[vehicleIdx].classList.remove("selected");
@@ -189,7 +205,7 @@ function populateVehicles(idx) {
 
 			if (vehicle) {
 				image.src = `./img/${vehicle.model}${vehicle.fileType ?? imageType}`;
-				label.textContent = vehicle.model;
+				label.textContent = vehicleLabels[vehicle.model] ?? vehicle.model;
 				vehicleIndexes.push(i);
 				item.style.visibility = "visible";
 			} else {
@@ -225,7 +241,7 @@ function populateVehicles(idx) {
 
 		if (vehicle) {
 			image.src = `./img/${vehicle.model}${vehicle.fileType ?? imageType}`;
-			label.textContent = vehicle.model;
+			label.textContent = vehicleLabels[vehicle.model] ?? vehicle.model;
 			item.style.visibility = "visible";
 			vehicleIndexes.push(i);
 		} else {
@@ -249,4 +265,4 @@ function getSelectedVehicleElement() {
 	return vehicleElements[vehicleIdx];
 }
 
-export { setVehicles, setImageType, setVehicleIdx, changeSlider, populateVehicles, setOnVehicleChangedCallback, getSelectedVehicleElement };
+export { setVehicles, setImageType, setVehicleLabels, setVehicleIdx, changeSlider, populateVehicles, setOnVehicleChangedCallback, getSelectedVehicleElement };

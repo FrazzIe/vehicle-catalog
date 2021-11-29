@@ -1,13 +1,13 @@
 // TODO: Vehicle information panel (stats, name)
 // TODO: Select vehicle button
 // TODO: Exit/Close button
-// TODO: Fetch vehicle label names
 // TODO: Optional vehicle price support (show price of vehicle next to label)
 import { data } from "../../vehicles.js";
 import { startGamepadListener, stopGamepadListener } from "./gamepad.js";
 import { generateVehicleImages } from "./screenshot.js";
 import { setCategories, changeCategory, populateCategories, setOnCategoryChangedCallback, getSelectedCategoryElement } from "./category.js";
-import { setVehicles, setImageType, setVehicleIdx, changeSlider, populateVehicles, setOnVehicleChangedCallback, getSelectedVehicleElement } from "./slider.js";
+import { setVehicles, setImageType, setVehicleLabels, setVehicleIdx, changeSlider, populateVehicles, setOnVehicleChangedCallback, getSelectedVehicleElement } from "./slider.js";
+import { generateVehicleLabels, setOnVehicleLabelsGeneratedCallback } from "./label.js";
 
 
 const buttonInterval = 140;
@@ -188,6 +188,10 @@ function onVehicleChanged(idx) {
 	vehicleIdx = idx;
 }
 
+function onVehicleLabelsGenerated(result) {
+	setVehicleLabels(result);
+}
+
 function show(val, preventRequest = false) {
 	let show = val === true;
 	if (show) {
@@ -231,6 +235,9 @@ function onNuiMessage(event) {
 		case "GenerateVehicleImages":
 			generateVehicleImages(item.payload, data.vehicles);
 			break;
+		case "GenerateVehicleLabels":
+			generateVehicleLabels(data.vehicles);
+			break;
 	}
 }
 
@@ -244,6 +251,7 @@ function init() {
 	setImageType(getImageType());
 	setOnCategoryChangedCallback(onCategoryChanged);
 	setOnVehicleChangedCallback(onVehicleChanged);
+	setOnVehicleLabelsGeneratedCallback(onVehicleLabelsGenerated);
 	populateCategories();
 	setupArrows();
 }

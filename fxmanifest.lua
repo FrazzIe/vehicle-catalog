@@ -25,6 +25,7 @@ client_scripts {
 	"script/cl_config.js",
 	"script/cl_util.js",
 	"script/cl_images.js",
+	"script/cl_label.js",
 	"script/cl_catalog.js"
 }
 

@@ -83,6 +83,17 @@ function init() {
 		removeHud();
 	}
 
+	async function onInit(resourceName) {
+		if (config.resourceName != resourceName)
+			return;
+
+		await delay(1000);
+
+		SendNuiMessage(JSON.stringify({
+			type: "GenerateVehicleLabels"
+		}));
+	}
+
 	function onOpen(_data) {
 		let [success, err] = checkData(_data);
 
@@ -134,6 +145,7 @@ function init() {
 	RegisterNuiCallbackType("close");
 	RegisterNuiCallbackType("indexChanged");
 	
+	on("onClientResourceStart", onInit);
 	on("__cfx_nui:close", onClose);
 	on("__cfx_nui:indexChanged", onIndexChanged);
 }
