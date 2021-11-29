@@ -2,13 +2,8 @@ function delay(ms) {
 	return new Promise(res => setTimeout(res, ms));
 }
 
-function setupCamera(data) {
+function setupCamera() {
 	let handle = CreateCam("DEFAULT_SCRIPTED_CAMERA", true);
-
-	if (data != null) {
-		SetCamCoord(handle, data.pos.x, data.pos.y, data.pos.z);
-		SetCamRot(handle, data.rot.x, data.rot.y, data.rot.z, 2);
-	}
 
 	SetCamFov(handle, 45.0);
 	SetCamActive(handle, true);
@@ -49,8 +44,8 @@ async function loadModel(model) {
 
 function spawnVehicle(model, pos) {
 	let handle = CreateVehicle(model, pos.x, pos.y, pos.z, pos.w, false, false);
-	FreezeEntityPosition(handle, true);
 	SetVehicleOnGroundProperly(handle);
+	FreezeEntityPosition(handle, true);
 	SetEntityCollision(handle, false, true);
 	SetModelAsNoLongerNeeded(model);
 

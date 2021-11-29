@@ -84,7 +84,7 @@ function onGenerateCmd(src, args) {
 	
 	accessControl[src] = true;
 
-	emitNet(`${resourceName}:onGenerateStart`, src, args[0]);
+	emitNet(`${resourceName}:onGenerateStart`, src, args[0], args[1], args[2]);
 }
 
 function onGenerateEnd() {

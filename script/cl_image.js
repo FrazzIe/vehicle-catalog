@@ -2,6 +2,9 @@ function init() {
 	let tick;
 	let cameraHandle;
 	let lastVehicle;
+	let setOffset = false;
+	let updateOffset = false;
+	let offsetLength = false;
 
 	function setWeather(weatherType) {
 		ClearWeatherTypePersist();
@@ -38,6 +41,20 @@ function init() {
 
 		lastVehicle = spawnVehicle(model, config.images.vehicle);
 
+		if (!setOffset || updateOffset) {
+			setOffset = true;
+			let length = 0;
+
+			if (offsetLength) {
+				let dimensions = GetModelDimensions(model);
+				length = (dimensions[1][1] - dimensions[0][1]) / 2;
+			}
+
+			AttachCamToEntity(cameraHandle, lastVehicle, config.images.offset.attach.x, length + config.images.offset.attach.y, config.images.offset.attach.z, true);
+			PointCamAtEntity(cameraHandle, lastVehicle, config.images.offset.point.x, config.images.offset.point.y, config.images.offset.point.z, true);
+			await delay(500);
+		}
+
 		await delay(500);
 
 		cb("ok");
@@ -53,23 +70,40 @@ function init() {
 		}
 
 		removeCamera(cameraHandle);
-		SetFocusPosAndVel(pos[0], pos[1], pos[2], 0.0, 0.0, 0.0);
+		
 
 		if (tick) {
 			clearTick(tick);
 			tick = null;
 		}
 
+		SetFocusPosAndVel(pos[0], pos[1], pos[2], 0.0, 0.0, 0.0);
+		setOffset = false;
+		updateOffset = false;
+		offsetLength = false;
+
 		TriggerServerEvent(`${config.resourceName}:onGenerateEnd`);
 		cb("ok");
 	}
 
-	async function onGenerateStart(format) {
+	async function onGenerateStart(format, _updateOffset, _offsetLength) {
 		tick = setTick(onTick);
-		cameraHandle = setupCamera(config.images.camera);
+		cameraHandle = setupCamera();
 		SetFocusPosAndVel(config.images.vehicle.x, config.images.vehicle.y, config.images.vehicle.z, 0.0, 0.0, 0.0);
-		RemoveDecalsInRange(config.images.camera.pos.x, config.images.camera.pos.y, config.images.camera.pos.z, 25.0);
-		ClearAreaOfVehicles(config.images.camera.pos.x, config.images.camera.pos.y, config.images.camera.pos.z, 25.0, false, false, false, false, false);
+		RemoveDecalsInRange(config.images.vehicle.x, config.images.vehicle.y, config.images.vehicle.z, 25.0);
+		ClearAreaOfVehicles(config.images.vehicle.x, config.images.vehicle.y, config.images.vehicle.z, 25.0, false, false, false, false, false);
+
+		if (_updateOffset != null) {
+			console.log(_updateOffset)
+			if (_updateOffset == "true" || _updateOffset == "1")
+				updateOffset = true;
+		}
+
+		if (_offsetLength != null) {
+			console.log(_offsetLength)
+			if (_offsetLength == "true" || _offsetLength == "1")
+				offsetLength = true;
+		}
 
 		SendNuiMessage(JSON.stringify({
 			type: "GenerateVehicleImages", 
