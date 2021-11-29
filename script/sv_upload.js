@@ -11,8 +11,7 @@ const imageFolder = "images";
 const accessControl = {};
 const resourceName = GetCurrentResourceName();
 
-// TODO: Allow image GET request w/ caching?
-function handler(req, res) {
+function handlePost(req, res) {
 	req.path = path.normalize(req.path);
 	const pathParams = req.path.split(path.sep);
 
@@ -25,12 +24,6 @@ function handler(req, res) {
 	if (pathParams[0] != "" && pathParams[1] != "upload") {		
 		res.writeHead(404);
 		res.send("Not found.");
-		return;
-	}
-
-	if (req.method != "POST") {
-		res.writeHead(405);
-		res.send(`The "${req.method}" method is not allowed`);
 		return;
 	}
 
@@ -76,6 +69,23 @@ function handler(req, res) {
 			});
 		});
 	}, "binary");
+}
+
+function handleGet(req, res) {
+
+}
+
+// TODO: Allow image GET request w/ caching?
+function handler(req, res) {
+	if (req.method == "POST")
+		handlePost(req, res);
+	else if(req.method == "GET")
+		handleGet(req, res);
+	else {
+		res.writeHead(405);
+		res.send(`The "${req.method}" method is not allowed`);
+		return;
+	}
 }
 
 function onGenerateCmd(src, args) {
