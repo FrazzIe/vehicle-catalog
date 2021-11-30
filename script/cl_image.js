@@ -5,6 +5,7 @@ function init() {
 	let setOffset = false;
 	let updateOffset = false;
 	let offsetLength = false;
+	let showMarker = false;
 
 	function setWeather(weatherType) {
 		ClearWeatherTypePersist();
@@ -21,6 +22,9 @@ function init() {
 
 		for (let i = 0; i < 2; i++)
 			DisableAllControlActions(i);
+
+		if (showMarker)
+			DrawMarker(config.images.marker.type, config.images.vehicle.x, config.images.vehicle.y, config.images.vehicle.z + config.images.marker.offsetZ, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, config.images.marker.scale.x, config.images.marker.scale.y, config.images.marker.scale.z, config.images.marker.color.r, config.images.marker.color.g, config.images.marker.color.b, config.images.marker.color.a, false, true);
 	}
 
 	async function onSetupImage(data, cb) {
@@ -30,6 +34,13 @@ function init() {
 		}
 
 		await delay(500);
+
+		if (data.default) {
+			showMarker = true;
+			await delay(500);
+			cb("ok");
+			return;
+		}
 
 		let model = data.model;
 		let [loaded, err] = await loadModel(model);
@@ -81,6 +92,7 @@ function init() {
 		setOffset = false;
 		updateOffset = false;
 		offsetLength = false;
+		showMarker = false;
 
 		TriggerServerEvent(`${config.resourceName}:onGenerateEnd`);
 		cb("ok");

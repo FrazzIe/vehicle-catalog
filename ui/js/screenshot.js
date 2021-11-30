@@ -115,6 +115,11 @@ async function generateVehicleImages(payload, data) {
 			}
 		}
 
+		let isReady = await setupVehicleForImage({ default: true });
+
+		if (isReady)
+			captureVehicleImage(payload, gameView, { model: "default" });
+
 		gameView.stop = true;
 	}
 

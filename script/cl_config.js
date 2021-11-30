@@ -4,6 +4,12 @@ const config = {
 		offset: {
 			attach: { x: -4.0, y: 4.5, z: 1.4 },
 			point: { x: 0.1, y: 0.0, z: 0.0 }
+		},
+		marker: {
+			type: 32,
+			scale: { x: 1.9, y: 0.0, z: 2.0 },
+			color: { r: 243, g: 44, b: 82, a: 255 },
+			offsetZ: 1.0
 		}
 	}
 }
