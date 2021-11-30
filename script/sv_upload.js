@@ -1,6 +1,7 @@
 const fs = require("fs");
 const buf = require("buffer");
 const path = require("path");
+const data = require("./vehicles.json");
 
 const acceptedMimetypes = {
 	"image/png": ".png",

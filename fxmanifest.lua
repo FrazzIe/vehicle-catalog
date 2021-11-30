@@ -14,7 +14,7 @@ files {
 	"ui/css/*.css",
 	"ui/js/*.js",
 	"ui/img/*.*",
-	"vehicles.js"
+	"vehicles.json"
 }
 
 shared_scripts {

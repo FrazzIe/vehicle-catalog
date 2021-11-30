@@ -2,7 +2,7 @@
 // TODO: Select vehicle button
 // TODO: Exit/Close button
 // TODO: Optional vehicle price support (show price of vehicle next to label)
-import { data } from "../../vehicles.js";
+import { data } from "./data.js";
 import { startGamepadListener, stopGamepadListener } from "./gamepad.js";
 import { generateVehicleImages } from "./screenshot.js";
 import { setCategories, changeCategory, populateCategories, setOnCategoryChangedCallback, getSelectedCategoryElement } from "./category.js";
