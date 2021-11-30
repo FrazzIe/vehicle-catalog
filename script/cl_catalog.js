@@ -9,10 +9,10 @@ function init() {
 	function checkData(_data) {
 		if (!_data)
 			return [false, "No data received"];
-		
+
 		if (!_data.vehicle || isNaN(_data.vehicle.x) || isNaN(_data.vehicle.y) || isNaN(_data.vehicle.z) || isNaN(_data.vehicle.w))
 			return [false, "No vehicle position received"];
-		
+
 		if (!_data.offset)
 			return [false, "No offsets received"];
 
