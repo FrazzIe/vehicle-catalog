@@ -6,7 +6,7 @@ import { data } from "../../vehicles.js";
 import { startGamepadListener, stopGamepadListener } from "./gamepad.js";
 import { generateVehicleImages } from "./screenshot.js";
 import { setCategories, changeCategory, populateCategories, setOnCategoryChangedCallback, getSelectedCategoryElement } from "./category.js";
-import { setVehicles, setImageType, setVehicleLabels, setVehicleIdx, changeSlider, populateVehicles, setOnVehicleChangedCallback, getSelectedVehicleElement } from "./slider.js";
+import { setVehicles, setImageType, setImageEndpoint, setVehicleLabels, setVehicleIdx, changeSlider, populateVehicles, setOnVehicleChangedCallback, getSelectedVehicleElement } from "./slider.js";
 import { generateVehicleLabels, setOnVehicleLabelsGeneratedCallback } from "./label.js";
 
 
@@ -15,6 +15,8 @@ const axesInterval = 160;
 const resourceName = "GetParentResourceName" in window ? GetParentResourceName() : false;
 const app = document.getElementById("app");
 
+let initialised = false;
+let serverEndpoint = "";
 let categoryIdx;
 let vehicleIdx;
 let buttonIntervals = [];
@@ -189,7 +191,12 @@ function onVehicleChanged(idx) {
 }
 
 function onVehicleLabelsGenerated(result) {
-	setVehicleLabels(result);
+	setVehicleLabels(result, initialised);
+
+	if (!initialised) {
+		populateCategories();
+		initialised = true;
+	}
 }
 
 function show(val, preventRequest = false) {
@@ -229,10 +236,24 @@ function onNuiMessage(event) {
 	const item = event.data || event.detail;
 
 	switch(item.type) {
+		case "Init":
+			if (initialised)
+				break;
+
+			if (!item.payload || !item.payload.endpoint) {
+				console.log("Invalid endpoint received, the script may not work as intended!");
+			} else {
+				serverEndpoint = item.payload.endpoint;
+				setImageEndpoint(serverEndpoint);
+			}
+
+			generateVehicleLabels(data.vehicles);
+			break;
 		case "Show":
 			show(item.payload);
 			break;
 		case "GenerateVehicleImages":
+			item.payload.endpoint = serverEndpoint;
 			generateVehicleImages(item.payload, data.vehicles);
 			break;
 		case "GenerateVehicleLabels":
@@ -252,8 +273,10 @@ function init() {
 	setOnCategoryChangedCallback(onCategoryChanged);
 	setOnVehicleChangedCallback(onVehicleChanged);
 	setOnVehicleLabelsGeneratedCallback(onVehicleLabelsGenerated);
-	populateCategories();
 	setupArrows();
+
+	if (resourceName == false)
+		populateCategories();
 }
 
 init();

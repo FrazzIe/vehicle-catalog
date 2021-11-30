@@ -85,9 +85,22 @@ function init() {
 
 		await delay(1000);
 
-		SendNuiMessage(JSON.stringify({
-			type: "GenerateVehicleLabels"
-		}));
+		let onServerInit;
+
+		onServerInit = function(url) {
+			let endpoint = url == "" ? getServerEndpoint() : url;
+			
+			SendNuiMessage(JSON.stringify({
+				type: "Init",
+				payload: { endpoint: endpoint }
+			}));
+
+			removeEventListener(`${config.resourceName}:onInit`, onServerInit);
+			emit(`${config.resourceName}:onInit`);			
+		}
+
+		onNet(`${config.resourceName}:onInit`, onServerInit);
+		emitNet(`${config.resourceName}:onInit`);
 	}
 
 	function onOpen(_data) {

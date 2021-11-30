@@ -3,6 +3,7 @@ const resourceName = "GetParentResourceName" in window ? GetParentResourceName()
 
 let vehicles = [];
 let imageType = ".webp";
+let imageEndpoint = "";
 let vehicleLabels = {};
 let vehicleElements;
 let vehicleIndexes;
@@ -48,8 +49,15 @@ function setImageType(data) {
 	imageType = data;
 }
 
-function setVehicleLabels(data) {
+function setImageEndpoint(data) {
+	imageEndpoint = data;
+}
+
+function setVehicleLabels(data, initialised) {
 	vehicleLabels = data;
+
+	if (!initialised)
+		return;
 
 	for (let i = 0; i < vehicleIndexes.length; i++) {
 		let item = vehicleElements[i];
@@ -171,7 +179,11 @@ function changeSlider(increment, _category) {
 			continue;
 
 		image.onerror = onImageError;
-		image.src = `./img/${vehicle.model}${vehicle.fileType ?? imageType}`;
+
+		if (imageEndpoint != "")
+			image.src = `https://${imageEndpoint}/${resourceName}/images/${vehicle.model}${vehicle.fileType ?? imageType}`;
+		else
+			image.src = "./img/default.png";
 
 		label.textContent = vehicleLabels[vehicle.model] ?? vehicle.model;
 
@@ -204,7 +216,11 @@ function populateVehicles(idx) {
 			image.ondragstart = onImageDrag;
 
 			if (vehicle) {
-				image.src = `./img/${vehicle.model}${vehicle.fileType ?? imageType}`;
+				if (imageEndpoint != "")
+					image.src = `https://${imageEndpoint}/${resourceName}/images/${vehicle.model}${vehicle.fileType ?? imageType}`;
+				else
+					image.src = "./img/default.png";
+
 				label.textContent = vehicleLabels[vehicle.model] ?? vehicle.model;
 				vehicleIndexes.push(i);
 				item.style.visibility = "visible";
@@ -240,7 +256,11 @@ function populateVehicles(idx) {
 		image.onerror = onImageError;
 
 		if (vehicle) {
-			image.src = `./img/${vehicle.model}${vehicle.fileType ?? imageType}`;
+			if (imageEndpoint != "")
+				image.src = `https://${imageEndpoint}/${resourceName}/images/${vehicle.model}${vehicle.fileType ?? imageType}`;
+			else
+				image.src = "./img/default.png";
+
 			label.textContent = vehicleLabels[vehicle.model] ?? vehicle.model;
 			item.style.visibility = "visible";
 			vehicleIndexes.push(i);
@@ -265,4 +285,4 @@ function getSelectedVehicleElement() {
 	return vehicleElements[vehicleIdx];
 }
 
-export { setVehicles, setImageType, setVehicleLabels, setVehicleIdx, changeSlider, populateVehicles, setOnVehicleChangedCallback, getSelectedVehicleElement };
+export { setVehicles, setImageType, setImageEndpoint, setVehicleLabels, setVehicleIdx, changeSlider, populateVehicles, setOnVehicleChangedCallback, getSelectedVehicleElement };

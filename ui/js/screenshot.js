@@ -52,19 +52,13 @@ function captureVehicleImage(payload, gameView, vehicle) {
 	const imageType = getMimetypeForImage(payload.format);
 	const imageURL = gameView.canvas.toDataURL(imageType, 0.92);
 	const blob = dataURItoBlob(imageURL);
-	const id = payload.id;
-	let serverEndpoint = payload.endpoint;
-	
-	//hacky fix for a locally hosted server with a local client
-	let pattern = /(^192\.168\.)|(^10\.)|(^172\.1[6-9]\.)|(^172\.2[0-9]\.)|(^172\.3[0-1]\.)|(^::1$)|(^[fF][cCdD])/;
-	let endpoint = serverEndpoint.split(':');
-	if (pattern.test(endpoint[0]))
-		serverEndpoint = `127.0.0.1:${endpoint[1]}`;
 
-	if (resourceName == false)
+	if (resourceName == false || !payload || !payload.endpoint || !payload.id) {
+		console.log("Unable to capture image, resourceName or received payload is malformed");
 		return;
+	}
 
-	fetch(`http://${serverEndpoint}/${resourceName}/upload/${id}/${vehicle.model}`, {
+	fetch(`https://${payload.endpoint}/${resourceName}/upload/${payload.id}/${vehicle.model}`, {
 		method: "POST",
 		body: blob
 	}).then(function(response) {

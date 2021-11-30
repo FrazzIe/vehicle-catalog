@@ -118,11 +118,9 @@ function handleGet(req, res) {
 			return;
 		}
 
-		let image = `data:${acceptedFileTypes[fileExt]};base64,${data.toString("base64")}`;
-		cachedFiles[fileName] = image;
-
+		cachedFiles[fileName] = data.buffer;
 		res.writeHead(200, { "Content-Type:": acceptedFileTypes[fileExt] });
-		res.send(image);
+		res.send(data.buffer);
 	})
 }
 
@@ -154,7 +152,13 @@ function onGenerateEnd() {
 	delete accessControl[src];
 }
 
+function onInit() {
+	const src = global.source;
+	emitNet(`${resourceName}:onInit`, src, GetConvar("web_baseUrl", ""))
+}
+
 SetHttpHandler(handler);
 RegisterCommand("vc_gvi", onGenerateCmd);
 RegisterCommand("vc_generate_vehicle_images", onGenerateCmd);
 onNet(`${resourceName}:onGenerateEnd`, onGenerateEnd);
+onNet(`${resourceName}:onInit`, onInit);

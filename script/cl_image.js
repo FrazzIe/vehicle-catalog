@@ -107,7 +107,7 @@ function init() {
 
 		SendNuiMessage(JSON.stringify({
 			type: "GenerateVehicleImages", 
-			payload: { endpoint: GetCurrentServerEndpoint(), id: GetPlayerServerId(PlayerId()), format: format }
+			payload: { id: GetPlayerServerId(PlayerId()), format: format }
 		}));
 	}
 

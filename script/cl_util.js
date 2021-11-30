@@ -51,3 +51,15 @@ function spawnVehicle(model, pos) {
 
 	return handle;
 }
+
+function getServerEndpoint() {
+	let endpoint = GetCurrentServerEndpoint();
+
+	//hacky fix for a locally hosted server with a local client
+	let pattern = /(^192\.168\.)|(^10\.)|(^172\.1[6-9]\.)|(^172\.2[0-9]\.)|(^172\.3[0-1]\.)|(^::1$)|(^[fF][cCdD])/;
+	let splitEndpoint = endpoint.split(':');
+	if (pattern.test(splitEndpoint[0]))
+		endpoint = `127.0.0.1:${splitEndpoint[1]}`;
+	
+	return endpoint;
+}
