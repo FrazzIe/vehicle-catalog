@@ -86,7 +86,7 @@ function init() {
 		cb("ok");
 	}
 
-	async function onGenerateStart(format, _updateOffset, _offsetLength) {
+	async function onGenerateStart(format, _updateOffset, _offsetLength, crop) {
 		tick = setTick(onTick);
 		cameraHandle = setupCamera();
 		SetFocusPosAndVel(config.images.vehicle.x, config.images.vehicle.y, config.images.vehicle.z, 0.0, 0.0, 0.0);
@@ -107,7 +107,7 @@ function init() {
 
 		SendNuiMessage(JSON.stringify({
 			type: "GenerateVehicleImages", 
-			payload: { id: GetPlayerServerId(PlayerId()), format: format }
+			payload: { id: GetPlayerServerId(PlayerId()), format: format, crop: crop }
 		}));
 	}
 

@@ -18,6 +18,22 @@ function dataURItoBlob(dataURI) {
     return blob;
 }
 
+// from https://stackoverflow.com/a/35033622
+function crop(canvas, percentage) {
+	let buffer = document.createElement("canvas");
+	let ctx = buffer.getContext("2d");
+
+	buffer.width = canvas.width * percentage;
+	buffer.height = canvas.height * percentage;
+
+	let offsetX = (canvas.width - buffer.width) / 2;
+	let offsetY = (canvas.height - buffer.height) / 2;
+	
+	ctx.drawImage(canvas, offsetX, offsetY, buffer.width, buffer.height, 0, 0, buffer.width, buffer.height);
+
+	return buffer;	
+}
+
 function getMimetypeForImage(format) {
 	switch(format) {
 		case "png":
@@ -50,7 +66,23 @@ function setupVehicleForImage(vehicle) {
 
 function captureVehicleImage(payload, gameView, vehicle) {
 	const imageType = getMimetypeForImage(payload.format);
-	const imageURL = gameView.canvas.toDataURL(imageType, 0.92);
+	let imageURL;
+
+	if (payload.crop) {
+		let percentage = parseFloat(payload.crop);
+
+		if (!isNaN(percentage)) {
+			if (percentage > 0.0 && percentage <= 1.0)
+				imageURL = crop(gameView.canvas, percentage).toDataURL(imageType, 0.92);
+			else
+				console.log(`Skipping image crop, percentage is out of bounds (0.0 < ${percentage} <= 1.0`);
+		} else
+			console.log(`Skipping image crop, "${payload.crop}" is not a number`);
+	}
+
+	if (!imageURL)
+		imageURL = gameView.canvas.toDataURL(imageType, 0.92);
+
 	const blob = dataURItoBlob(imageURL);
 
 	if (resourceName == false || !payload || !payload.endpoint || !payload.id) {
