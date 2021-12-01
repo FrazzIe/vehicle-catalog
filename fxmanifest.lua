@@ -30,5 +30,5 @@ client_scripts {
 }
 
 server_scripts {
-	"script/sv_upload.js"
+	"script/sv_main.js"
 }

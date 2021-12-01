@@ -1,7 +1,6 @@
 const fs = require("fs");
 const buf = require("buffer");
 const path = require("path");
-const data = require("./vehicles.json");
 
 const acceptedMimetypes = {
 	"image/png": ".png",
@@ -17,6 +16,7 @@ const imageFolder = "images";
 const accessControl = {};
 const resourceName = GetCurrentResourceName();
 const cachedFiles = {};
+let defaultExt = ".webp";
 
 function handlePost(req, res) {
 	req.path = path.normalize(req.path);
@@ -78,6 +78,10 @@ function handlePost(req, res) {
 	}, "binary");
 }
 
+function handleError(req, res) {
+
+}
+
 function handleGet(req, res) {
 	req.path = path.normalize(req.path);
 	const pathParams = req.path.split(path.sep);
@@ -116,7 +120,7 @@ function handleGet(req, res) {
 			console.log(error);
 			res.writeHead(404);
 			res.send("Not found.");
-			return;
+			return handleError(req, res);
 		}
 
 		cachedFiles[fileName] = data.buffer;
@@ -153,13 +157,8 @@ function onGenerateEnd() {
 	delete accessControl[src];
 }
 
-function onInit() {
-	const src = global.source;
-	emitNet(`${resourceName}:onInit`, src, GetConvar("web_baseUrl", ""))
-}
+module.exports = function(data) {
+	defaultExt = data.image.fileType;
 
-SetHttpHandler(handler);
-RegisterCommand("vc_gvi", onGenerateCmd);
-RegisterCommand("vc_generate_vehicle_images", onGenerateCmd);
-onNet(`${resourceName}:onGenerateEnd`, onGenerateEnd);
-onNet(`${resourceName}:onInit`, onInit);
+	return { handler, onGenerateCmd, onGenerateEnd };
+}
