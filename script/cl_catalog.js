@@ -5,6 +5,7 @@ function init() {
 	let activeModel;
 	let entities = [];
 	let setOffset = false;
+	let visible = false;
 
 	function checkData(_data) {
 		if (!_data)
@@ -107,6 +108,9 @@ function init() {
 	}
 
 	function onOpen(_data) {
+		if (visible)
+			onClose();
+
 		let [success, err] = checkData(_data);
 
 		if (!success) {
@@ -114,6 +118,7 @@ function init() {
 			return;
 		}
 
+		visible = true;
 		tick = setTick(onTick);
 		cameraHandle = setupCamera();
 		SetNuiFocus(true, true);
@@ -143,8 +148,10 @@ function init() {
 		SetNuiFocus(false, false);
 		SetFocusPosAndVel(pos[0], pos[1], pos[2], 0.0, 0.0, 0.0);
 		setOffset = false;
+		visible = false;
 
-		cb("ok");
+		if (cb)
+			cb("ok");
 	}
 	
 	function onIndexChanged(data, cb) {
