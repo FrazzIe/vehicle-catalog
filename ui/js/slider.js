@@ -5,6 +5,8 @@ let vehicles = [];
 let imageType = ".webp";
 let imageEndpoint = "";
 let imageLocal = false;
+let currencySymbol = "$";
+let priceLabel = false;
 let vehicleLabels = {};
 let vehicleElements;
 let vehicleIndexes;
@@ -46,16 +48,35 @@ function setVehicles(data) {
 	vehicles = data;
 }
 
-function setImageType(data) {
-	imageType = data;
+function setImageType(fileType) {
+	imageType = fileType;
 }
 
-function setImageEndpoint(data) {
-	imageEndpoint = data;
+function setImageEndpoint(endpoint) {
+	imageEndpoint = endpoint;
 }
 
-function setImageLocal(data) {
-	imageLocal = data;
+function setImageLocal(val) {
+	imageLocal = val === true;
+}
+
+function setPriceSymbol(symbol) {
+	currencySymbol = symbol;
+}
+
+function showPriceLabel(val) {
+	priceLabel = val === true;
+
+	for (let i = 0; i < vehicleIndexes.length; i++) {
+		let item = vehicleElements[i];
+		let price = item.children[2];
+		let vehicle = vehicles[categoryIdx][vehicleIndexes[i]];
+
+		if (!vehicle)
+			continue;
+
+		price.style.visibility = priceLabel ? "visible" : "hidden";
+	}
 }
 
 function setVehicleLabels(data, initialised) {
@@ -187,6 +208,7 @@ function changeSlider(increment, _category) {
 		let item = vehicleElements[i];
 		let image = item.children[0];
 		let label = item.children[1];
+		let price = item.children[2];
 		let vehicle = vehicles[category][vehicleIndexes[i]];
 
 		if (!vehicle)
@@ -196,6 +218,8 @@ function changeSlider(increment, _category) {
 		image.src = getImageUrl(vehicle);
 
 		label.textContent = vehicleLabels[vehicle.model] ?? vehicle.model;
+		price.style.visibility = priceLabel ? "visible" : "hidden";
+		price.textContent = `${currencySymbol}${vehicle.price ?? 0}`;
 
 		if (i == idx) {
 			vehicleElements[vehicleIdx].classList.remove("selected");
@@ -220,14 +244,20 @@ function populateVehicles(idx) {
 			let item = document.createElement("div");
 			let image = document.createElement("img");
 			let label = document.createElement("div");
+			let price = document.createElement("div");
 			let vehicle = vehicles[idx][i];
 
 			image.onerror = onImageError;
 			image.ondragstart = onImageDrag;
 
+			label.classList.add("name");
+			price.classList.add("price");
+			price.style.visibility = priceLabel ? "visible" : "hidden";
+
 			if (vehicle) {
 				image.src = getImageUrl(vehicle);
 				label.textContent = vehicleLabels[vehicle.model] ?? vehicle.model;
+				price.textContent = `${currencySymbol}${vehicle.price ?? 0}`;
 				vehicleIndexes.push(i);
 				item.style.visibility = "visible";
 			} else {
@@ -241,6 +271,7 @@ function populateVehicles(idx) {
 			item.onclick = onVehicleClicked;
 			item.appendChild(image);
 			item.appendChild(label);
+			item.appendChild(price);
 			container.appendChild(item);
 			vehicleElements.push(item);
 		}
@@ -257,13 +288,16 @@ function populateVehicles(idx) {
 		let item = vehicleElements[i];
 		let image = item.children[0];
 		let label = item.children[1];
+		let price = item.children[2];
 		let vehicle = vehicles[idx][i];
 
 		image.onerror = onImageError;
-
+		price.style.visibility = priceLabel ? "visible" : "hidden";
+		
 		if (vehicle) {
 			image.src = getImageUrl(vehicle);
 			label.textContent = vehicleLabels[vehicle.model] ?? vehicle.model;
+			price.textContent = `${currencySymbol}${vehicle.price ?? 0}`;
 			item.style.visibility = "visible";
 			vehicleIndexes.push(i);
 		} else {
@@ -287,4 +321,4 @@ function getSelectedVehicleElement() {
 	return vehicleElements[vehicleIdx];
 }
 
-export { setVehicles, setImageType, setImageEndpoint, setImageLocal, setVehicleLabels, setVehicleIdx, changeSlider, populateVehicles, setOnVehicleChangedCallback, getSelectedVehicleElement };
+export { setVehicles, setImageType, setImageEndpoint, setImageLocal, setPriceSymbol, showPriceLabel, setVehicleLabels, setVehicleIdx, changeSlider, populateVehicles, setOnVehicleChangedCallback, getSelectedVehicleElement };

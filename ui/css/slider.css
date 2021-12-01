@@ -52,14 +52,22 @@
 
 .slider-container .item-container .item div {
 	position: absolute;
-	bottom: 0%;
-	left: 0%;
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 1rem;
 	background-color: black;
 	color: white;
 	padding: 2.5px;
 	transition: all 0.2s ease-in-out, visibility .1ms;
+}
+
+.slider-container .item-container .item div.name {
+	bottom: 0%;
+	left: 0%;
+}
+
+.slider-container .item-container .item div.price {
+	top: 0%;
+	right: 0%;
 }
 
 .slider-container .item-container .item.selected div {

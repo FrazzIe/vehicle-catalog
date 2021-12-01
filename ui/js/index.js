@@ -6,7 +6,7 @@ import { data } from "./data.js";
 import { startGamepadListener, stopGamepadListener } from "./gamepad.js";
 import { generateVehicleImages } from "./screenshot.js";
 import { setCategories, changeCategory, populateCategories, setOnCategoryChangedCallback, getSelectedCategoryElement } from "./category.js";
-import { setVehicles, setImageType, setImageEndpoint, setImageLocal, setVehicleLabels, setVehicleIdx, changeSlider, populateVehicles, setOnVehicleChangedCallback, getSelectedVehicleElement } from "./slider.js";
+import { setVehicles, setImageType, setImageEndpoint, setImageLocal, setPriceSymbol, showPriceLabel, setVehicleLabels, setVehicleIdx, changeSlider, populateVehicles, setOnVehicleChangedCallback, getSelectedVehicleElement } from "./slider.js";
 import { generateVehicleLabels, setOnVehicleLabelsGeneratedCallback } from "./label.js";
 
 const buttonInterval = 140;
@@ -249,7 +249,8 @@ function onNuiMessage(event) {
 			generateVehicleLabels(data.vehicles);
 			break;
 		case "Show":
-			show(item.payload);
+			showPriceLabel(item.payload.showPrice);
+			show(item.payload.visible);
 			break;
 		case "GenerateVehicleImages":
 			item.payload.endpoint = serverEndpoint;
@@ -269,6 +270,7 @@ function init() {
 	setVehicles(data.vehicles);
 	setImageType(getImageType());
 	setImageLocal(!data.image.server);
+	setPriceSymbol(data.currencySymbol);
 	setOnCategoryChangedCallback(onCategoryChanged);
 	setOnVehicleChangedCallback(onVehicleChanged);
 	setOnVehicleLabelsGeneratedCallback(onVehicleLabelsGenerated);

@@ -28,6 +28,9 @@ function init() {
 		if (!_data.offsetLength)
 			_data.offsetLength = false;
 
+		if (!_data.showPrice)
+			_data.showPrice = false;
+
 		data = _data;
 
 		return [true];
@@ -118,7 +121,7 @@ function init() {
 
 		SendNuiMessage(JSON.stringify({
 			type: "Show",
-			payload: true
+			payload: { visible: true, showPrice: data.showPrice }
 		}));
 	}
 	
