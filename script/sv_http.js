@@ -12,10 +12,11 @@ const acceptedFileTypes = {
 	".jpeg": "image/jpeg",
 	".webp": "image/webp"	
 }
-const imageFolder = "images";
+
 const accessControl = {};
 const resourceName = GetCurrentResourceName();
 const cachedFiles = {};
+let imageFolder = "images";
 let defaultName = "default";
 let defaultExt = ".webp";
 let allowGet = true;
@@ -179,6 +180,9 @@ module.exports = function(data) {
 	defaultName = data.image.default.fileName;
 	defaultExt = data.image.default.fileType;
 	allowGet = data.image.server;
+
+	if (!data.image.server)
+		imageFolder = path.join("ui", "img");
 
 	return { handler, onGenerateCmd, onGenerateEnd };
 }
