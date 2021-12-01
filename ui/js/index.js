@@ -265,7 +265,6 @@ function init() {
 	window.addEventListener("message", onNuiMessage, false);
 
 	show(false, true);
-	show(true);
 	setCategories(data.categories);
 	setVehicles(data.vehicles);
 	setImageType(getImageType());
@@ -275,8 +274,10 @@ function init() {
 	setOnVehicleLabelsGeneratedCallback(onVehicleLabelsGenerated);
 	setupArrows();
 
-	if (resourceName == false)
+	if (resourceName == false) {
+		show(true);
 		populateCategories();
+	}
 }
 
 init();
