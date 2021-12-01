@@ -4,6 +4,7 @@ const resourceName = "GetParentResourceName" in window ? GetParentResourceName()
 let vehicles = [];
 let imageType = ".webp";
 let imageEndpoint = "";
+let imageLocal = false;
 let vehicleLabels = {};
 let vehicleElements;
 let vehicleIndexes;
@@ -53,6 +54,10 @@ function setImageEndpoint(data) {
 	imageEndpoint = data;
 }
 
+function setImageLocal(data) {
+	imageLocal = data;
+}
+
 function setVehicleLabels(data, initialised) {
 	vehicleLabels = data;
 
@@ -93,6 +98,15 @@ function setVehicleIdx(idx) {
 	}).catch(function(err) {
 		console.log(err);
 	});
+}
+
+function getImageUrl(vehicle) {
+	if (imageLocal == true)
+		return `./img/${vehicle.model}${vehicle.fileType ?? imageType}`;
+	else if (imageEndpoint != "")
+		return `https://${imageEndpoint}/${resourceName}/images/${vehicle.model}${vehicle.fileType ?? imageType}`;
+
+	return "./img/default.png";
 }
 
 // issue: select middle use changeSlider(+4) only item 0,1 should change so [numVehicles - (current index + 1)]
@@ -179,11 +193,7 @@ function changeSlider(increment, _category) {
 			continue;
 
 		image.onerror = onImageError;
-
-		if (imageEndpoint != "")
-			image.src = `https://${imageEndpoint}/${resourceName}/images/${vehicle.model}${vehicle.fileType ?? imageType}`;
-		else
-			image.src = "./img/default.png";
+		image.src = getImageUrl(vehicle);
 
 		label.textContent = vehicleLabels[vehicle.model] ?? vehicle.model;
 
@@ -216,11 +226,7 @@ function populateVehicles(idx) {
 			image.ondragstart = onImageDrag;
 
 			if (vehicle) {
-				if (imageEndpoint != "")
-					image.src = `https://${imageEndpoint}/${resourceName}/images/${vehicle.model}${vehicle.fileType ?? imageType}`;
-				else
-					image.src = "./img/default.png";
-
+				image.src = getImageUrl(vehicle);
 				label.textContent = vehicleLabels[vehicle.model] ?? vehicle.model;
 				vehicleIndexes.push(i);
 				item.style.visibility = "visible";
@@ -256,11 +262,7 @@ function populateVehicles(idx) {
 		image.onerror = onImageError;
 
 		if (vehicle) {
-			if (imageEndpoint != "")
-				image.src = `https://${imageEndpoint}/${resourceName}/images/${vehicle.model}${vehicle.fileType ?? imageType}`;
-			else
-				image.src = "./img/default.png";
-
+			image.src = getImageUrl(vehicle);
 			label.textContent = vehicleLabels[vehicle.model] ?? vehicle.model;
 			item.style.visibility = "visible";
 			vehicleIndexes.push(i);
@@ -285,4 +287,4 @@ function getSelectedVehicleElement() {
 	return vehicleElements[vehicleIdx];
 }
 
-export { setVehicles, setImageType, setImageEndpoint, setVehicleLabels, setVehicleIdx, changeSlider, populateVehicles, setOnVehicleChangedCallback, getSelectedVehicleElement };
+export { setVehicles, setImageType, setImageEndpoint, setImageLocal, setVehicleLabels, setVehicleIdx, changeSlider, populateVehicles, setOnVehicleChangedCallback, getSelectedVehicleElement };

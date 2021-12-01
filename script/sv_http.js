@@ -18,6 +18,7 @@ const resourceName = GetCurrentResourceName();
 const cachedFiles = {};
 let defaultName = "default";
 let defaultExt = ".webp";
+let allowGet = true;
 
 function handlePost(req, res) {
 	req.path = path.normalize(req.path);
@@ -147,11 +148,10 @@ function handleGet(req, res) {
 	});
 }
 
-// TODO: Allow image GET request w/ caching?
 function handler(req, res) {
 	if (req.method == "POST")
 		handlePost(req, res);
-	else if(req.method == "GET")
+	else if(req.method == "GET" && allowGet)
 		handleGet(req, res);
 	else {
 		res.writeHead(405);
@@ -178,6 +178,7 @@ function onGenerateEnd() {
 module.exports = function(data) {
 	defaultName = data.image.default.fileName;
 	defaultExt = data.image.default.fileType;
+	allowGet = data.image.server;
 
 	return { handler, onGenerateCmd, onGenerateEnd };
 }

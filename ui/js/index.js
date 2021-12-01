@@ -6,9 +6,8 @@ import { data } from "./data.js";
 import { startGamepadListener, stopGamepadListener } from "./gamepad.js";
 import { generateVehicleImages } from "./screenshot.js";
 import { setCategories, changeCategory, populateCategories, setOnCategoryChangedCallback, getSelectedCategoryElement } from "./category.js";
-import { setVehicles, setImageType, setImageEndpoint, setVehicleLabels, setVehicleIdx, changeSlider, populateVehicles, setOnVehicleChangedCallback, getSelectedVehicleElement } from "./slider.js";
+import { setVehicles, setImageType, setImageEndpoint, setImageLocal, setVehicleLabels, setVehicleIdx, changeSlider, populateVehicles, setOnVehicleChangedCallback, getSelectedVehicleElement } from "./slider.js";
 import { generateVehicleLabels, setOnVehicleLabelsGeneratedCallback } from "./label.js";
-
 
 const buttonInterval = 140;
 const axesInterval = 160;
@@ -270,6 +269,7 @@ function init() {
 	setCategories(data.categories);
 	setVehicles(data.vehicles);
 	setImageType(getImageType());
+	setImageLocal(!data.image.server);
 	setOnCategoryChangedCallback(onCategoryChanged);
 	setOnVehicleChangedCallback(onVehicleChanged);
 	setOnVehicleLabelsGeneratedCallback(onVehicleLabelsGenerated);
