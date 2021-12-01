@@ -16,6 +16,7 @@ const imageFolder = "images";
 const accessControl = {};
 const resourceName = GetCurrentResourceName();
 const cachedFiles = {};
+let defaultName = "default";
 let defaultExt = ".webp";
 
 function handlePost(req, res) {
@@ -78,8 +79,28 @@ function handlePost(req, res) {
 	}, "binary");
 }
 
-function handleError(req, res) {
+function handleError(imageDirectory, req, res) {
+	let fileName = defaultName + defaultExt;
 
+	if (cachedFiles[fileName]) {
+		res.writeHead(200, { "Content-Type:": acceptedFileTypes[defaultExt] });
+		res.send(cachedFiles[fileName]);
+		return;
+	}
+
+	let filePath = path.join(imageDirectory, fileName);
+
+	fs.readFile(filePath, function(error, data) {
+		if (error) {
+			res.writeHead(404);
+			res.send("Not found.");
+			return;
+		}
+
+		cachedFiles[fileName] = data.buffer;
+		res.writeHead(200, { "Content-Type:": acceptedFileTypes[defaultExt] });
+		res.send(data.buffer);
+	});
 }
 
 function handleGet(req, res) {
@@ -113,20 +134,17 @@ function handleGet(req, res) {
 		return;
 	}
 
-	let filePath = path.join(GetResourcePath(resourceName), imageFolder, fileName);
+	let imageDirectory = path.join(GetResourcePath(resourceName), imageFolder);
+	let filePath = path.join(imageDirectory, fileName);
 
 	fs.readFile(filePath, function(error, data) {
-		if (error) {
-			console.log(error);
-			res.writeHead(404);
-			res.send("Not found.");
-			return handleError(req, res);
-		}
+		if (error)
+			return handleError(imageDirectory, req, res);
 
 		cachedFiles[fileName] = data.buffer;
 		res.writeHead(200, { "Content-Type:": acceptedFileTypes[fileExt] });
 		res.send(data.buffer);
-	})
+	});
 }
 
 // TODO: Allow image GET request w/ caching?
@@ -158,7 +176,8 @@ function onGenerateEnd() {
 }
 
 module.exports = function(data) {
-	defaultExt = data.image.fileType;
+	defaultName = data.image.default.fileName;
+	defaultExt = data.image.default.fileType;
 
 	return { handler, onGenerateCmd, onGenerateEnd };
 }

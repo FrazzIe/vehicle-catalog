@@ -1,6 +1,10 @@
 {
 	"image": {
-		"fileType": ".webp"
+		"fileType": ".webp",
+		"default": {
+			"fileName": "default",
+			"fileType": ".webp"
+		}
 	},
 	"categories": [
 		"Compacts",
