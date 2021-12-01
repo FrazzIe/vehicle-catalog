@@ -129,6 +129,10 @@ function init() {
 		let ped = PlayerPedId();
 		let pos = GetEntityCoords(ped);
 
+		while(entities.length) {
+			DeleteEntity(entities.pop());
+		}
+
 		removeCamera(cameraHandle);
 
 		if (tick) {
