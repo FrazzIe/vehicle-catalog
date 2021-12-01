@@ -10,5 +10,17 @@ body {
 	position: absolute;
 	bottom: 0%;
 	width: 100%;
-	height: 28%;
+	height: 25%;
+}
+
+@media screen and (min-width: 1200px) {
+	.main-container {
+		height: 32%;
+	}
+}
+
+@media screen and (min-width: 1921px) {
+	.main-container {
+		height: 29%;
+	}
 }

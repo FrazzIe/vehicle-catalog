@@ -45,3 +45,43 @@
 .category-container .item:last-child {
 	border-right: none;
 }
+
+@media only screen and (min-width: 768px) {
+	.category-container {
+		height: 22%;
+	}
+
+	.category-container .item {
+		font-size: 0.9rem;
+	}
+}
+
+@media screen and (min-width: 1200px) {
+	.category-container {
+		height: 18%;
+	}
+
+	.category-container .item {
+		font-size: 1.09rem;
+	}
+}
+
+@media screen and (min-width: 1921px) {
+	.category-container {
+		height: 15%;
+	}
+
+	.category-container .item {
+		font-size: 1.4rem;
+	}
+}
+
+@media screen and (min-width: 2561px) {
+	.category-container {
+		height: 15%;
+	}
+
+	.category-container .item {
+		font-size: 2.4rem;
+	}
+}
