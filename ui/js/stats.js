@@ -18,9 +18,12 @@ function init(labels) {
 
 		for (let j = 0; j < 5; j++) {
 			const bar = document.createElement("div");
+			const fill = document.createElement("div");
 
 			bar.classList.add("bar");
+			fill.classList.add("fill");
 
+			bar.appendChild(fill);
 			bars.appendChild(bar);
 		}
 
