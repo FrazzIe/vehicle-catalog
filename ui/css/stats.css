@@ -33,8 +33,7 @@
 	flex-wrap: nowrap;
 	align-items: center;
 	justify-content: space-evenly;
-	gap: 1%;
-	flex-grow: 1;
+	gap: 2px;
 	flex: 1;
 }
 
