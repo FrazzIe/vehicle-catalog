@@ -10,7 +10,7 @@
 	flex-direction: column;
 	flex-wrap: wrap;
 	justify-content: flex-start;
-	gap: 1%;
+
 }
 
 .info-container .heading {
