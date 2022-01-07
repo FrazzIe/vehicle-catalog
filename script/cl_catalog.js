@@ -1,84 +1,88 @@
-let data;
-let tick;
-let cameraHandle;
-let activeModel;
-let entities = [];
-let setOffset = false;
-let visible = false;
+const catalog = {
+	data: null,
+	tick: null,
+	camera: null,
+	visible: false,
+	offset: false,
+	preview: {
+		current: null,
+		entities: []
+	}
+}
 
-function checkData(_data) {
-	if (!_data)
+function checkData(data) {
+	if (!data)
 		return [false, "No data received"];
 
-	if (!_data.vehicle || isNaN(_data.vehicle.x) || isNaN(_data.vehicle.y) || isNaN(_data.vehicle.z) || isNaN(_data.vehicle.w))
+	if (!data.vehicle || isNaN(data.vehicle.x) || isNaN(data.vehicle.y) || isNaN(data.vehicle.z) || isNaN(data.vehicle.w))
 		return [false, "No vehicle position received"];
 
-	if (!_data.offset)
+	if (!data.offset)
 		return [false, "No offsets received"];
 
-	if (!_data.offset.attach || isNaN(_data.offset.attach.x) || isNaN(_data.offset.attach.y) || isNaN(_data.offset.attach.z))
+	if (!data.offset.attach || isNaN(data.offset.attach.x) || isNaN(data.offset.attach.y) || isNaN(data.offset.attach.z))
 		return [false, "No attach offset position received"];
 
-	if (!_data.offset.point || isNaN(_data.offset.point.x) || isNaN(_data.offset.point.y) || isNaN(_data.offset.point.z))
+	if (!data.offset.point || isNaN(data.offset.point.x) || isNaN(data.offset.point.y) || isNaN(data.offset.point.z))
 		return [false, "No point offset position received"];
 
-	if (!_data.updateOffset)
-		_data.updateOffset = false;
+	if (!data.updateOffset)
+		data.updateOffset = false;
 
-	if (!_data.offsetLength)
-		_data.offsetLength = false;
+	if (!data.offsetLength)
+		data.offsetLength = false;
 
 	if (!_data.showPrice)
-		_data.showPrice = false;
+		data.showPrice = false;
 
-	data = _data;
+	catalog.data = data;
 
 	return [true];
 }
 
 async function showVehicle(model) {
-	while(entities.length) {
-		DeleteEntity(entities.pop());
+	while(catalog.preview.entities.length) {
+		DeleteEntity(catalog.preview.entities.pop());
 	}
 
-	let [loaded, err] = await loadModel(model);
+	const [loaded, err] = await loadModel(model);
 
 	if (!loaded) {
 		console.log(`${err}, skipping...`);
 		return;
 	}
 
-	if (activeModel != model) {
+	if (catalog.preview.current != model) {
 		console.log(`"${model}" is no longer active, unloading..`);
 		SetModelAsNoLongerNeeded(model);
 		return;
 	}
 
-	let handle = spawnVehicle(model, data.vehicle);
+	const handle = spawnVehicle(model, catalog.data.vehicle);
 
-	if (activeModel != model) {
+	if (catalog.preview.current != model) {
 		console.log(`"${model}" is no longer active, deleting..`);
 		DeleteEntity(handle);
 		return;
 	}
 
-	entities.push(handle);
+	catalog.preview.entities.push(handle);
 
-	if (!setOffset || data.updateOffset) {
-		setOffset = true;
+	if (!catalog.offset || catalog.data.updateOffset) {
+		catalog.offset = true;
 		let length = 0;
 
-		if (data.offsetLength) {
+		if (catalog.data.offsetLength) {
 			let dimensions = GetModelDimensions(model);
 			length = (dimensions[1][1] - dimensions[0][1]) / 2;
 		}
 
-		AttachCamToEntity(cameraHandle, handle, data.offset.attach.x, length + data.offset.attach.y, data.offset.attach.z, true);
-		PointCamAtEntity(cameraHandle, handle, data.offset.point.x, data.offset.point.y, data.offset.point.z, true);
+		AttachCamToEntity(catalog.camera, handle, catalog.data.offset.attach.x, length + catalog.data.offset.attach.y, catalog.data.offset.attach.z, true);
+		PointCamAtEntity(catalog.camera, handle, catalog.data.offset.point.x, catalog.data.offset.point.y, catalog.data.offset.point.z, true);
 	}
 }
 
-function onTick() {
+function onCatalogTick() {
 	removeHud();
 }
 
@@ -106,48 +110,50 @@ async function onInit(resourceName) {
 	emitNet(`${config.resourceName}:onInit`);
 }
 
-function onOpen(_data) {
-	if (visible)
+function onOpen(data) {
+	if (catalog.visible)
 		onClose();
 
-	let [success, err] = checkData(_data);
+	const [success, err] = checkData(data);
 
 	if (!success) {
 		console.log("%s, unable to open.", err);
 		return;
 	}
 
-	visible = true;
-	tick = setTick(onTick);
-	cameraHandle = setupCamera();
+	catalog.visible = true;
+	catalog.tick = setTick(onTick);
+	catalog.camera = setupCamera();
+
 	SetNuiFocus(true, true);
-	SetFocusPosAndVel(data.vehicle.x, data.vehicle.y, data.vehicle.z, 0.0, 0.0, 0.0);
+	SetFocusPosAndVel(catalog.data.vehicle.x, catalog.data.vehicle.y, catalog.data.vehicle.z, 0.0, 0.0, 0.0);
 
 	SendNuiMessage(JSON.stringify({
 		type: "Show",
-		payload: { visible: true, showPrice: data.showPrice }
+		payload: { visible: true, showPrice: catalog.data.showPrice }
 	}));
 }
 
 function onClose(data, cb) {
-	let ped = PlayerPedId();
-	let pos = GetEntityCoords(ped);
+	const ped = PlayerPedId();
+	const pos = GetEntityCoords(ped);
 
-	while(entities.length) {
-		DeleteEntity(entities.pop());
+	while(catalog.preview.entities.length) {
+		DeleteEntity(catalog.preview.entities.pop());
 	}
 
 	removeCamera(cameraHandle);
 
-	if (tick) {
-		clearTick(tick);
-		tick = null;
+	if (catalog.tick) {
+		clearTick(catalog.tick);
+		catalog.tick = null;
 	}
 
 	SetNuiFocus(false, false);
 	SetFocusPosAndVel(pos[0], pos[1], pos[2], 0.0, 0.0, 0.0);
-	setOffset = false;
-	visible = false;
+
+	catalog.offset = false;
+	catalog.visible = false;
 
 	if (cb)
 		cb("ok");
@@ -159,8 +165,10 @@ function onIndexChanged(data, cb) {
 		return;
 	}
 
-	activeModel = data.model;
+	catalog.preview.current = data.model;
+
 	showVehicle(data.model);
+
 	cb("ok");
 }
 
