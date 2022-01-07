@@ -122,7 +122,7 @@ function onOpen(data) {
 	}
 
 	catalog.visible = true;
-	catalog.tick = setTick(onTick);
+	catalog.tick = setTick(onCatalogTick);
 	catalog.camera = setupCamera();
 
 	SetNuiFocus(true, true);
