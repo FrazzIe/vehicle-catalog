@@ -97,10 +97,13 @@ async function onInit(resourceName) {
 	onServerInit = function(url) {
 		let endpoint = url == "" ? getServerEndpoint() : url;
 		
-		SendNuiMessage(JSON.stringify({
+		SendNUIMessage({
 			type: "Init",
-			payload: { endpoint: endpoint }
-		}));
+			payload: { 
+				endpoint: endpoint,
+				labels: getStatLabels()
+			}
+		});
 
 		removeEventListener(`${config.resourceName}:onInit`, onServerInit);
 		emit(`${config.resourceName}:onInit`);			
