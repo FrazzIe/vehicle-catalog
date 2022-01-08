@@ -6,6 +6,20 @@ const vehicleStatLabels = [
 	"FMMC_VEHST_3"
 ];
 
+/**
+ * Get resolved vehicle stat labels
+ * @returns {string[]} array of vehicle stat labels
+ */
+function getStatLabels() {
+	const labels = [];
+
+	for (let i = 0; i < vehicleStatLabels.length; i++) {
+		labels[i] = GetLabelText(vehicleStatLabels[i]);
+	}
+
+	return labels;
+}
+
 // from fm_race_creator.c
 function getClassMaxSpeed(classId) {
 	if (classId == 7)
