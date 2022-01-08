@@ -2,7 +2,7 @@
  * Update vehicle statstics bars
  * @param {number[]} values Array of bar percentages
  */
-function update(values) {
+export function update(values) {
 	const stats = document.querySelector(".stats-container");
 
 	for (let i = 0; i < values.length; i++) {
@@ -43,7 +43,7 @@ function update(values) {
  * Initialise vehicle statistics pane
  * @param {string[]} labels Array of resolved stat labels
  */
-function init(labels) {
+export function init(labels) {
 	const stats = document.querySelector(".stats-container");
 
 	for (let i = 0; i < labels.length; i++) {

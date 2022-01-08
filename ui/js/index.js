@@ -8,6 +8,7 @@ import { generateVehicleImages } from "./screenshot.js";
 import { setCategories, changeCategory, populateCategories, setOnCategoryChangedCallback, getSelectedCategoryElement } from "./category.js";
 import { setVehicles, setImageType, setImageEndpoint, setImageLocal, setPriceSymbol, showPriceLabel, setVehicleLabels, setVehicleIdx, changeSlider, populateVehicles, setOnVehicleChangedCallback, getSelectedVehicleElement } from "./slider.js";
 import { generateVehicleLabels, setOnVehicleLabelsGeneratedCallback } from "./label.js";
+import * as stats from "./stats.js";
 
 const buttonInterval = 140;
 const axesInterval = 160;
