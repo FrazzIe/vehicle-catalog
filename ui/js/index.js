@@ -240,14 +240,18 @@ function onNuiMessage(event) {
 			if (initialised)
 				break;
 
-			if (!item.payload || !item.payload.endpoint) {
+			if (item.payload.endpoint == null) {
 				console.log("Invalid endpoint received, the script may not work as intended!");
 			} else {
 				serverEndpoint = item.payload.endpoint;
 				setImageEndpoint(serverEndpoint);
 			}
 
-			generateVehicleLabels(data.vehicles);
+			if (item.payload.labels != null) {
+				stats.init(item.payload.labels);
+			}
+			
+			generateVehicleLabels(data.vehicles);			
 			break;
 		case "Show":
 			showPriceLabel(item.payload.showPrice);
