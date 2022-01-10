@@ -11,33 +11,41 @@ const catalog = {
 }
 
 function checkData(data) {
-	if (!data)
-		return [false, "No data received"];
+	if (data == null) {
+		return "No data received";
+	}
 
-	if (!data.vehicle || isNaN(data.vehicle.x) || isNaN(data.vehicle.y) || isNaN(data.vehicle.z) || isNaN(data.vehicle.w))
-		return [false, "No vehicle position received"];
+	if (data.vehicle == null || isNaN(data.vehicle.x) == true || isNaN(data.vehicle.y) == true || isNaN(data.vehicle.z) == true || isNaN(data.vehicle.w) == true) {
+		return "No vehicle position received";
+	}
 
-	if (!data.offset)
-		return [false, "No offsets received"];
+	if (data.offset == null) {
+		return "No offsets received";
+	}
 
-	if (!data.offset.attach || isNaN(data.offset.attach.x) || isNaN(data.offset.attach.y) || isNaN(data.offset.attach.z))
-		return [false, "No attach offset position received"];
+	if (data.offset.attach == null || isNaN(data.offset.attach.x) == true || isNaN(data.offset.attach.y) == true || isNaN(data.offset.attach.z) == true) {
+		return "No attach offset position received";
+	}
 
-	if (!data.offset.point || isNaN(data.offset.point.x) || isNaN(data.offset.point.y) || isNaN(data.offset.point.z))
-		return [false, "No point offset position received"];
+	if (data.offset.point == null || isNaN(data.offset.point.x) == true || isNaN(data.offset.point.y) == true || isNaN(data.offset.point.z) == true) {
+		return "No point offset position received";
+	}
 
-	if (!data.updateOffset)
+	if (data.updateOffset == null) {
 		data.updateOffset = false;
+	}		
 
-	if (!data.offsetLength)
+	if (data.offsetLength == null) {
 		data.offsetLength = false;
+	}
 
-	if (!data.showPrice)
+	if (data.showPrice == null) {
 		data.showPrice = false;
+	}
 
 	catalog.data = data;
 
-	return [true];
+	return true;
 }
 
 async function showVehicle(model) {
@@ -114,13 +122,14 @@ async function onInit(resourceName) {
 }
 
 function onOpen(data) {
-	if (catalog.visible)
+	if (catalog.visible == true) {
 		onClose();
+	}
 
-	const [success, err] = checkData(data);
+	const result = checkData(data);
 
-	if (!success) {
-		console.log("%s, unable to open.", err);
+	if (result != true) {
+		console.log("%s, unable to open.", result);
 		return;
 	}
 
@@ -144,13 +153,13 @@ function onClose(data, cb) {
 	const ped = PlayerPedId();
 	const pos = GetEntityCoords(ped);
 
-	while(catalog.preview.entities.length) {
+	while (catalog.preview.entities.length) {
 		DeleteEntity(catalog.preview.entities.pop());
 	}
 
 	removeCamera(cameraHandle);
 
-	if (catalog.tick) {
+	if (catalog.tick != null) {
 		clearTick(catalog.tick);
 		catalog.tick = null;
 	}
@@ -161,12 +170,13 @@ function onClose(data, cb) {
 	catalog.offset = false;
 	catalog.visible = false;
 
-	if (cb)
+	if (cb != null) {
 		cb("ok");
+	}
 }
 
 function onIndexChanged(data, cb) {
-	if (data.error) {
+	if (data.error != null) {
 		cb("error");
 		return;
 	}
