@@ -131,10 +131,13 @@ function onOpen(data) {
 	SetNuiFocus(true, true);
 	SetFocusPosAndVel(catalog.data.vehicle.x, catalog.data.vehicle.y, catalog.data.vehicle.z, 0.0, 0.0, 0.0);
 
-	SendNuiMessage(JSON.stringify({
+	SendNUIMessage({
 		type: "Show",
-		payload: { visible: true, showPrice: catalog.data.showPrice }
-	}));
+		payload: {
+			visible: true,
+			showPrice: catalog.data.showPrice
+		}
+	});
 }
 
 function onClose(data, cb) {
