@@ -1,10 +1,14 @@
-let tick;
-let cameraHandle;
-let lastVehicle;
-let setOffset = false;
-let updateOffset = false;
-let offsetLength = false;
-let showMarker = false;
+const screenshot = {
+	tick: null,
+	camera: null,
+	vehicle: null,
+	marker: false,
+	offset: {
+		set: false,
+		update: false,
+		length: false
+	}
+}
 
 function setWeather(weatherType) {
 	ClearWeatherTypePersist();
@@ -13,7 +17,7 @@ function setWeather(weatherType) {
 	SetWeatherTypePersist(weatherType);
 }
 
-async function onTick() {
+async function onScreenshotTick() {
 	removeHud();
 
 	setWeather("EXTRASUNNY");
@@ -22,20 +26,20 @@ async function onTick() {
 	for (let i = 0; i < 2; i++)
 		DisableAllControlActions(i);
 
-	if (showMarker)
+	if (screenshot.marker)
 		DrawMarker(config.images.marker.type, config.images.vehicle.x, config.images.vehicle.y, config.images.vehicle.z + config.images.marker.offsetZ, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, config.images.marker.scale.x, config.images.marker.scale.y, config.images.marker.scale.z, config.images.marker.color.r, config.images.marker.color.g, config.images.marker.color.b, config.images.marker.color.a, false, true);
 }
 
 async function onSetupImage(data, cb) {
-	if (lastVehicle) {
-		DeleteEntity(lastVehicle);
-		lastVehicle = null;
+	if (screenshot.vehicle != null) {
+		DeleteEntity(screenshot.vehicle);
+		screenshot.vehicle = null;
 	}
 
 	await delay(500);
 
 	if (data.default) {
-		showMarker = true;
+		screenshot.marker = true;
 		await delay(500);
 		cb("ok");
 		return;
@@ -49,19 +53,19 @@ async function onSetupImage(data, cb) {
 		return;
 	}
 
-	lastVehicle = spawnVehicle(model, config.images.vehicle);
+	screenshot.vehicle = spawnVehicle(model, config.images.vehicle);
 
-	if (!setOffset || updateOffset) {
-		setOffset = true;
+	if (screenshot.offset.set == false || screenshot.offset.update == true) {
+		screenshot.offset.set = true;
 		let length = 0;
 
-		if (offsetLength) {
+		if (screenshot.offset.length) {
 			let dimensions = GetModelDimensions(model);
 			length = (dimensions[1][1] - dimensions[0][1]) / 2;
 		}
 
-		AttachCamToEntity(cameraHandle, lastVehicle, config.images.offset.attach.x, length + config.images.offset.attach.y, config.images.offset.attach.z, true);
-		PointCamAtEntity(cameraHandle, lastVehicle, config.images.offset.point.x, config.images.offset.point.y, config.images.offset.point.z, true);
+		AttachCamToEntity(screenshot.camera, lastVehicle, config.images.offset.attach.x, length + config.images.offset.attach.y, config.images.offset.attach.z, true);
+		PointCamAtEntity(screenshot.camera, lastVehicle, config.images.offset.point.x, config.images.offset.point.y, config.images.offset.point.z, true);
 		await delay(500);
 	}
 
@@ -74,46 +78,47 @@ async function onEndImage(data, cb) {
 	let ped = PlayerPedId();
 	let pos = GetEntityCoords(ped);
 
-	if (lastVehicle) {
-		DeleteEntity(lastVehicle);
-		lastVehicle = null;
+	if (screenshot.vehicle != null) {
+		DeleteEntity(screenshot.vehicle);
+		screenshot.vehicle = null;
 	}
 
-	removeCamera(cameraHandle);
-	
+	removeCamera(screenshot.camera);
 
-	if (tick) {
-		clearTick(tick);
-		tick = null;
+	if (screenshot.tick != null) {
+		clearTick(screenshot.tick);
+		screenshot.tick = null;
 	}
 
 	SetFocusPosAndVel(pos[0], pos[1], pos[2], 0.0, 0.0, 0.0);
-	setOffset = false;
-	updateOffset = false;
-	offsetLength = false;
-	showMarker = false;
+
+	screenshot.offset.set = false;
+	screenshot.offset.update = false;
+	screenshot.offset.length = false;
+	screenshot.marker = false;
 
 	TriggerServerEvent(`${config.resourceName}:onGenerateEnd`);
 	cb("ok");
 }
 
-async function onGenerateStart(format, _updateOffset, _offsetLength, crop) {
-	tick = setTick(onTick);
-	cameraHandle = setupCamera();
+async function onGenerateStart(format, updateOffset, offsetLength, crop) {
+	screenshot.tick = setTick(onScreenshotTick);
+	screenshot.camera = setupCamera();
+
 	SetFocusPosAndVel(config.images.vehicle.x, config.images.vehicle.y, config.images.vehicle.z, 0.0, 0.0, 0.0);
 	RemoveDecalsInRange(config.images.vehicle.x, config.images.vehicle.y, config.images.vehicle.z, 25.0);
 	ClearAreaOfVehicles(config.images.vehicle.x, config.images.vehicle.y, config.images.vehicle.z, 25.0, false, false, false, false, false);
 
-	if (_updateOffset != null) {
-		console.log(_updateOffset)
-		if (_updateOffset == "true" || _updateOffset == "1")
-			updateOffset = true;
+	if (updateOffset != null) {
+		if (updateOffset == "true" || updateOffset == "1") {
+			screenshot.offset.update = true;
+		}
 	}
 
-	if (_offsetLength != null) {
-		console.log(_offsetLength)
-		if (_offsetLength == "true" || _offsetLength == "1")
-			offsetLength = true;
+	if (offsetLength != null) {
+		if (offsetLength == "true" || offsetLength == "1") {
+			screenshot.offset.length = true;
+		}
 	}
 
 	SendNuiMessage(JSON.stringify({
