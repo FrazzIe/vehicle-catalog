@@ -21,11 +21,13 @@ async function onScreenshotTick() {
 
 	NetworkOverrideClockTime(12, 0, 0);
 
-	for (let i = 0; i < 2; i++)
+	for (let i = 0; i < 2; i++) {
 		DisableAllControlActions(i);
+	}
 
-	if (screenshot.marker)
+	if (screenshot.marker) {
 		DrawMarker(config.images.marker.type, config.images.vehicle.x, config.images.vehicle.y, config.images.vehicle.z + config.images.marker.offsetZ, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, config.images.marker.scale.x, config.images.marker.scale.y, config.images.marker.scale.z, config.images.marker.color.r, config.images.marker.color.g, config.images.marker.color.b, config.images.marker.color.a, false, true);
+	}
 }
 
 async function onSetupImage(data, cb) {
@@ -36,17 +38,20 @@ async function onSetupImage(data, cb) {
 
 	await delay(500);
 
-	if (data.default) {
+	if (data.default == true) {
 		screenshot.marker = true;
+
 		await delay(500);
+
 		cb("ok");
+
 		return;
 	}
 
-	let model = data.model;
-	let [loaded, err] = await loadModel(model);
+	const model = data.model;
+	const [loaded, err] = await loadModel(model);
 
-	if (!loaded) {
+	if (loaded == false) {
 		console.log(`${err}, skipping...`);
 		return;
 	}
@@ -55,15 +60,17 @@ async function onSetupImage(data, cb) {
 
 	if (screenshot.offset.set == false || screenshot.offset.update == true) {
 		screenshot.offset.set = true;
+
 		let length = 0;
 
 		if (screenshot.offset.length) {
-			let dimensions = GetModelDimensions(model);
+			const dimensions = GetModelDimensions(model);
 			length = (dimensions[1][1] - dimensions[0][1]) / 2;
 		}
 
 		AttachCamToEntity(screenshot.camera, lastVehicle, config.images.offset.attach.x, length + config.images.offset.attach.y, config.images.offset.attach.z, true);
 		PointCamAtEntity(screenshot.camera, lastVehicle, config.images.offset.point.x, config.images.offset.point.y, config.images.offset.point.z, true);
+
 		await delay(500);
 	}
 
@@ -73,8 +80,8 @@ async function onSetupImage(data, cb) {
 }
 
 async function onEndImage(data, cb) {
-	let ped = PlayerPedId();
-	let pos = GetEntityCoords(ped);
+	const ped = PlayerPedId();
+	const pos = GetEntityCoords(ped);
 
 	if (screenshot.vehicle != null) {
 		DeleteEntity(screenshot.vehicle);
@@ -96,6 +103,7 @@ async function onEndImage(data, cb) {
 	screenshot.marker = false;
 
 	TriggerServerEvent(`${config.resourceName}:onGenerateEnd`);
+
 	cb("ok");
 }
 
@@ -119,10 +127,14 @@ async function onGenerateStart(format, updateOffset, offsetLength, crop) {
 		}
 	}
 
-	SendNuiMessage(JSON.stringify({
+	SendNUIMessage({
 		type: "GenerateVehicleImages", 
-		payload: { id: GetPlayerServerId(PlayerId()), format: format, crop: crop }
-	}));
+		payload: {
+			id: GetPlayerServerId(PlayerId()),
+			format: format,
+			crop: crop
+		}
+	});
 }
 
 RegisterNuiCallbackType("setupImage");
