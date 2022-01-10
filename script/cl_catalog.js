@@ -32,7 +32,7 @@ function checkData(data) {
 	if (!data.offsetLength)
 		data.offsetLength = false;
 
-	if (!_data.showPrice)
+	if (!data.showPrice)
 		data.showPrice = false;
 
 	catalog.data = data;
