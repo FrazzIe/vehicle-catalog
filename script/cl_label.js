@@ -1,5 +1,5 @@
 function onGetLabels(data, cb) {
-	let labels = {};
+	const labels = {};
 
 	if (data == null) {
 		cb({ error: true });
@@ -8,11 +8,11 @@ function onGetLabels(data, cb) {
 
 	for (let i = 0; i < data.length; i++) {
 		for (let j = 0; j < data[i].length; j++) {
-			let vehicle = data[i][j];
+			const vehicle = data[i][j];
 
-			if (vehicle && vehicle.model) {
-				let name = GetDisplayNameFromVehicleModel(vehicle.model);
-				let text = GetLabelText(name);
+			if (vehicle != null && vehicle.model != null) {
+				const name = GetDisplayNameFromVehicleModel(vehicle.model);
+				const text = GetLabelText(name);
 
 				labels[vehicle.model] = text;
 			}
