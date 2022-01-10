@@ -7,20 +7,18 @@ const screenshot = {
 		set: false,
 		update: false,
 		length: false
-	}
-}
-
-function setWeather(weatherType) {
-	ClearWeatherTypePersist();
-	SetWeatherTypeNowPersist(weatherType);
-	SetWeatherTypeNow(weatherType);
-	SetWeatherTypePersist(weatherType);
+	},
+	weather: "EXTRASUNNY"
 }
 
 async function onScreenshotTick() {
 	removeHud();
 
-	setWeather("EXTRASUNNY");
+	ClearWeatherTypePersist();
+	SetWeatherTypeNowPersist(screenshot.weather);
+	SetWeatherTypeNow(screenshot.weather);
+	SetWeatherTypePersist(screenshot.weather);
+
 	NetworkOverrideClockTime(12, 0, 0);
 
 	for (let i = 0; i < 2; i++)
