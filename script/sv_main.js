@@ -1,5 +1,5 @@
 const data = require("./vehicles.json");
-const { handler, onGenerateCmd, onGenerateEnd } = require("./script/sv_http.js")(data);
+const { handler } = require("./script/sv_http.js")(data);
 const resourceName = GetCurrentResourceName();
 
 function onInit() {
@@ -8,7 +8,4 @@ function onInit() {
 }
 
 SetHttpHandler(handler);
-RegisterCommand("vc_gvi", onGenerateCmd);
-RegisterCommand("vc_generate_vehicle_images", onGenerateCmd);
-onNet(`${resourceName}:onGenerateEnd`, onGenerateEnd);
 onNet(`${resourceName}:onInit`, onInit);

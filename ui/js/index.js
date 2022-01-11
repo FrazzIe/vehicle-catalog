@@ -4,7 +4,6 @@
 // TODO: Optional vehicle price support (show price of vehicle next to label)
 import { data } from "./data.js";
 import { startGamepadListener, stopGamepadListener } from "./gamepad.js";
-import { generateVehicleImages } from "./screenshot.js";
 import { setCategories, changeCategory, populateCategories, setOnCategoryChangedCallback, getSelectedCategoryElement } from "./category.js";
 import { setVehicles, setImageType, setImageEndpoint, setImageLocal, setPriceSymbol, showPriceLabel, setVehicleLabels, setVehicleIdx, changeSlider, populateVehicles, setOnVehicleChangedCallback, getSelectedVehicleElement } from "./slider.js";
 import { generateVehicleLabels, setOnVehicleLabelsGeneratedCallback } from "./label.js";
@@ -256,10 +255,6 @@ function onNuiMessage(event) {
 		case "Show":
 			showPriceLabel(item.payload.showPrice);
 			show(item.payload.visible);
-			break;
-		case "GenerateVehicleImages":
-			item.payload.endpoint = serverEndpoint;
-			generateVehicleImages(item.payload, data.vehicles);
 			break;
 		case "GenerateVehicleLabels":
 			generateVehicleLabels(data.vehicles);

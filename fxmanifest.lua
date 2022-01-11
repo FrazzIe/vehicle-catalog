@@ -5,29 +5,16 @@ author "Fraser Watt (https://github.com/FrazzIe)"
 description "A vehicle catalog to be used with FiveM"
 version "0.1"
 
-lua54 "yes"
-
 ui_page "ui/index.html"
 
 files {
 	"ui/index.html",
-	"ui/css/*.css",
-	"ui/js/*.js",
-	"ui/img/*.*",
+	"ui/**/*.*",
 	"vehicles.json"
 }
 
-shared_scripts {
-
-}
-
 client_scripts {
-	"script/cl_config.js",
-	"script/cl_util.js",
-	"script/cl_image.js",
-	"script/cl_label.js",
-	"script/cl_stats.js",
-	"script/cl_catalog.js"
+	"script/cl_*.*"
 }
 
 server_scripts {
