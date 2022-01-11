@@ -49,13 +49,13 @@ function checkData(data) {
 }
 
 async function showVehicle(model) {
-	while(catalog.preview.entities.length) {
+	while (catalog.preview.entities.length) {
 		DeleteEntity(catalog.preview.entities.pop());
 	}
 
 	const [loaded, err] = await loadModel(model);
 
-	if (!loaded) {
+	if (loaded == false) {
 		console.log(`${err}, skipping...`);
 		return;
 	}
@@ -76,11 +76,11 @@ async function showVehicle(model) {
 
 	catalog.preview.entities.push(handle);
 
-	if (!catalog.offset || catalog.data.updateOffset) {
+	if (catalog.offset == null || catalog.data.updateOffset == true) {
 		catalog.offset = true;
 		let length = 0;
 
-		if (catalog.data.offsetLength) {
+		if (catalog.data.offsetLength == true) {
 			let dimensions = GetModelDimensions(model);
 			length = (dimensions[1][1] - dimensions[0][1]) / 2;
 		}
@@ -95,15 +95,16 @@ function onCatalogTick() {
 }
 
 async function onInit(resourceName) {
-	if (config.resourceName != resourceName)
+	if (config.resourceName != resourceName) {
 		return;
+	}
 
 	await delay(1000);
 
 	let onServerInit;
 
 	onServerInit = function(url) {
-		let endpoint = url == "" ? getServerEndpoint() : url;
+		const endpoint = url == "" ? getServerEndpoint() : url;
 		
 		SendNUIMessage({
 			type: "Init",
