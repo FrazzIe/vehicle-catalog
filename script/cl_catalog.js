@@ -10,7 +10,7 @@ const catalog = {
 	}
 }
 
-function checkData(data) {
+function isCatalogDataValid(data) {
 	if (data == null) {
 		return "No data received";
 	}
@@ -127,7 +127,7 @@ function onOpen(data) {
 		onClose();
 	}
 
-	const result = checkData(data);
+	const result = isCatalogDataValid(data);
 
 	if (result != true) {
 		console.log("%s, unable to open.", result);
