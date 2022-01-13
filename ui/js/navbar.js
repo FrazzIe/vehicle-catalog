@@ -54,4 +54,10 @@ function populate(id, values, empty = true)
 			nav.removeChild(nav.lastChild);
 		}
 	}
+
+	// add items
+	for (let i = 0; i < values.length; i++)
+	{
+		add(nav, values[i], i);
+	}
 }
