@@ -11,6 +11,12 @@ function add(id, text, idx)
 		throw "nav element id is null";
 	}
 	
+	const nav = document.getElementById(id);
+
+	if (nav == null)
+	{
+		throw `nav element with id "${id}" doesn't exist`;
+	}
 }
 
 /**
