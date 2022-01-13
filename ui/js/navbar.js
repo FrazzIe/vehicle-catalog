@@ -14,7 +14,7 @@ function populate(id, values)
 
 	if (nav == null)
 	{
-		throw `nav element with id: "${id} doesn't exist"`;
+		throw `nav element with id "${id}" doesn't exist`;
 	}
 
 	if (values == null || values.length == 0)
