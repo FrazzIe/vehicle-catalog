@@ -1,4 +1,15 @@
 /**
+ * Add item to navbar
+ * @param {string} id nav element id
+ * @param {string} text nav item text
+ * @param {number} [idx nav item index
+ */
+function add(id, text, idx)
+{
+	
+}
+
+/**
  * Add items to navbar
  * @param {string} id nav element id
  * @param {string[]} values collection of nav items
