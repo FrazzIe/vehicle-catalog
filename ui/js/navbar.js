@@ -2,7 +2,7 @@
  * Add item to navbar
  * @param {string} id nav element id
  * @param {string} text nav item text
- * @param {number} [idx nav item index
+ * @param {number} [idx] nav item index
  */
 function add(id, text, idx)
 {
