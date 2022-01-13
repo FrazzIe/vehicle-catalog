@@ -10,6 +10,15 @@ function add(nav, text, idx)
 	{
 		throw "nav item index is null";
 	}
+
+	// create item
+	const item = document.createElement("div");
+
+	item.classList.add("item");
+	item.textContent = text;
+	item.dataset.index = idx;
+
+	nav.appendChild(item);
 }
 
 /**
