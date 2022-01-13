@@ -11,4 +11,9 @@ function populate(id, values)
 	}
 
 	const nav = document.getElementById(id);
+
+	if (nav == null)
+	{
+		throw `nav element with id: "${id} doesn't exist"`;
+	}
 }
