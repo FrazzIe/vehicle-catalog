@@ -1,21 +1,14 @@
 /**
  * Add item to navbar
- * @param {string} id nav element id
+ * @param {HTMLDivElement} nav nav element
  * @param {string} text nav item text
- * @param {number} [idx] nav item index
+ * @param {number} idx nav item index
  */
-function add(id, text, idx)
+function add(nav, text, idx)
 {
-	if (id == null)
+	if (idx == null)
 	{
-		throw "nav element id is null";
-	}
-	
-	const nav = document.getElementById(id);
-
-	if (nav == null)
-	{
-		throw `nav element with id "${id}" doesn't exist`;
+		throw "nav item index is null";
 	}
 }
 
