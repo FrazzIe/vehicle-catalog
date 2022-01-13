@@ -6,6 +6,10 @@
  */
 function add(id, text, idx)
 {
+	if (id == null)
+	{
+		throw "nav element id is null";
+	}
 	
 }
 
