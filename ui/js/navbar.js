@@ -75,3 +75,11 @@ function populate(id, values, empty = true)
 	}
 }
 
+/**
+ * add/subtract selected item index
+ * @param {number} amount amount to increment
+ */
+function increment(amount)
+{
+
+}
