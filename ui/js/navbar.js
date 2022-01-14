@@ -22,7 +22,6 @@ function add(nav, text, idx)
 	item.classList.add("item");
 	item.id = `${nav.id}-${idx}`;
 	item.textContent = text;
-	item.dataset.index = idx;
 
 	nav.appendChild(item);
 }
@@ -72,6 +71,7 @@ function populate(id, values, empty = true)
 	if (empty == true)
 	{
 		nav.firstChild.classList.add("selected");
+		nav.dataset.index = 0;
 	}
 }
 
@@ -93,4 +93,6 @@ function increment(id, amount)
 	{
 		throw `nav element with id "${id}" doesn't exist`;
 	}
+
+
 }
