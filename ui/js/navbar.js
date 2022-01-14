@@ -94,5 +94,20 @@ function increment(id, amount)
 		throw `nav element with id "${id}" doesn't exist`;
 	}
 
+	const numItems = nav.children.length;
+	const curIndex = parseInt(nav.dataset.index) ?? 0;
+	const increment = Math.abs(amount) % numItems;
+	
+	let newIndex;
+
+	// calc new index
+	if (amount > 0)
+	{
+		newIndex = curIndex + increment;
+	}
+	else
+	{
+		newIndex = curIndex - increment;
+	}
 
 }
