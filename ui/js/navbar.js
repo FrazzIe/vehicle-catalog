@@ -20,6 +20,7 @@ function add(nav, text, idx)
 	const item = document.createElement("div");
 
 	item.classList.add("item");
+	item.id = `${nav.id}-${idx}`;
 	item.textContent = text;
 	item.dataset.index = idx;
 
