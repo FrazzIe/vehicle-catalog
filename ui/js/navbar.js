@@ -110,4 +110,13 @@ function increment(id, amount)
 		newIndex = curIndex - increment;
 	}
 
+	// clamp index in between 0 and numItems
+	if (newIndex >= numItems)
+	{
+		newIndex -= numItems;
+	}
+	else if (newIndex < 0)
+	{
+		newIndex = numItems + newIndex;
+	}
 }
