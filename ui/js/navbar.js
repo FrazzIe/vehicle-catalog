@@ -77,9 +77,20 @@ function populate(id, values, empty = true)
 
 /**
  * add/subtract selected item index
+ * @param {string} id nav element id
  * @param {number} amount amount to increment
  */
-function increment(amount)
+function increment(id, amount)
 {
+	if (id == null)
+	{
+		throw "nav element id is null";
+	}
 
+	const nav = document.getElementById(id);
+
+	if (nav == null)
+	{
+		throw `nav element with id "${id}" doesn't exist`;
+	}
 }
