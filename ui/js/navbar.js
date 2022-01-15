@@ -145,5 +145,9 @@ function increment(id, amount)
  */
 function create(id, parent)
 {
+	if (id == null)
+	{
+		throw "nav element id is null";
+	}
 	
 }
