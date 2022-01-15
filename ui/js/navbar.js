@@ -149,5 +149,16 @@ function create(id, parent)
 	{
 		throw "nav element id is null";
 	}
-	
+
+	if (parent == null)
+	{
+		throw "nav parent element is null";
+	}
+
+	if ((parent instanceof HTMLElement) == false)
+	{
+		throw "nav parent is not a HTMLElement";
+	}
+
+	const nav = document.getElementById(id);
 }
