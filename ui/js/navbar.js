@@ -76,7 +76,7 @@ function populate(id, values, empty = true)
 }
 
 /**
- * add/subtract selected item index
+ * Add/Subtract selected item index
  * @param {string} id nav element id
  * @param {number} amount amount to increment
  */
@@ -160,5 +160,10 @@ function create(id, parent)
 		throw "nav parent is not a HTMLElement";
 	}
 
-	const nav = document.getElementById(id);
+	const exists = document.getElementById(id);
+
+	if (exists != null)
+	{
+		throw `nav element with id "${id}" already exists`;
+	}
 }
