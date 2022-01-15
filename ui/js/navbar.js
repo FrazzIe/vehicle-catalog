@@ -137,3 +137,13 @@ function increment(id, amount)
 	// store new index
 	nav.dataset.index = newIndex;
 }
+
+/**
+ * Create a navbar
+ * @param {string} id nav element id
+ * @param {HTMLElement} parent parent element to append navbar
+ */
+function create(id, parent)
+{
+	
+}
