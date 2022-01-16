@@ -1,4 +1,13 @@
 /**
+ * Event Listener for nav item clicks
+ * @param {Event} event event object
+ */
+function onClick(event)
+{
+	
+}
+
+/**
  * Add item to navbar
  * @param {HTMLDivElement} nav nav element
  * @param {string} text nav item text
@@ -22,6 +31,8 @@ function add(nav, text, idx)
 	item.classList.add("item");
 	item.id = `${nav.id}-${idx}`;
 	item.textContent = text;
+
+	item.onclick = onClick;
 
 	nav.appendChild(item);
 }
