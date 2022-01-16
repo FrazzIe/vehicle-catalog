@@ -173,7 +173,7 @@ function create(id, parent, values)
 	nav.id = id;
 	nav.classList.add("navbar");
 
-	populate(id, values);
-
 	parent.appendChild(nav);
+	
+	populate(id, values);
 }
