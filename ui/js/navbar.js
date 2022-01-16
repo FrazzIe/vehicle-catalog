@@ -34,6 +34,11 @@ function add(nav, text, idx)
  */
 function populate(id, values, empty = true) 
 {
+	if (values == null || values.length == 0)
+	{
+		return;
+	}
+	
 	if (id == null)
 	{
 		throw "nav element id is null";
@@ -44,11 +49,6 @@ function populate(id, values, empty = true)
 	if (nav == null)
 	{
 		throw `nav element with id "${id}" doesn't exist`;
-	}
-
-	if (values == null || values.length == 0)
-	{
-		return;
 	}
 
 	if (empty == true)
