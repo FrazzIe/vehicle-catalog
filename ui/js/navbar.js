@@ -17,6 +17,20 @@ function onClick(event)
 	{
 		return;
 	}
+
+	let curIndex = parseInt(nav.dataset.index);
+
+	if (isNaN(curIndex) == true)
+	{
+		curIndex = 0;
+	}
+
+	let newIndex = parseInt(item.dataset.index);
+
+	if (isNaN(newIndex) == true)
+	{
+
+	}
 }
 
 /**
