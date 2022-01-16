@@ -38,6 +38,19 @@ function onClick(event)
 			throw `unable to resolve index for element with id "${item.id}"`;
 		}
 	}
+
+	const numItems = nav.children.length;
+
+	// clamp index in between 0 and numItems
+	if (newIndex < 0)
+	{
+		newIndex = 0;
+	}
+
+	if (newIndex >= numItems)
+	{
+		newIndex = numItems;
+	}
 }
 
 /**
