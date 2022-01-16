@@ -41,15 +41,30 @@ function onClick(event)
 
 	const numItems = nav.children.length;
 
-	// clamp index in between 0 and numItems
-	if (newIndex < 0)
+	// check if newIndex is out navbar item range
+	if (newIndex < 0 || newIndex > numItems)
 	{
-		newIndex = 0;
-	}
+		let found = false;
 
-	if (newIndex >= numItems)
-	{
-		newIndex = numItems;
+		// fallback, get element index from navbar children
+		for (let i = 0; i < numItems; i++)
+		{
+			if (nav.children[i] != null)
+			{
+				if (nav.children[i].id == item.id)
+				{
+					newIndex = i;
+					found = true;
+					break;
+				}
+			}
+		}
+
+		// fallback failed?
+		if (found == false)
+		{
+			throw `unable to resolve index for element with id "${item.id} (2)"`;
+		}
 	}
 }
 
