@@ -4,7 +4,19 @@
  */
 function onClick(event)
 {
-	
+	const item = event.target;
+
+	if (item == null)
+	{
+		return;
+	}
+
+	const nav = item.parentElement;
+
+	if (nav == null)
+	{
+		return;
+	}
 }
 
 /**
