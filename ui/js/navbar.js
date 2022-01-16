@@ -142,8 +142,9 @@ function increment(id, amount)
  * Create a navbar
  * @param {string} id nav element id
  * @param {HTMLElement} parent parent element to append navbar
+ * @param {string[]} [values] collection of nav items
  */
-function create(id, parent)
+function create(id, parent, values)
 {
 	if (id == null)
 	{
@@ -171,6 +172,8 @@ function create(id, parent)
 
 	nav.id = id;
 	nav.classList.add("navbar");
+
+	populate(id, values);
 
 	parent.appendChild(nav);
 }
