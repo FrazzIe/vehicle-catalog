@@ -76,6 +76,8 @@ function onClick(event)
 	}
 
 	item.classList.add("selected");
+
+	nav.dataset.index = newIndex;
 }
 
 /**
