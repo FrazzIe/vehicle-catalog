@@ -29,7 +29,14 @@ function onClick(event)
 
 	if (isNaN(newIndex) == true)
 	{
+		// fallback, get element index
+		newIndex = parseInt(item.id.replace(`${nav.id}-`, ""));
 
+		// fallback failed?
+		if (isNaN(newIndex) == true)
+		{
+			throw `unable to resolve index for element with id "${item.id}"`;
+		}
 	}
 }
 
