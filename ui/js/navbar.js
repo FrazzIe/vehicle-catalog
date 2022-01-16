@@ -166,4 +166,11 @@ function create(id, parent)
 	{
 		throw `nav element with id "${id}" already exists`;
 	}
+
+	const nav = document.createElement("div");
+
+	nav.id = id;
+	nav.classList.add("navbar");
+
+	parent.appendChild(nav);
 }
