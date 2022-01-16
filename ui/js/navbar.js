@@ -66,6 +66,16 @@ function onClick(event)
 			throw `unable to resolve index for element with id "${item.id} (2)"`;
 		}
 	}
+
+	// get last selected element
+	const last = nav.children[curIndex];
+
+	if (last != null)
+	{
+		last.classList.remove("selected");
+	}
+
+	item.classList.add("selected");
 }
 
 /**
