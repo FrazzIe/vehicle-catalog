@@ -171,6 +171,46 @@ function populate(id, values, empty = true)
 }
 
 /**
+ * Create a navbar
+ * @param {string} id nav element id
+ * @param {HTMLElement} parent parent element to append navbar
+ * @param {string[]} [values] collection of nav items
+ */
+function create(id, parent, values)
+{
+	if (id == null)
+	{
+		throw "nav element id is null";
+	}
+
+	if (parent == null)
+	{
+		throw "nav parent element is null";
+	}
+
+	if ((parent instanceof HTMLElement) == false)
+	{
+		throw "nav parent is not a HTMLElement";
+	}
+
+	const exists = document.getElementById(id);
+
+	if (exists != null)
+	{
+		throw `nav element with id "${id}" already exists`;
+	}
+
+	const nav = document.createElement("div");
+
+	nav.id = id;
+	nav.classList.add("navbar");
+
+	parent.appendChild(nav);
+
+	populate(id, values);
+}
+
+/**
  * Add/Subtract selected item index
  * @param {string} id nav element id
  * @param {number} amount amount to increment
@@ -246,44 +286,4 @@ function increment(id, amount)
 	});
 
 	nav.dispatchEvent(customEvent);
-}
-
-/**
- * Create a navbar
- * @param {string} id nav element id
- * @param {HTMLElement} parent parent element to append navbar
- * @param {string[]} [values] collection of nav items
- */
-function create(id, parent, values)
-{
-	if (id == null)
-	{
-		throw "nav element id is null";
-	}
-
-	if (parent == null)
-	{
-		throw "nav parent element is null";
-	}
-
-	if ((parent instanceof HTMLElement) == false)
-	{
-		throw "nav parent is not a HTMLElement";
-	}
-
-	const exists = document.getElementById(id);
-
-	if (exists != null)
-	{
-		throw `nav element with id "${id}" already exists`;
-	}
-
-	const nav = document.createElement("div");
-
-	nav.id = id;
-	nav.classList.add("navbar");
-
-	parent.appendChild(nav);
-
-	populate(id, values);
 }
