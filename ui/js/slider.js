@@ -57,6 +57,9 @@ function create(id, parent, values)
 	}
 
 	const slider = document.createElement("div");
+
+	slider.id = id;
+	slider.classList.add("slider");
 }
 
 /**
