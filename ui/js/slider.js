@@ -34,7 +34,29 @@ function populate(id, values, empty = true)
  */
 function create(id, parent, values)
 {
+	if (id == null)
+	{
+		throw "slider element id is null";
+	}
 
+	if (parent == null)
+	{
+		throw "slider parent element is null";
+	}
+
+	if ((parent instanceof HTMLElement) == false)
+	{
+		throw "slider parent is not a HTMLElement";
+	}
+
+	const exists = document.getElementById(id);
+
+	if (exists != null)
+	{
+		throw `slider element with id "${id}" already exists`;
+	}
+
+	const slider = document.createElement("div");
 }
 
 /**
