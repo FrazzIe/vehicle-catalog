@@ -237,6 +237,15 @@ function increment(id, amount)
 
 	// store new index
 	nav.dataset.index = newIndex;
+
+	const customEvent = new CustomEvent(indexChangedEvent, {
+		detail: {
+			old: curIndex,
+			new: newIndex
+		}
+	});
+
+	nav.dispatchEvent(customEvent);
 }
 
 /**
