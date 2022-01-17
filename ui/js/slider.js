@@ -27,6 +27,16 @@ function populate(id, values, empty = true)
 }
 
 /**
+ * Create a slider arrow
+ * @param {HTMLDivElement} slider slider element
+ * @param {bool} left arrow direction
+ */
+function createArrow(slider, left)
+{
+
+}
+
+/**
  * Create a slider
  * @param {string} id slider element id
  * @param {HTMLElement} parent parent element to append slider
