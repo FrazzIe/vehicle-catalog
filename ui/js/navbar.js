@@ -1,3 +1,5 @@
+const indexChangedEvent = "NavbarIndexChanged";
+
 /**
  * Event Listener for nav item clicks
  * @param {Event} event event object
@@ -78,6 +80,15 @@ function onClick(event)
 	item.classList.add("selected");
 
 	nav.dataset.index = newIndex;
+
+	const customEvent = new CustomEvent(indexChangedEvent, {
+		detail: {
+			old: curIndex,
+			new: newIndex
+		}
+	});
+
+	nav.dispatchEvent(customEvent);
 }
 
 /**
