@@ -73,7 +73,7 @@ function createArrow(slider, left)
 	}
 
 	// append to slider
-	slider.appendChild(slider);
+	slider.appendChild(container);
 }
 
 /**
