@@ -51,6 +51,20 @@ function createArrow(slider, left)
 		direction = "right";
 		increment = 1;
 	}
+
+	// create arrow container
+	const container = document.createElement("div");
+
+	container.id = `${slider.id}-arrow-${direction}`;
+	container.classList.add("arrow-container");
+
+	// create arrow
+	// append to container
+	const arrow = document.createElement("div");
+
+	arrow.classList.add("arrow", direction);
+	
+	container.appendChild(arrow);
 }
 
 /**
