@@ -110,6 +110,20 @@ function create(id, parent, values)
 
 	slider.id = id;
 	slider.classList.add("slider");
+
+	// left arrow
+	createArrow(slider, true);
+
+	// items container
+	const items = document.createElement("div");
+
+	items.id = `${slider.id}-items`;
+	items.classList.add("item-container");
+
+	slider.appendChild(items);
+
+	// right arrow
+	createArrow(slider, false);
 }
 
 /**
