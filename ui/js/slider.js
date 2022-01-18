@@ -69,7 +69,7 @@ function createArrow(slider, left)
 	// container onclick
 	container.onclick = function()
 	{
-		increment(incrementAmount);
+		increment(slider.id, incrementAmount);
 	}
 
 	// append to slider
