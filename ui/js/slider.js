@@ -38,6 +38,19 @@ function createArrow(slider, left)
 		throw `slider element is null`;
 	}
 
+	let direction;
+	let increment;
+
+	if (left == true)
+	{
+		direction = "left";
+		increment = -1;
+	}
+	else
+	{
+		direction = "right";
+		increment = 1;
+	}
 }
 
 /**
