@@ -39,17 +39,17 @@ function createArrow(slider, left)
 	}
 
 	let direction;
-	let increment;
+	let incrementAmount;
 
 	if (left == true)
 	{
 		direction = "left";
-		increment = -1;
+		incrementAmount = -1;
 	}
 	else
 	{
 		direction = "right";
-		increment = 1;
+		incrementAmount = 1;
 	}
 
 	// create arrow container
@@ -69,7 +69,7 @@ function createArrow(slider, left)
 	// container onclick
 	container.onclick = function()
 	{
-		increment(increment);
+		increment(incrementAmount);
 	}
 
 	// append to slider
