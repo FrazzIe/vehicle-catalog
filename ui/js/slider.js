@@ -33,6 +33,10 @@ function populate(id, values, empty = true)
  */
 function createArrow(slider, left)
 {
+	if (slider == null)
+	{
+		throw `slider element is null`;
+	}
 
 }
 
