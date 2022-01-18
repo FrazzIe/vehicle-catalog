@@ -65,6 +65,15 @@ function createArrow(slider, left)
 	arrow.classList.add("arrow", direction);
 	
 	container.appendChild(arrow);
+
+	// container onclick
+	container.onclick = function()
+	{
+		increment(increment);
+	}
+
+	// append to slider
+	slider.appendChild(slider);
 }
 
 /**
