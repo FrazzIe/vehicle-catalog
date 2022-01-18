@@ -124,6 +124,8 @@ function create(id, parent, values)
 
 	// right arrow
 	createArrow(slider, false);
+
+	parent.appendChild(slider);
 }
 
 /**
