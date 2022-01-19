@@ -9,10 +9,29 @@ function onClick(event)
 
 /**
  * Add item to slider
+ * @param {HTMLDivElement} slider slider element
+ * @param {object} data slider item data
+ * @param {string} data.model vehicle model
+ * @param {number} idx slider item index
  */
-function add()
+function add(slider, data, idx)
 {
+	if (slider == null)
+	{
+		throw `slider element is null`;
+	}
 
+	const items = slider.children[1];
+
+	if (items == null)
+	{
+		throw `slider element with id "${id}" doesn't have items container`;
+	}
+
+	if (idx == null)
+	{
+		throw "slider item index is null";
+	}
 }
 
 /**
