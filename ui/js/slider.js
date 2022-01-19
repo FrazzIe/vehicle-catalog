@@ -32,6 +32,16 @@ function add(slider, data, idx)
 	{
 		throw "slider item index is null";
 	}
+
+	// create item
+	const item = document.createElement("div");
+
+	item.classList.add("item");
+	item.id = `${items.id}-${idx}`;
+
+	item.onclick = onClick;
+
+	items.appendChild(item);
 }
 
 /**
