@@ -41,6 +41,26 @@ function add(slider, data, idx)
 
 	item.onclick = onClick;
 
+	// create image for item
+	const image = document.createElement("img");
+
+	// load default image on error
+	image.onerror = function()
+	{
+		image.onerror = null;
+		image.src = "";
+	};
+
+	// prevent image drag
+	image.ondragstart = function()
+	{
+		return false;
+	};
+	
+	image.src = "";
+
+	item.appendChild(image);
+
 	items.appendChild(item);
 }
 
