@@ -55,6 +55,12 @@ function populate(id, values, empty = true)
 			items.removeChild(items.lastChild);
 		}
 	}
+
+	// add items
+	for (let i = 0; i < values.length; i++)
+	{
+		// add();
+	}
 }
 
 /**
