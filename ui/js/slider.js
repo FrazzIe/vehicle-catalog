@@ -46,6 +46,15 @@ function populate(id, values, empty = true)
 	{
 		throw `slider element with id "${id}" doesn't contain items container`;
 	}
+
+	if (empty == true)
+	{
+		// remove all child elements from items container
+		while (items.firstChild != null)
+		{
+			items.removeChild(nav.lastChild);
+		}
+	}
 }
 
 /**
