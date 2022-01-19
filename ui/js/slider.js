@@ -61,6 +61,13 @@ function populate(id, values, empty = true)
 	{
 		// add();
 	}
+
+	// add selected class to first child
+	// only if list was emptied
+	if (empty == true)
+	{
+		items.firstChild.classList.add("selected");
+	}
 }
 
 /**
