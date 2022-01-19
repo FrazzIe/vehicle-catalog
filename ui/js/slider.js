@@ -44,7 +44,7 @@ function populate(id, values, empty = true)
 
 	if (items == null)
 	{
-		throw `slider element with id "${id}" doesn't contain items container`;
+		throw `slider element with id "${id}" doesn't have items container`;
 	}
 
 	if (empty == true)
