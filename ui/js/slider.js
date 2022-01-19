@@ -52,7 +52,7 @@ function populate(id, values, empty = true)
 		// remove all child elements from items container
 		while (items.firstChild != null)
 		{
-			items.removeChild(nav.lastChild);
+			items.removeChild(items.lastChild);
 		}
 	}
 }
