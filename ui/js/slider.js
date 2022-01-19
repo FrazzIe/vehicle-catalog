@@ -61,6 +61,14 @@ function add(slider, data, idx)
 
 	item.appendChild(image);
 
+	// create text label for item
+	const textLabel = document.createElement("div");
+
+	textLabel.classList.add("name");
+	textLabel.textContent = data.model;
+
+	item.appendChild(textLabel);
+
 	items.appendChild(item);
 }
 
