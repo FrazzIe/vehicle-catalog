@@ -23,7 +23,22 @@ function add()
  */
 function populate(id, values, empty = true) 
 {
+	if (values == null || values.length == 0)
+	{
+		return;
+	}
+	
+	if (id == null)
+	{
+		throw "slider element id is null";
+	}
 
+	const slider = document.getElementById(id);
+
+	if (slider == null)
+	{
+		throw `slider element with id "${id}" doesn't exist`;
+	}
 }
 
 /**
