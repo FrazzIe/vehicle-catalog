@@ -12,6 +12,7 @@ function onClick(event)
  * @param {HTMLDivElement} slider slider element
  * @param {object} data slider item data
  * @param {string} data.model vehicle model
+ * @param {number} [data.price] vehicle price
  * @param {number} idx slider item index
  */
 function add(slider, data, idx)
@@ -68,6 +69,15 @@ function add(slider, data, idx)
 	textLabel.textContent = data.model;
 
 	item.appendChild(textLabel);
+
+	// create price label for item
+	// TODO: optional check
+	const priceLabel = document.createElement("div");
+
+	priceLabel.classList.add("price");
+	priceLabel.textContent = data.price;
+
+	item.appendChild(priceLabel);
 
 	items.appendChild(item);
 }
