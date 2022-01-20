@@ -181,7 +181,7 @@ function createArrow(slider, left)
 	container.onclick = function()
 	{
 		increment(slider.id, incrementAmount);
-	}
+	};
 
 	// append to slider
 	slider.appendChild(container);
