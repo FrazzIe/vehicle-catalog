@@ -329,5 +329,30 @@ function change(id, amount)
 	{
 		curIndex = minIndex;
 	}
+
+	const numItems = items.children.length;
+	const increment = Math.abs(amount) % numItems;
+	
+	let newIndex;
+
+	// calc new index
+	if (amount > 0)
+	{
+		newIndex = curIndex + increment;
+	}
+	else
+	{
+		newIndex = curIndex - increment;
+	}
+
+	// clamp index in between 0 and numItems
+	if (newIndex >= numItems)
+	{
+		newIndex -= numItems;
+	}
+	else if (newIndex < 0)
+	{
+		newIndex = numItems + newIndex;
+	}
 }
 
