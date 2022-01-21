@@ -177,17 +177,17 @@ function createArrow(slider, left)
 	}
 
 	let direction;
-	let incrementAmount;
+	let amount;
 
 	if (left == true)
 	{
 		direction = "left";
-		incrementAmount = -1;
+		amount = -1;
 	}
 	else
 	{
 		direction = "right";
-		incrementAmount = 1;
+		amount = 1;
 	}
 
 	// create arrow container
@@ -207,7 +207,7 @@ function createArrow(slider, left)
 	// container onclick
 	container.onclick = function()
 	{
-		increment(slider.id, incrementAmount);
+		change(slider.id, amount);
 	};
 
 	// append to slider
@@ -286,9 +286,9 @@ function create(id, parent, values, numVisible = DEFAULT_NUM_VISIBLE)
 /**
  * Add/Subtract selected item index
  * @param {string} id slider element id
- * @param {number} amount amount to increment
+ * @param {number} amount amount to change
  */
-function increment(id, amount)
+function change(id, amount)
 {
 
 }

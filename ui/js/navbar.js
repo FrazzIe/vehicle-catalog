@@ -213,9 +213,9 @@ function create(id, parent, values)
 /**
  * Add/Subtract selected item index
  * @param {string} id nav element id
- * @param {number} amount amount to increment
+ * @param {number} amount amount to change
  */
-function increment(id, amount)
+function change(id, amount)
 {
 	if (id == null)
 	{
