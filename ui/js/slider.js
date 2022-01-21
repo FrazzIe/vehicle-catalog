@@ -308,5 +308,19 @@ function change(id, amount)
 	{
 		throw `slider element with id "${id}" doesn't have items container`;
 	}
+
+	const minIndex = parseInt(items.dataset.min);
+
+	if (isNaN(minIndex))
+	{
+		throw `slider element with id "${id}" doesn't have a valid min index`;
+	}
+
+	const maxIndex = parseInt(items.dataset.max);
+
+	if (isNaN(maxIndex))
+	{
+		throw `slider element with id "${id}" doesn't have a valid max index`;
+	}
 }
 
