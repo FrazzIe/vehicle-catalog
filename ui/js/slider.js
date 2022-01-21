@@ -129,6 +129,13 @@ function populate(id, values, empty = true)
 		add(slider, values[i], i);
 	}
 
+	let numVisible = parseInt(items.dataset.visible);
+
+	if (isNaN(numVisible))
+	{
+		numVisible = 5;
+	}
+
 	// add selected class to first child
 	// only if list was emptied
 	if (empty == true)
