@@ -302,4 +302,11 @@ function change(id, amount)
 		throw `slider element with id "${id}" doesn't exist`;
 	}
 
+	const items = slider.children[1];
+
+	if (items == null)
+	{
+		throw `slider element with id "${id}" doesn't have items container`;
+	}
 }
+
