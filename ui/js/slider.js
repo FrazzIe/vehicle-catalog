@@ -1,3 +1,5 @@
+const DEFAULT_NUM_VISIBLE = 5;
+
 /**
  * Event Listener for slider item clicks
  * @param {Event} event event object
@@ -133,7 +135,7 @@ function populate(id, values, empty = true)
 
 	if (isNaN(numVisible))
 	{
-		numVisible = 5;
+		numVisible = DEFAULT_NUM_VISIBLE;
 	}
 
 	// add selected class to first child
@@ -219,7 +221,7 @@ function createArrow(slider, left)
  * @param {object[]} [values] collection of slider items
  * @param {number} [numVisible] number of items to show by default
  */
-function create(id, parent, values, numVisible = 5)
+function create(id, parent, values, numVisible = DEFAULT_NUM_VISIBLE)
 {
 	if (id == null)
 	{
