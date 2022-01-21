@@ -57,7 +57,7 @@ function add(slider, data, idx)
 	{
 		return false;
 	};
-	
+
 	image.src = "";
 
 	item.appendChild(image);
@@ -94,7 +94,7 @@ function populate(id, values, empty = true)
 	{
 		return;
 	}
-	
+
 	if (id == null)
 	{
 		throw "slider element id is null";
@@ -126,7 +126,7 @@ function populate(id, values, empty = true)
 	// add items
 	for (let i = 0; i < values.length; i++)
 	{
-		// add();
+		add(slider, values[i], i);
 	}
 
 	// add selected class to first child
@@ -174,7 +174,7 @@ function createArrow(slider, left)
 	const arrow = document.createElement("div");
 
 	arrow.classList.add("arrow", direction);
-	
+
 	container.appendChild(arrow);
 
 	// container onclick
