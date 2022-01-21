@@ -290,5 +290,16 @@ function create(id, parent, values, numVisible = DEFAULT_NUM_VISIBLE)
  */
 function change(id, amount)
 {
+	if (id == null)
+	{
+		throw "slider element id is null";
+	}
+
+	const slider = document.getElementById(id);
+
+	if (slider == null)
+	{
+		throw `slider element with id "${id}" doesn't exist`;
+	}
 
 }
