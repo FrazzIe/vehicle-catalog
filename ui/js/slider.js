@@ -192,8 +192,9 @@ function createArrow(slider, left)
  * @param {string} id slider element id
  * @param {HTMLElement} parent parent element to append slider
  * @param {object[]} [values] collection of slider items
+ * @param {number} [numVisible] number of items to show by default
  */
-function create(id, parent, values)
+function create(id, parent, values, numVisible = 5)
 {
 	if (id == null)
 	{
@@ -217,6 +218,19 @@ function create(id, parent, values)
 		throw `slider element with id "${id}" already exists`;
 	}
 
+	numVisible = parseInt(numVisible);
+
+	// ensure numVisible param is a number
+	if (isNaN(numVisible))
+	{
+		throw `numVisible param must be a number "${numVisible}"`;
+	}
+
+	if (numVisible > 0)
+	{
+		throw `numVisible param must be greater than 0`;
+	}
+
 	const slider = document.createElement("div");
 
 	slider.id = id;
@@ -230,6 +244,7 @@ function create(id, parent, values)
 
 	items.id = `${slider.id}-items`;
 	items.classList.add("item-container");
+	items.dataset.visible = numVisible;
 
 	slider.appendChild(items);
 
