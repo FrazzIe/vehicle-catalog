@@ -226,7 +226,7 @@ function create(id, parent, values, numVisible = 5)
 		throw `numVisible param must be a number "${numVisible}"`;
 	}
 
-	if (numVisible > 0)
+	if (numVisible <= 0)
 	{
 		throw `numVisible param must be greater than 0`;
 	}
