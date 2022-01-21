@@ -322,5 +322,12 @@ function change(id, amount)
 	{
 		throw `slider element with id "${id}" doesn't have a valid max index`;
 	}
+
+	let curIndex = parseInt(items.dataset.index);
+
+	if (isNaN(curIndex))
+	{
+		curIndex = minIndex;
+	}
 }
 
