@@ -141,6 +141,18 @@ function populate(id, values, empty = true)
 	if (empty == true)
 	{
 		items.firstChild.classList.add("selected");
+		items.dataset.index = 0;
+		items.dataset.min = 0;
+
+		// set max
+		if (items.children.length < numVisible)
+		{
+			items.dataset.max = items.children.length;
+		}
+		else
+		{
+			items.dataset.max = numVisible;
+		}
 	}
 }
 
