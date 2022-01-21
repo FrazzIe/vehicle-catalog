@@ -20,6 +20,7 @@
 
 .slider .item-container .item {
 	position: relative;
+	display: none;
 	flex: 1;
 	width: 25%;
 	border: 2px solid;
@@ -30,6 +31,10 @@
 
 .slider .item-container .item:hover {
 	border-color: #3498DB;
+}
+
+.slider .item-container .item.visible {
+	display: block;
 }
 
 .slider .item-container .item.selected {
