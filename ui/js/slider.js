@@ -153,6 +153,12 @@ function populate(id, values, empty = true)
 		{
 			items.dataset.max = numVisible;
 		}
+
+		// show visible items
+		for (let i = items.dataset.min; i < items.dataset.max; i++)
+		{
+			items.children[i].classList.add("visible");
+		}
 	}
 }
 
