@@ -290,6 +290,12 @@ function create(id, parent, values, numVisible = DEFAULT_NUM_VISIBLE)
  */
 function change(id, amount)
 {
+	// don't accept 0
+	if (amount == 0)
+	{
+		return;
+	}
+
 	if (id == null)
 	{
 		throw "slider element id is null";
