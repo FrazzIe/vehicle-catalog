@@ -340,25 +340,58 @@ function change(id, amount)
 	const increment = Math.abs(amount) % numItems;
 	
 	let newIndex;
+	let newMinIndex = minIndex;
+	let newMaxIndex = maxIndex;
 
 	// calc new index
 	if (amount > 0)
 	{
 		newIndex = curIndex + increment;
+
+		// calc new max & min
+		if (newIndex > maxIndex)
+		{
+			newMaxIndex = newIndex;
+			newMinIndex = minIndex + (newMaxIndex - maxIndex);
+		}
 	}
 	else
 	{
 		newIndex = curIndex - increment;
+
+		if (newIndex < minIndex)
+		{
+			newMinIndex = newIndex;
+			newMaxIndex = maxIndex + newIndex;
+		}
 	}
 
 	// clamp index in between 0 and numItems
 	if (newIndex >= numItems)
 	{
 		newIndex -= numItems;
+		newMaxIndex -= numItems;
+		newMinIndex -= numItems;
+
+		// prevent min being negative
+		if (newMinIndex < 0)
+		{
+			newMaxIndex -= newMinIndex;
+			newMinIndex -= newMinIndex;
+		}
 	}
 	else if (newIndex < 0)
 	{
 		newIndex = numItems + newIndex;
+		newMinIndex = numItems + newMinIndex;
+		newMaxIndex = numItems + newMaxIndex;
+
+		// prevent max being greater than numItems
+		if (newMaxIndex >= numItems)
+		{
+			newMinIndex -= newMaxIndex - newIndex;
+			newMaxIndex = newIndex;
+		}
 	}
 }
 
