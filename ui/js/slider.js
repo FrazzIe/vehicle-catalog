@@ -149,15 +149,15 @@ function populate(id, values, empty = true)
 		// set max
 		if (items.children.length < numVisible)
 		{
-			items.dataset.max = items.children.length;
+			items.dataset.max = items.children.length - 1;
 		}
 		else
 		{
-			items.dataset.max = numVisible;
+			items.dataset.max = numVisible - 1;
 		}
 
 		// show visible items
-		for (let i = items.dataset.min; i < items.dataset.max; i++)
+		for (let i = items.dataset.min; i <= items.dataset.max; i++)
 		{
 			items.children[i].classList.add("visible");
 		}
