@@ -5,8 +5,9 @@ const indexChangedEvent = "SliderIndexChanged";
  * Set selected item index
  * @param {HTMLDivElement} slider slider element
  * @param {number} newIndex slider item index
+ * @param {bool} [delay] delay previous item index
  */
-function setIndex(slider, newIndex)
+function setIndex(slider, newIndex, delay = false)
 {
 	if (slider == null)
 	{
@@ -26,7 +27,7 @@ function setIndex(slider, newIndex)
 	{
 		return;
 	}
-	
+
 	// change selected element
 	const last = items.children[curIndex];
 	const next = items.children[newIndex];
@@ -34,6 +35,16 @@ function setIndex(slider, newIndex)
 	if (last != null)
 	{
 		last.classList.remove("selected");
+
+		if (delay)
+		{
+			last.classList.add("previous");
+
+			setTimeout(function()
+			{
+				last.classList.remove("previous");
+			}, 20);
+		}
 	}
 
 	if (next != null)
@@ -441,6 +452,8 @@ function change(id, amount)
 			newMaxIndex = newIndex;
 		}
 	}
+	
+	let useDelay = false;
 
 	// change item visibility
 	if (minIndex != newMinIndex || maxIndex != newMaxIndex)
@@ -459,8 +472,10 @@ function change(id, amount)
 
 		items.dataset.min = newMinIndex;
 		items.dataset.max = newMaxIndex;
+
+		useDelay = true;
 	}
 
-	setIndex(slider, newIndex);
+	setIndex(slider, newIndex, useDelay);
 }
 
