@@ -217,6 +217,12 @@ function create(id, parent, values)
  */
 function change(id, amount)
 {
+	// don't accept 0
+	if (amount == 0)
+	{
+		return;
+	}
+
 	if (id == null)
 	{
 		throw "nav element id is null";
