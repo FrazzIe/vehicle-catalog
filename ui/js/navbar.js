@@ -1,84 +1,39 @@
 const indexChangedEvent = "NavbarIndexChanged";
 
 /**
- * Event Listener for nav item clicks
- * @param {Event} event event object
+ * Set selected item index
+ * @param {HTMLDivElement} nav nav element
+ * @param {number} newIndex nav item index
  */
-function onClick(event)
+function setIndex(nav, newIndex)
 {
-	const item = event.target;
-
-	if (item == null)
-	{
-		return;
-	}
-
-	const nav = item.parentElement;
-
 	if (nav == null)
 	{
-		return;
+		throw `nav element is null`;
 	}
 
 	let curIndex = parseInt(nav.dataset.index);
 
-	if (isNaN(curIndex) == true)
+	if (isNaN(curIndex))
 	{
-		curIndex = 0;
+		return;
 	}
-
-	let newIndex = parseInt(item.dataset.index);
-
-	if (isNaN(newIndex) == true)
-	{
-		// fallback, get element index
-		newIndex = parseInt(item.id.replace(`${nav.id}-`, ""));
-
-		// fallback failed?
-		if (isNaN(newIndex) == true)
-		{
-			throw `unable to resolve index for element with id "${item.id}"`;
-		}
-	}
-
-	const numItems = nav.children.length;
-
-	// check if newIndex is out navbar item range
-	if (newIndex < 0 || newIndex > numItems)
-	{
-		let found = false;
-
-		// fallback, get element index from navbar children
-		for (let i = 0; i < numItems; i++)
-		{
-			if (nav.children[i] != null)
-			{
-				if (nav.children[i].id == item.id)
-				{
-					newIndex = i;
-					found = true;
-					break;
-				}
-			}
-		}
-
-		// fallback failed?
-		if (found == false)
-		{
-			throw `unable to resolve index for element with id "${item.id} (2)"`;
-		}
-	}
-
-	// get last selected element
+	
+	// change selected element
 	const last = nav.children[curIndex];
+	const next = nav.children[newIndex];
 
 	if (last != null)
 	{
 		last.classList.remove("selected");
 	}
 
-	item.classList.add("selected");
+	if (next != null)
+	{
+		next.classList.add("selected");
+	}
 
+	// store new index
 	nav.dataset.index = newIndex;
 
 	const customEvent = new CustomEvent(indexChangedEvent, {
@@ -116,7 +71,10 @@ function add(nav, text, idx)
 	item.id = `${nav.id}-${idx}`;
 	item.textContent = text;
 
-	item.onclick = onClick;
+	item.onclick = function()
+	{
+		setIndex(nav, idx);
+	};
 
 	nav.appendChild(item);
 }
