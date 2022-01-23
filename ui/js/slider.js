@@ -1,12 +1,47 @@
 const DEFAULT_NUM_VISIBLE = 5;
 
 /**
- * Event Listener for slider item clicks
- * @param {Event} event event object
+ * Set selected item index
+ * @param {HTMLDivElement} slider slider element
+ * @param {number} newIndex slider item index
  */
-function onClick(event)
+function setIndex(slider, newIndex)
 {
+	if (slider == null)
+	{
+		throw `slider element is null`;
+	}
 
+	const items = slider.children[1];
+
+	if (items == null)
+	{
+		throw `slider element with id "${slider.id}" doesn't have items container`;
+	}
+
+	let curIndex = parseInt(items.dataset.index);
+
+	if (isNaN(curIndex))
+	{
+		return;
+	}
+	
+	// change selected element
+	const last = items.children[curIndex];
+	const next = items.children[newIndex];
+
+	if (last != null)
+	{
+		last.classList.remove("selected");
+	}
+
+	if (next != null)
+	{
+		next.classList.add("selected");
+	}
+
+	// store new index
+	items.dataset.index = newIndex;
 }
 
 /**
@@ -28,7 +63,7 @@ function add(slider, data, idx)
 
 	if (items == null)
 	{
-		throw `slider element with id "${id}" doesn't have items container`;
+		throw `slider element with id "${slider.id}" doesn't have items container`;
 	}
 
 	if (idx == null)
@@ -42,7 +77,10 @@ function add(slider, data, idx)
 	item.classList.add("item");
 	item.id = `${items.id}-${idx}`;
 
-	item.onclick = onClick;
+	item.onclick = function()
+	{
+		setIndex(slider, idx);
+	};
 
 	// create image for item
 	const image = document.createElement("img");
