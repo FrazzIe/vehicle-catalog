@@ -26,7 +26,7 @@
 	border: 2px solid;
 	margin-left: 5px;
 	margin-right: 5px;
-	transition: all 0.2s ease-in-out, visibility .1ms;
+	transition: all 0.2s ease-in-out, display .1ms;
 }
 
 .slider .item-container .item:hover {
@@ -61,7 +61,7 @@
 	background-color: black;
 	color: white;
 	padding: 2.5px;
-	transition: all 0.2s ease-in-out, visibility .1ms;
+	transition: all 0.2s ease-in-out, display .1ms;
 }
 
 .slider .item-container .item div.name {

@@ -393,5 +393,24 @@ function change(id, amount)
 			newMaxIndex = newIndex;
 		}
 	}
+
+	// change item visibility
+	if (minIndex != newMinIndex || maxIndex != newMaxIndex)
+	{
+		// hide visible items
+		for (let i = minIndex; i <= maxIndex; i++)
+		{
+			items.children[i].classList.remove("visible");
+		}
+
+		// show visible items
+		for (let i = newMinIndex; i <= newMaxIndex; i++)
+		{
+			items.children[i].classList.add("visible");
+		}
+
+		items.dataset.min = newMinIndex;
+		items.dataset.max = newMaxIndex;
+	}
 }
 
