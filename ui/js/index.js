@@ -1,5 +1,3 @@
-import {  } from "./navbar.js";
-import {  } from "./slider.js";
 const messages = {};
 
 /**

@@ -293,19 +293,3 @@ function change(id, amount)
 
 	nav.dispatchEvent(customEvent);
 }
-
-create("test-navbar", document.body.children[0].children[0], [
-	"Compacts",
-	"Coupes",
-	"Sports",
-	"Sports Classics",
-	"Super",
-	"Muscle",
-	"Offroad",
-	"SUV",
-	"Vans",
-	"Sedans",
-	"Motorcycles"
-]);
-
-export { create };
