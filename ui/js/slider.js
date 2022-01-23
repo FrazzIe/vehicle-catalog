@@ -362,7 +362,7 @@ function change(id, amount)
 		if (newIndex < minIndex)
 		{
 			newMinIndex = newIndex;
-			newMaxIndex = maxIndex + newIndex;
+			newMaxIndex = maxIndex - (minIndex - newMinIndex);
 		}
 	}
 
