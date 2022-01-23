@@ -412,5 +412,21 @@ function change(id, amount)
 		items.dataset.min = newMinIndex;
 		items.dataset.max = newMaxIndex;
 	}
+
+	// change selected element
+	const last = items.children[curIndex];
+	const next = items.children[newIndex];
+
+	if (last != null)
+	{
+		last.classList.remove("selected");
+	}
+
+	if (next != null)
+	{
+		next.classList.add("selected");
+	}
+
+	items.dataset.index = newIndex;
 }
 
