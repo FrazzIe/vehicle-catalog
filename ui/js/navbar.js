@@ -225,29 +225,6 @@ function change(id, amount)
 		newIndex = numItems + newIndex;
 	}
 
-	// change selected element
-	const last = nav.children[curIndex];
-	const next = nav.children[newIndex];
-
-	if (last != null)
-	{
-		last.classList.remove("selected");
-	}
-
-	if (next != null)
-	{
-		next.classList.add("selected");
-	}
-
-	// store new index
-	nav.dataset.index = newIndex;
-
-	const customEvent = new CustomEvent(indexChangedEvent, {
-		detail: {
-			old: curIndex,
-			new: newIndex
-		}
-	});
-
-	nav.dispatchEvent(customEvent);
+	setIndex(nav, newIndex);
 }
+
