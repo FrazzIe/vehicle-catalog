@@ -1,4 +1,5 @@
 const DEFAULT_NUM_VISIBLE = 5;
+const indexChangedEvent = "SliderIndexChanged";
 
 /**
  * Set selected item index
@@ -42,6 +43,15 @@ function setIndex(slider, newIndex)
 
 	// store new index
 	items.dataset.index = newIndex;
+
+	const customEvent = new CustomEvent(indexChangedEvent, {
+		detail: {
+			old: curIndex,
+			new: newIndex
+		}
+	});
+
+	slider.dispatchEvent(customEvent);
 }
 
 /**
@@ -451,20 +461,6 @@ function change(id, amount)
 		items.dataset.max = newMaxIndex;
 	}
 
-	// change selected element
-	const last = items.children[curIndex];
-	const next = items.children[newIndex];
-
-	if (last != null)
-	{
-		last.classList.remove("selected");
-	}
-
-	if (next != null)
-	{
-		next.classList.add("selected");
-	}
-
-	items.dataset.index = newIndex;
+	setIndex(slider, newIndex);
 }
 
