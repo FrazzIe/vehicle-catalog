@@ -1,230 +1,161 @@
-const indexChangedEvent = "NavbarIndexChanged";
-
 /**
- * Set selected item index
- * @param {HTMLDivElement} nav nav element
- * @param {number} newIndex nav item index
+ * Class representing a navbar
  */
-function setIndex(nav, newIndex)
+class Navbar
 {
-	if (nav == null)
+	static INDEX_CHANGED_EVENT = "NavbarIndexChanged";
+
+	#index;
+
+	/**
+	 * Create a navbar
+	 * @param {string} id nav element id
+	 * @param {string[]} [values] collection of nav items
+	 */
+	constructor(id, values)
 	{
-		throw `nav element is null`;
-	}
-
-	let curIndex = parseInt(nav.dataset.index);
-
-	if (isNaN(curIndex))
-	{
-		return;
-	}
-	
-	// change selected element
-	const last = nav.children[curIndex];
-	const next = nav.children[newIndex];
-
-	if (last != null)
-	{
-		last.classList.remove("selected");
-	}
-
-	if (next != null)
-	{
-		next.classList.add("selected");
-	}
-
-	// store new index
-	nav.dataset.index = newIndex;
-
-	const customEvent = new CustomEvent(indexChangedEvent, {
-		detail: {
-			old: curIndex,
-			new: newIndex
-		}
-	});
-
-	nav.dispatchEvent(customEvent);
-}
-
-/**
- * Add item to navbar
- * @param {HTMLDivElement} nav nav element
- * @param {string} text nav item text
- * @param {number} idx nav item index
- */
-function add(nav, text, idx)
-{
-	if (nav == null)
-	{
-		throw `nav element is null`;
-	}
-
-	if (idx == null)
-	{
-		throw "nav item index is null";
-	}
-
-	// create item
-	const item = document.createElement("div");
-
-	item.classList.add("item");
-	item.id = `${nav.id}-${idx}`;
-	item.textContent = text;
-
-	item.onclick = function()
-	{
-		setIndex(nav, idx);
-	};
-
-	nav.appendChild(item);
-}
-
-/**
- * Add items to navbar
- * @param {string} id nav element id
- * @param {string[]} values collection of nav items
- * @param {bool} [empty] empty previous nav items
- */
-function populate(id, values, empty = true) 
-{
-	if (values == null || values.length == 0)
-	{
-		return;
-	}
-	
-	if (id == null)
-	{
-		throw "nav element id is null";
-	}
-
-	const nav = document.getElementById(id);
-
-	if (nav == null)
-	{
-		throw `nav element with id "${id}" doesn't exist`;
-	}
-
-	if (empty == true)
-	{
-		// remove all child elements from nav
-		while (nav.firstChild != null)
+		if (id == null)
 		{
-			nav.removeChild(nav.lastChild);
+			throw "nav element id is null";
 		}
+
+		this.domElement = document.createElement("div");
+
+		this.domElement.id = id;
+		this.domElement.classList.add("navbar");
+		
+		this.populate(values);
 	}
 
-	// add items
-	for (let i = 0; i < values.length; i++)
+	/**
+	 * Set selected item index
+	 * @param {number} idx nav item index
+	 */
+	#setIndex(idx)
 	{
-		add(nav, values[i], i);
+		// change selected element
+		const last = this.domElement.children[this.#index];
+		const next = this.domElement.children[idx];
+
+		if (last != null)
+		{
+			last.classList.remove("selected");
+		}
+
+		if (next != null)
+		{
+			next.classList.add("selected");
+		}
+
+		const customEvent = new CustomEvent(Navbar.INDEX_CHANGED_EVENT, {
+			detail: {
+				old: this.#index,
+				new: idx
+			}
+		});
+
+		// store new index
+		this.#index = idx;
+		this.domElement.dataset.index = idx;
+
+		this.domElement.dispatchEvent(customEvent);		
 	}
 
-	// add selected class to first child
-	// only if list was emptied
-	if (empty == true)
+	/**
+	 * Add item to navbar
+	 * @param {string} text nav item text
+	 * @param {number} idx nav item index
+	 */
+	#add(text, idx)
 	{
-		nav.firstChild.classList.add("selected");
-		nav.dataset.index = 0;
+		if (idx == null)
+		{
+			throw "nav item index is null";
+		}
+
+		// create item
+		const item = document.createElement("div");
+
+		item.classList.add("item");
+		item.id = `${this.domElement.id}-${idx}`;
+		item.textContent = text;
+
+		item.onclick = () =>
+		{
+			this.#setIndex(idx);
+		};
+
+		this.domElement.appendChild(item);
+	}
+
+	/**
+	 * Add items to navbar
+	 * @param {string[]} values collection of nav items
+	 */
+	populate(values) 
+	{
+		if (values == null || values.length == 0)
+		{
+			return;
+		}
+
+		// remove all child elements from nav
+		while (this.domElement.firstChild != null)
+		{
+			this.domElement.removeChild(this.domElement.lastChild);
+		}
+
+		// add items
+		for (let i = 0; i < values.length; i++)
+		{
+			this.#add(values[i], i);
+		}
+
+		// set index
+		this.#index = 0;
+
+		// add selected class to first child
+		this.domElement.firstChild.classList.add("selected");
+		this.domElement.dataset.index = this.#index;
+	}
+
+	/**
+	 * Add/Subtract selected item index
+	 * @param {number} amount amount to change
+	 */
+	change(amount)
+	{
+		// don't accept 0
+		if (amount == 0)
+		{
+			return;
+		}
+
+		const numItems = this.domElement.children.length;
+		const increment = Math.abs(amount) % numItems;
+		
+		let newIndex;
+
+		// calc new index
+		if (amount > 0)
+		{
+			newIndex = this.#index + increment;
+		}
+		else
+		{
+			newIndex = this.#index - increment;
+		}
+
+		// clamp index in between 0 and numItems
+		if (newIndex >= numItems)
+		{
+			newIndex -= numItems;
+		}
+		else if (newIndex < 0)
+		{
+			newIndex = numItems + newIndex;
+		}
+
+		this.#setIndex(newIndex);
 	}
 }
-
-/**
- * Create a navbar
- * @param {string} id nav element id
- * @param {HTMLElement} parent parent element to append navbar
- * @param {string[]} [values] collection of nav items
- */
-function create(id, parent, values)
-{
-	if (id == null)
-	{
-		throw "nav element id is null";
-	}
-
-	if (parent == null)
-	{
-		throw "nav parent element is null";
-	}
-
-	if ((parent instanceof HTMLElement) == false)
-	{
-		throw "nav parent is not a HTMLElement";
-	}
-
-	const exists = document.getElementById(id);
-
-	if (exists != null)
-	{
-		throw `nav element with id "${id}" already exists`;
-	}
-
-	const nav = document.createElement("div");
-
-	nav.id = id;
-	nav.classList.add("navbar");
-
-	parent.appendChild(nav);
-
-	populate(id, values);
-}
-
-/**
- * Add/Subtract selected item index
- * @param {string} id nav element id
- * @param {number} amount amount to change
- */
-function change(id, amount)
-{
-	// don't accept 0
-	if (amount == 0)
-	{
-		return;
-	}
-
-	if (id == null)
-	{
-		throw "nav element id is null";
-	}
-
-	const nav = document.getElementById(id);
-
-	if (nav == null)
-	{
-		throw `nav element with id "${id}" doesn't exist`;
-	}
-
-	let curIndex = parseInt(nav.dataset.index);
-
-	if (isNaN(curIndex) == true)
-	{
-		curIndex = 0;
-	}
-
-	const numItems = nav.children.length;
-	const increment = Math.abs(amount) % numItems;
-	
-	let newIndex;
-
-	// calc new index
-	if (amount > 0)
-	{
-		newIndex = curIndex + increment;
-	}
-	else
-	{
-		newIndex = curIndex - increment;
-	}
-
-	// clamp index in between 0 and numItems
-	if (newIndex >= numItems)
-	{
-		newIndex -= numItems;
-	}
-	else if (newIndex < 0)
-	{
-		newIndex = numItems + newIndex;
-	}
-
-	setIndex(nav, newIndex);
-}
-
