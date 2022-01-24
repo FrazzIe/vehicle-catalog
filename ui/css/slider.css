@@ -61,7 +61,6 @@
 	background-color: black;
 	color: white;
 	padding: 2.5px;
-	transition: all 0.2s ease-in-out, display .1ms;
 }
 
 .slider .item-container .item div.name {
