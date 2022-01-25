@@ -1,3 +1,6 @@
+import Navbar from "./navbar.js";
+import Slider from "./slider.js";
+
 const messages = {};
 
 /**
