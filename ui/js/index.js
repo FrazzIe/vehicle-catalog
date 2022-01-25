@@ -133,6 +133,15 @@ messages.openCatalog = function(payload)
 			mainContainer.appendChild(sliders[i].domElement);
 		}
 	}
+
+	// show first slider
+	sliders[0].domElement.style.display = "flex";
+
+	// hide sliders
+	for (let i = 1; i < sliders.length; i++)
+	{
+		sliders[i].domElement.style.display = "none";
+	}
 }
 
 /**
