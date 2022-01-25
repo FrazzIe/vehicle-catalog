@@ -386,3 +386,5 @@ class Slider
 		this.#setIndex(newIndex, useDelay);
 	}
 }
+
+export default Slider;

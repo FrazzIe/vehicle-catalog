@@ -159,3 +159,5 @@ class Navbar
 		this.#setIndex(newIndex);
 	}
 }
+
+export default Navbar;
