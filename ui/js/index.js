@@ -190,7 +190,30 @@ function onMessage(event)
  */
 function onNavbarIndexChanged(event)
 {
-	// TODO: Change slider
+	if (event.detail == null)
+	{
+		return;
+	}
+
+	if (event.detail.old == null || event.detail.new == null)
+	{
+		return;
+	}
+
+	const last = sliders[event.detail.old];
+	const next = sliders[event.detail.new];
+	
+	if (last != null)
+	{
+		last.domElement.style.display = "none";
+	}
+
+	if (next != null)
+	{
+		next.domElement.style.display = "flex";
+	}
+
+	// TODO: Vehicle selected callback
 }
 
 /**
