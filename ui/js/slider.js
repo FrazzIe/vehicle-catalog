@@ -152,6 +152,7 @@ class Slider
 	 * Add item to slider
 	 * @param {object} data slider item data
 	 * @param {string} data.model vehicle model
+	 * @param {string} [data.label] vehicle label
 	 * @param {number} [data.price] vehicle price
 	 * @param {number} idx slider item index
 	 */
@@ -206,7 +207,7 @@ class Slider
 		const textLabel = document.createElement("div");
 
 		textLabel.classList.add("name");
-		textLabel.textContent = data.model;
+		textLabel.textContent = data.label ?? data.model;
 
 		item.appendChild(textLabel);
 
