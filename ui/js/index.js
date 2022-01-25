@@ -76,6 +76,14 @@ messages.openCatalog = function(payload)
 		// TODO: Hide catalog, show loading screen?
 	}
 
+	// get DOM container for sliders
+	const mainContainer = app.children[0];
+
+	if (mainContainer == null)
+	{
+		throw "Main container is null";
+	}
+
 	// set active catalog
 	activeCatalog = payload.id;
 
@@ -122,7 +130,7 @@ messages.openCatalog = function(payload)
 		{
 			sliders[i] = new Slider(`catalog-slider-${i}`, catalog.vehicles[i]);
 			
-			// TODO: Append slider to DOM
+			mainContainer.appendChild(sliders[i].domElement);
 		}
 	}
 }
