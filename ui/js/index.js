@@ -104,10 +104,11 @@ messages.openCatalog = function(payload)
 					slider.domElement.parentElement.removeChild(slider.domElement);
 				}
 
-				delete slider;
+				slider = null;
 				delete sliders[i];
 			}
-		}		
+		}
+	}		
 	else
 	{
 		// populate existing sliders
