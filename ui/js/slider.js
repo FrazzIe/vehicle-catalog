@@ -212,13 +212,15 @@ class Slider
 		item.appendChild(textLabel);
 
 		// create price label for item
-		// TODO: optional check
-		const priceLabel = document.createElement("div");
+		if (data.price != null)
+		{
+			const priceLabel = document.createElement("div");
 
-		priceLabel.classList.add("price");
-		priceLabel.textContent = data.price;
-
-		item.appendChild(priceLabel);
+			priceLabel.classList.add("price");
+			priceLabel.textContent = data.price;
+	
+			item.appendChild(priceLabel);
+		}
 
 		items.appendChild(item);	
 	}
