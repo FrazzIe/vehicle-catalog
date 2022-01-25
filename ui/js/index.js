@@ -6,6 +6,7 @@ const catalogs = {};
 
 let navbar;
 let sliders;
+let activeCatalog;
 
 /*
 	Functions to be called from game script
@@ -90,6 +91,7 @@ function init()
 {
 	navbar = new Navbar("catalog-navbar");
 	sliders = [];
+	activeCatalog = null;
 
 	// listen for events
 	window.addEventListener("message", onMessage);
