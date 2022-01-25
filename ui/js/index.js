@@ -128,11 +128,16 @@ messages.openCatalog = function(payload)
 		// create sliders
 		for (let i = numSliders; i < numCategories; i++)
 		{
-			sliders[i] = new Slider(`catalog-slider-${i}`, catalog.vehicles[i]);
+			const slider = new Slider(`catalog-slider-${i}`, catalog.vehicles[i]);
 			
-			// TODO: Event listener for SliderIndexChanged
+			// event listener for SliderIndexChanged
+			slider.domElement.addEventListener(Slider.INDEX_CHANGED_EVENT, onSliderIndexChanged);
 
-			mainContainer.appendChild(sliders[i].domElement);
+			// add slider to DOM
+			mainContainer.appendChild(slider.domElement);
+
+			// store slider
+			sliders[i] = slider;
 		}
 	}
 
@@ -194,7 +199,7 @@ function onNavbarIndexChanged(event)
  */
 function onSliderIndexChanged(event)
 {
-	
+	// TODO: Vehicle selected callback
 }
 
 /**
@@ -216,7 +221,7 @@ function init()
 	sliders = [];
 	activeCatalog = null;
 
-	// Add event listener for NavbarIndexChanged
+	// event listener for NavbarIndexChanged
 	navbar.domElement.addEventListener(Navbar.INDEX_CHANGED_EVENT, onNavbarIndexChanged);
 	
 	// append navbar to DOM
