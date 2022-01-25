@@ -189,6 +189,15 @@ function onNavbarIndexChanged(event)
 }
 
 /**
+ * Listen for slider index updates
+ * @param {Event} event 
+ */
+function onSliderIndexChanged(event)
+{
+	
+}
+
+/**
  * Initilaise globals
  * 
  * Add event listeners
