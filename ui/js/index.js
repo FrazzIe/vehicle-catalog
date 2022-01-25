@@ -130,6 +130,8 @@ messages.openCatalog = function(payload)
 		{
 			sliders[i] = new Slider(`catalog-slider-${i}`, catalog.vehicles[i]);
 			
+			// TODO: Event listener for SliderIndexChanged
+
 			mainContainer.appendChild(sliders[i].domElement);
 		}
 	}
@@ -142,6 +144,13 @@ messages.openCatalog = function(payload)
 	{
 		sliders[i].domElement.style.display = "none";
 	}
+
+	// make page visible
+	app.style.display = "block";
+
+	// TODO: Set selected vehicle stats, name etc in info-container
+	// TODO: hide loading screen?
+}
 }
 
 /**
@@ -175,6 +184,7 @@ function init()
 	}
 
 	navbar = new Navbar("catalog-navbar");
+	// TODO: Event listener for NavbarIndexChanged
 
 	sliders = [];
 	activeCatalog = null;
