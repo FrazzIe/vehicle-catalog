@@ -74,6 +74,9 @@ messages.openCatalog = function(payload)
 	{
 		// TODO: Hide catalog, show loading screen?
 	}
+
+	// set active catalog
+	activeCatalog = payload.id;
 }
 
 /**
