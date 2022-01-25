@@ -4,6 +4,9 @@ import Slider from "./slider.js";
 const messages = {};
 const catalogs = {};
 
+let navbar;
+let sliders;
+
 /*
 	Functions to be called from game script
 */
@@ -85,6 +88,9 @@ function onMessage(event)
  */
 function init()
 {
+	navbar = new Navbar("catalog-navbar");
+	sliders = [];
+
 	// listen for events
 	window.addEventListener("message", onMessage);
 }
