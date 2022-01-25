@@ -77,6 +77,8 @@ messages.openCatalog = function(payload)
 
 	// set active catalog
 	activeCatalog = payload.id;
+
+	navbar.populate(catalog.categories);
 }
 
 /**
