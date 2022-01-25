@@ -58,11 +58,17 @@ messages.openCatalog = function(payload)
 		return;
 	}
 
-	if (catalogs[payload.id] == null)
+	const catalog = catalogs[payload.id];
+
+	if (catalog == null)
 	{
 		return;
 	}
 
+	if (payload.id == activeCatalog)
+	{
+		return;
+	}
 
 }
 
