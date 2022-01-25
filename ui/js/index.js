@@ -70,6 +70,10 @@ messages.openCatalog = function(payload)
 		return;
 	}
 
+	if (activeCatalog != null)
+	{
+		// TODO: Hide catalog, show loading screen?
+	}
 }
 
 /**
