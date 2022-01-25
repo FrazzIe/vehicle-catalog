@@ -43,6 +43,26 @@ messages.registerCatalog = function(payload)
 }
 
 /**
+ * Open a catalog
+ * @param {object} payload
+ * @param {string} payload.id catalog id 
+ */
+messages.openCatalog = function(payload)
+{
+	if (payload.id == null)
+	{
+		return;
+	}
+
+	if (catalogs[payload.id] == null)
+	{
+		return;
+	}
+
+
+}
+
+/**
  * Listen for messages received from game script
  * @param {Event} event 
  */
