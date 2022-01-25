@@ -4,6 +4,7 @@ import Slider from "./slider.js";
 const messages = {};
 const catalogs = {};
 
+let app;
 let navbar;
 let sliders;
 let activeCatalog;
@@ -148,9 +149,27 @@ function onMessage(event)
  */
 function init()
 {
+	app = document.getElementById("app");
+
+	if (app == null)
+	{
+		throw "App container is null";
+	}
+
 	navbar = new Navbar("catalog-navbar");
+
 	sliders = [];
 	activeCatalog = null;
+
+	// append navbar to DOM
+	const mainContainer = app.children[0];
+
+	if (mainContainer == null)
+	{
+		throw "Main container is null";
+	}
+	
+	mainContainer.appendChild(navbar.domElement);
 
 	// listen for events
 	window.addEventListener("message", onMessage);
