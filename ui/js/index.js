@@ -89,7 +89,7 @@ messages.openCatalog = function(payload)
 
 	navbar.populate(catalog.categories);
 
-	const numCategories = catalog.categories;
+	const numCategories = catalog.categories.length;
 	const numSliders = sliders.length;
 
 	if (numSliders > numCategories)
