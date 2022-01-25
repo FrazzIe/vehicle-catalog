@@ -187,7 +187,8 @@ class Slider
 		image.onerror = function()
 		{
 			image.onerror = null;
-			image.src = "img/default.png";
+			image.src = "img/default.webp";
+			image.alt = "A default image";
 		};
 
 		// prevent image drag
@@ -196,7 +197,8 @@ class Slider
 			return false;
 		};
 
-		image.src = "";
+		image.src = `img/${data.model}.webp`;
+		image.alt = `An image of a ${data.model ?? "vehicle"}`;
 
 		item.appendChild(image);
 
