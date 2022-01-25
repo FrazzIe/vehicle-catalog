@@ -151,6 +151,16 @@ messages.openCatalog = function(payload)
 	// TODO: Set selected vehicle stats, name etc in info-container
 	// TODO: hide loading screen?
 }
+
+/**
+ * Close a catalog
+ * @param {object} payload
+ * @param {string} payload.id catalog id 
+ */
+messages.closeCatalog = function(payload)
+{
+	// make page invisible
+	app.style.display = "none";
 }
 
 /**
