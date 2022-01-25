@@ -180,6 +180,15 @@ function onMessage(event)
 }
 
 /**
+ * Listen for navbar index updates
+ * @param {Event} event 
+ */
+function onNavbarIndexChanged(event)
+{
+	// TODO: Change slider
+}
+
+/**
  * Initilaise globals
  * 
  * Add event listeners
@@ -194,11 +203,13 @@ function init()
 	}
 
 	navbar = new Navbar("catalog-navbar");
-	// TODO: Event listener for NavbarIndexChanged
 
 	sliders = [];
 	activeCatalog = null;
 
+	// Add event listener for NavbarIndexChanged
+	navbar.domElement.addEventListener(Navbar.INDEX_CHANGED_EVENT, onNavbarIndexChanged);
+	
 	// append navbar to DOM
 	const mainContainer = app.children[0];
 
