@@ -79,6 +79,50 @@ messages.openCatalog = function(payload)
 	activeCatalog = payload.id;
 
 	navbar.populate(catalog.categories);
+
+	const numCategories = catalog.categories;
+	const numSliders = sliders.length;
+
+	if (numSliders > numCategories)
+	{
+		// populate existing sliders
+		for (let i = 0; i < numCategories; i++)
+		{
+			sliders[i].populate(catalog.vehicles[i]);
+		}
+
+		// delete unused sliders
+		for (let i = numCategories; i < numSliders; i++)
+		{
+			let slider = sliders[i];
+
+			if (slider != null)
+			{
+				if (slider.domElement.parentElement != null)
+				{
+					slider.domElement.parentElement.removeChild(slider.domElement);
+				}
+
+				delete slider;
+				delete sliders[i];
+			}
+		}		
+	else
+	{
+		// populate existing sliders
+		for (let i = 0; i < numSliders; i++)
+		{
+			sliders[i].populate(catalog.vehicles[i]);
+		}
+
+		// create sliders
+		for (let i = numSliders; i < numCategories; i++)
+		{
+			sliders[i] = new Slider(`catalog-slider-${i}`, catalog.vehicles[i]);
+			
+			// TODO: Append slider to DOM
+		}
+	}
 }
 
 /**
