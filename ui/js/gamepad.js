@@ -13,6 +13,14 @@ const DEFAULT_AXES_INTERVAL = 160;
  */
 class GamepadListener
 {
+	static BUTTON_PRESSED_EVENT = "gamepadbuttonpressed";
+	static BUTTON_JUST_PRESSED_EVENT = "gamepadbuttonjustpressed";
+	static BUTTON_JUST_RELEASED_EVENT = "gamepadbuttonjustreleased";
+
+	static AXES_MOVE_EVENT = "gamepadaxesmove";
+	static AXES_START_MOVE_EVENT = "gamepadaxesstartmove";
+	static AXES_STOP_MOVE_EVENT = "gamepadaxesstopmove";
+
 	static #instance;
 	#gamepads;
 	#intervals;
