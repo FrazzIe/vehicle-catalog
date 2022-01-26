@@ -225,6 +225,7 @@ function onNavbarIndexChanged(event)
 		next.domElement.style.display = "flex";
 	}
 
+	activeCatalog.navIdx = event.detail.new;
 	// TODO: Vehicle selected callback
 }
 
@@ -234,6 +235,17 @@ function onNavbarIndexChanged(event)
  */
 function onSliderIndexChanged(event)
 {
+	if (event.detail == null)
+	{
+		return;
+	}
+
+	if (event.detail.old == null || event.detail.new == null)
+	{
+		return;
+	}
+
+	activeCatalog.sliderIdx = event.detail.new;
 	// TODO: Vehicle selected callback
 }
 
