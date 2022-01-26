@@ -152,6 +152,9 @@ messages.openCatalog = function(payload)
 		sliders[i].domElement.style.display = "none";
 	}
 
+	// start listening for Gamepad events
+	gamepadListener.start();
+
 	// make page visible
 	app.style.display = "block";
 
@@ -166,6 +169,9 @@ messages.openCatalog = function(payload)
  */
 messages.closeCatalog = function(payload)
 {
+	// stop listening for Gamepad events
+	gamepadListener.stop();
+
 	// make page invisible
 	app.style.display = "none";
 }
