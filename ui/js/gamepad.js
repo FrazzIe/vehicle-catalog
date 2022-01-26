@@ -13,6 +13,13 @@ const DEFAULT_AXES_INTERVAL = 160;
  */
 class GamepadListener
 {
+	#gamepads;
+	#intervals;
+	#buttonThreshold;
+	#axesThreshold;
+	#buttonInterval;
+	#axesInterval;
+
 	constructor()
 	{
 		this.#gamepads = {};
