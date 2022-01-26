@@ -228,6 +228,42 @@ function onSliderIndexChanged(event)
 }
 
 /**
+ * Listen for key press down
+ * @param {Event} event 
+ */
+function onKeyDown(event)
+{
+
+}
+
+/**
+ * Listen for mouse wheel scroll
+ * @param {Event} event 
+ */
+function onMouseWheel(event)
+{
+
+}
+
+/**
+ * Listen for gamepad button press down
+ * @param {Event} event 
+ */
+function onGamepadButtonPressed(event)
+{
+
+}
+
+/**
+ * Listen for gamepad axes move
+ * @param {Event} event 
+ */
+function onGamepadAxesMove(event)
+{
+
+}
+
+/**
  * Initilaise globals
  * 
  * Add event listeners
@@ -264,6 +300,10 @@ function init()
 
 	// listen for events
 	window.addEventListener("message", onMessage);
+	window.addEventListener("keydown", onKeyDown);
+	window.addEventListener("wheel", onMouseWheel);
+	window.addEventListener(GamepadListener.BUTTON_PRESSED_EVENT, onGamepadButtonPressed);
+	window.addEventListener(GamepadListener.AXES_MOVE_EVENT, onGamepadAxesMove);
 }
 
 init();
