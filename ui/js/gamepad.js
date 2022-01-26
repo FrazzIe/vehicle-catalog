@@ -256,8 +256,9 @@ class GamepadListener
 					if (pressed == null)
 					{
 						this.#states[id] = true;
-
-						console.log(`FIRE JUST PRESSED ${id}`);
+						
+						// fire just pressed
+						this.#dispatch(GamepadListener.BUTTON_JUST_PRESSED_EVENT, { button: i, value: value, pad: pad });
 					}
 
 					const now = performance.now();
@@ -273,8 +274,8 @@ class GamepadListener
 					// set interval
 					this.#intervals[id] = now;
 
-					// press
-					console.log(`FIRE PRESS ${id}`);
+					// fire press
+					this.#dispatch(GamepadListener.BUTTON_PRESSED_EVENT, { button: i, value: value, pad: pad });
 				}
 				else if (pressed)
 				{
@@ -284,7 +285,8 @@ class GamepadListener
 					// release
 					delete this.#states[id];
 
-					console.log(`FIRE RELEASE ${id}`);
+					// fire release
+					this.#dispatch(GamepadListener.BUTTON_JUST_RELEASED_EVENT, { button: i, value: value, pad: pad });
 				}
 			}
 
@@ -307,7 +309,8 @@ class GamepadListener
 					{
 						this.#states[id] = true;
 
-						console.log(`FIRE START MOVE ${id}`);
+						// fire start move
+						this.#dispatch(GamepadListener.AXES_START_MOVE_EVENT, { axes: i, value: value, pad: pad });
 					}
 
 					const now = performance.now();
@@ -323,8 +326,8 @@ class GamepadListener
 					// set interval
 					this.#intervals[id] = now;
 
-					console.log(`FIRE MOVE ${id}`);
-					// active
+					// fire move
+					this.#dispatch(GamepadListener.AXES_MOVE_EVENT, { axes: i, value: value, pad: pad });
 				}
 				else if (moved)
 				{
@@ -334,7 +337,8 @@ class GamepadListener
 					// stop
 					delete this.#states[id];
 
-					console.log(`FIRE STOP MOVE ${id}`);
+					// fire stop move
+					this.#dispatch(GamepadListener.AXES_STOP_MOVE_EVENT, { axes: i, value: value, pad: pad });
 				}
 			}		
 		}
