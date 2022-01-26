@@ -13,6 +13,7 @@ const DEFAULT_AXES_INTERVAL = 160;
  */
 class GamepadListener
 {
+	static #instance;
 	#gamepads;
 	#intervals;
 	#states;
@@ -23,6 +24,15 @@ class GamepadListener
 
 	constructor()
 	{
+		// implement singleton
+		if (GamepadListener.instance != null)
+		{
+			return GamepadListener.instance;
+		}
+
+		GamepadListener.#instance = this;
+
+		// assign vars
 		this.#gamepads = {};
 		this.#intervals = {};
 		this.#states = {};
@@ -34,6 +44,11 @@ class GamepadListener
 		this.#axesInterval = DEFAULT_AXES_INTERVAL;
 
 		this.active = false;
+	}
+
+	static get instance()
+	{
+		return this.#instance;
 	}
 
 	set buttonThreshold(value)
@@ -316,4 +331,4 @@ class GamepadListener
 	}
 }
 
-export default new GamepadListener();
+export default GamepadListener;
