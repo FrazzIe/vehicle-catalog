@@ -302,7 +302,35 @@ function onMouseWheel(event)
  */
 function onGamepadButtonPressed(event)
 {
-
+	switch(event.detail.button)
+	{
+		case 14: // D-PAD LEFT
+		{
+			// TODO: decrement slider
+			break;
+		}
+		case 15: // D-PAD RIGHT
+		{
+			// TODO: increment slider
+			break;
+		}
+		case 4: // LEFT BUMPER
+		{
+			// TODO: decrement nav
+			break;
+		}
+		case 5: // RIGHT BUMPER
+		{
+			// TODO: increment nav
+			break;
+		}
+		case 1:	// B or Circle
+		case 8: // BACK BUTTON
+		{
+			// TODO: Close catalog
+			break;
+		} 
+	}
 }
 
 /**
