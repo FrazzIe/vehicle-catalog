@@ -179,9 +179,9 @@ class GamepadListener
 
 		// loop through gamepads list
 		// query each gamepad
-		for (let i in this.gamepads)
+		for (let idx in this.gamepads)
 		{
-			const pad = this.gamepads[i];
+			const pad = this.gamepads[idx];
 
 			// skip gamepads that have a "weird" configuration
 			if (pad.mapping != "standard")
