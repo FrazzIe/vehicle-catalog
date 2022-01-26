@@ -261,7 +261,7 @@ class GamepadListener
 
 		if (this.active)
 		{
-			requestAnimationFrame(this.#tickHandler);
+			requestAnimationFrame(this.#tickHandler.bind(this));
 		}
 	}
 
@@ -283,7 +283,7 @@ class GamepadListener
 	
 		this.active = true;
 	
-		requestAnimationFrame(this.#tickHandler);
+		requestAnimationFrame(this.#tickHandler.bind(this));
 	}
 
 	/**
