@@ -233,7 +233,46 @@ function onSliderIndexChanged(event)
  */
 function onKeyDown(event)
 {
+	if (event.defaultPrevented)
+	{
+		return;
+	}
 
+	switch(event.key)
+	{
+		case "w":
+		case "ArrowUp":
+		{
+			// TODO: Switch focus between nav and slider
+			break;
+		}
+		case "s":
+		case "ArrowDown":
+		{
+			// TODO: Switch focus between nav and slider
+			break;
+		}
+		case "a":
+		case "ArrowLeft":
+		{
+			// TODO: decrement nav/slider
+			break;
+		}
+		case "d":
+		case "ArrowRight":
+		{
+			// TODO: increment nav/slider
+			break;
+		}
+		case "Escape":
+		case "Backspace":
+		{
+			// TODO: Close catalog
+			break;
+		} 
+	}
+
+	event.preventDefault();
 }
 
 /**
