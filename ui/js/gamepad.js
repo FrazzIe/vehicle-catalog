@@ -210,14 +210,14 @@ class GamepadListener
 
 		const eventNameLocal = `on${eventName}`;
 		const event = new CustomEvent(eventData, {
-			detail: eventData;
+			detail: eventData
 		});
 
 		if (window[eventNameLocal] != null)
 		{
 			window[eventNameLocal](event);
 		}
-		
+
 		window.dispatchEvent(event);
 	}
 
