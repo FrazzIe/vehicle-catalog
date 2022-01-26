@@ -196,6 +196,24 @@ class GamepadListener
 	}
 
 	/**
+	 * Dispatch custom event on window object
+	 * @param {string} eventName 
+	 * @param {object} eventData 
+	 * @returns 
+	 */
+	#dispatch(eventName, eventData)
+	{
+		if (eventData == null || eventData == null)
+		{
+			return;
+		}
+
+		window.dispatchEvent(new CustomEvent(eventData, {
+			detail: eventData;
+		}));
+	}
+
+	/**
 	 * Tick handler for animation frame
 	 * 
 	 * Queries each gamepad for button presses, dispatches events
