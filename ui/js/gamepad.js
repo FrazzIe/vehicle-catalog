@@ -15,6 +15,7 @@ class GamepadListener
 {
 	#gamepads;
 	#intervals;
+	#states;
 	#buttonThreshold;
 	#axesThreshold;
 	#buttonInterval;
@@ -24,6 +25,7 @@ class GamepadListener
 	{
 		this.#gamepads = {};
 		this.#intervals = {};
+		this.#states = {};
 
 		this.#buttonThreshold = DEFAULT_BUTTON_THRESHOLD;
 		this.#axesThreshold = DEFAULT_AXES_THRESHOLD;
@@ -199,12 +201,20 @@ class GamepadListener
 					continue;
 				}
 
-				const intervalId = `${pad.index}-b-${i}`;
+				const id = `${pad.index}-b-${i}`;
+				const pressed = this.#states[id];
 
 				if (value > this.#buttonThreshold)
 				{
+					if (pressed == null)
+					{
+						this.#states[id] = true;
+
+						console.log(`FIRE JUST PRESSED ${id}`);
+					}
+
 					const now = performance.now();
-					const interval = this.#intervals[intervalId];
+					const interval = this.#intervals[id];
 
 					// check for active interval
 					// skip event fire
@@ -214,16 +224,20 @@ class GamepadListener
 					}
 
 					// set interval
-					this.#intervals[intervalId] = now;
+					this.#intervals[id] = now;
 
 					// press
+					console.log(`FIRE PRESS ${id}`);
 				}
-				else
+				else if (pressed)
 				{
 					// remove interval
-					delete this.#intervals[intervalId];
+					delete this.#intervals[id];
 					
 					// release
+					delete this.#states[id];
+
+					console.log(`FIRE RELEASE ${id}`);
 				}
 			}
 
@@ -237,12 +251,12 @@ class GamepadListener
 					continue;
 				}
 
-				const intervalId = `${pad.index}-a-${i}`;
+				const id = `${pad.index}-a-${i}`;
 
 				if (value > this.#axesThreshold || value < -this.#axesThreshold)
 				{
 					const now = performance.now();
-					const interval = this.#intervals[intervalId];
+					const interval = this.#intervals[id];
 
 					// check for active interval
 					// skip event fire
@@ -252,8 +266,9 @@ class GamepadListener
 					}
 
 					// set interval
-					this.#intervals[intervalId] = now;
+					this.#intervals[id] = now;
 
+					console.log(`FIRE ACTIVE ${id}`);
 					// active
 				}
 			}		
