@@ -21,6 +21,7 @@ class GamepadListener
 	#axesThreshold;
 	#buttonInterval;
 	#axesInterval;
+	#active;
 
 	constructor()
 	{
@@ -43,12 +44,17 @@ class GamepadListener
 		this.#buttonInterval = DEFAULT_BUTTON_INTERVAL;
 		this.#axesInterval = DEFAULT_AXES_INTERVAL;
 
-		this.active = false;
+		this.#active = false;
 	}
 
 	static get instance()
 	{
 		return this.#instance;
+	}
+
+	get active()
+	{
+		return this.#active;
 	}
 
 	set buttonThreshold(value)
@@ -311,7 +317,7 @@ class GamepadListener
 			window.addEventListener(INTERNAL_DISCONNECTED_EVENT, this.#disconnected);
 		}
 	
-		this.active = true;
+		this.#active = true;
 	
 		requestAnimationFrame(this.#tickHandler.bind(this));
 	}
@@ -321,7 +327,7 @@ class GamepadListener
 	 */
 	stop()
 	{
-		this.active = false;
+		this.#active = false;
 
 		if (INTERNAL_EVENTS_ENABLED)
 		{
