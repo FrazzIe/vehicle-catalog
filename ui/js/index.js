@@ -1,5 +1,6 @@
 import Navbar from "./navbar.js";
 import Slider from "./slider.js";
+import GamepadListener from "./gamepad.js";
 
 const messages = {};
 const catalogs = {};
@@ -7,6 +8,7 @@ const catalogs = {};
 let app;
 let navbar;
 let sliders;
+let gamepadListener;
 let activeCatalog;
 
 /*
@@ -242,6 +244,9 @@ function init()
 	navbar = new Navbar("catalog-navbar");
 
 	sliders = [];
+
+	gamepadListener = new GamepadListener();
+
 	activeCatalog = null;
 
 	// event listener for NavbarIndexChanged
