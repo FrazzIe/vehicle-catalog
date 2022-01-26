@@ -5,46 +5,86 @@ const INTERNAL_DISCONNECTED_EVENT = "gamepaddisconnected";
 const DEFAULT_BUTTON_THRESHOLD = 0.12;
 const DEFAULT_AXES_THRESHOLD = 0.2;
 
+const DEFAULT_BUTTON_INTERVAL = 140;
+const DEFAULT_AXES_INTERVAL = 160;
+
+/**
+ * Listens for gamepads collection, emits button and thumbstick events
+ */
 class GamepadListener
 {
 	constructor()
 	{
 		this.#gamepads = {};
+		this.#intervals = {};
 
 		this.#buttonThreshold = DEFAULT_BUTTON_THRESHOLD;
 		this.#axesThreshold = DEFAULT_AXES_THRESHOLD;
 
+		this.#buttonInterval = DEFAULT_BUTTON_INTERVAL;
+		this.#axesInterval = DEFAULT_AXES_INTERVAL;
+
 		this.active = false;
 	}
 
-	set buttonThreshold(threshold)
+	set buttonThreshold(value)
 	{
-		if (isNaN(threshold))
+		if (isNaN(value))
 		{
 			throw "threshold is not a number";
 		}
 
-		if (threshold < 0.0 || threshold > 1.0)
+		if (value < 0.0 || value > 1.0)
 		{
 			throw "threshold must be between 0.0 and 1.0";
 		}
 
-		this.#buttonThreshold = threshold;
+		this.#buttonThreshold = value;
 	}
 
-	set axesThreshold(threshold)
+	set axesThreshold(value)
 	{
-		if (isNaN(threshold))
+		if (isNaN(value))
 		{
 			throw "threshold is not a number";
 		}
 
-		if (threshold < 0.0 || threshold > 1.0)
+		if (value < 0.0 || value > 1.0)
 		{
 			throw "threshold must be between 0.0 and 1.0";
 		}
 
-		this.#buttonThreshold = threshold;
+		this.#buttonThreshold = value;
+	}
+
+	set buttonInterval(value)
+	{
+		if (isNaN(value))
+		{
+			throw "interval is not a number";
+		}
+
+		if (value < 0)
+		{
+			throw "interval must be between 0 and X";
+		}
+
+		this.#buttonInterval = value;
+	}
+
+	set axesInterval(value)
+	{
+		if (isNaN(value))
+		{
+			throw "interval is not a number";
+		}
+
+		if (value < 0)
+		{
+			throw "interval must be between 0 and X";
+		}
+
+		this.#axesInterval = value;
 	}
 
 	/**
@@ -152,12 +192,30 @@ class GamepadListener
 					continue;
 				}
 
+				const intervalId = `${pad.index}-b-${i}`;
+
 				if (value > buttonThreshold)
 				{
+					const now = performance.now();
+					const interval = this.#intervals[intervalId];
+
+					// check for active interval
+					// skip event fire
+					if (interval != null && now - interval <= this.#buttonInterval)
+					{
+						continue;
+					}
+
+					// set interval
+					this.#intervals[intervalId] = now;
+
 					// press
 				}
 				else
 				{
+					// remove interval
+					delete this.#intervals[intervalId];
+					
 					// release
 				}
 			}
@@ -172,8 +230,23 @@ class GamepadListener
 					continue;
 				}
 
+				const intervalId = `${pad.index}-a-${i}`;
+
 				if (value > axesThreshold || value < -axesThreshold)
 				{
+					const now = performance.now();
+					const interval = this.#intervals[intervalId];
+
+					// check for active interval
+					// skip event fire
+					if (interval != null && now - interval <= this.#axesInterval)
+					{
+						continue;
+					}
+
+					// set interval
+					this.#intervals[intervalId] = now;
+
 					// active
 				}
 			}		
