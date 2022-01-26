@@ -281,7 +281,19 @@ function onKeyDown(event)
  */
 function onMouseWheel(event)
 {
+	if (event.deltaY == 0)
+	{
+		return;
+	}
 
+	let amount = 1;
+
+	if (event.deltaY < 0)
+	{
+		amount = -1;
+	}
+
+	// TODO: increment/decrement nav/slider
 }
 
 /**
