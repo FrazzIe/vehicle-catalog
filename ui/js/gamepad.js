@@ -201,7 +201,7 @@ class GamepadListener
 
 				const intervalId = `${pad.index}-b-${i}`;
 
-				if (value > buttonThreshold)
+				if (value > this.#buttonThreshold)
 				{
 					const now = performance.now();
 					const interval = this.#intervals[intervalId];
@@ -239,7 +239,7 @@ class GamepadListener
 
 				const intervalId = `${pad.index}-a-${i}`;
 
-				if (value > axesThreshold || value < -axesThreshold)
+				if (value > this.#axesThreshold || value < -this.#axesThreshold)
 				{
 					const now = performance.now();
 					const interval = this.#intervals[intervalId];
