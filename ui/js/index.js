@@ -339,7 +339,19 @@ function onGamepadButtonPressed(event)
  */
 function onGamepadAxesMove(event)
 {
-
+	switch(event.detail.axes)
+	{
+		case 0: // LEFT STICK X-AXIS
+		{
+			// TODO: increment/decrement nav/slider
+			break;
+		}
+		case 3: // RIGHT STICK Y-AXIS
+		{
+			// TODO: Switch focus between nav and slider
+			break;
+		}
+	}
 }
 
 /**
