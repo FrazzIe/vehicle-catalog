@@ -209,7 +209,7 @@ class GamepadListener
 		}
 
 		const eventNameLocal = `on${eventName}`;
-		const event = new CustomEvent(eventData, {
+		const event = new CustomEvent(eventName, {
 			detail: eventData
 		});
 
