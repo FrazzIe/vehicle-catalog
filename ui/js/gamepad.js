@@ -273,9 +273,17 @@ class GamepadListener
 				}
 
 				const id = `${pad.index}-a-${i}`;
+				const moved = this.#states[id];
 
 				if (value > this.#axesThreshold || value < -this.#axesThreshold)
 				{
+					if (moved == null)
+					{
+						this.#states[id] = true;
+
+						console.log(`FIRE START MOVE ${id}`);
+					}
+
 					const now = performance.now();
 					const interval = this.#intervals[id];
 
@@ -289,8 +297,18 @@ class GamepadListener
 					// set interval
 					this.#intervals[id] = now;
 
-					console.log(`FIRE ACTIVE ${id}`);
+					console.log(`FIRE MOVE ${id}`);
 					// active
+				}
+				else if (moved)
+				{
+					// remove interval
+					delete this.#intervals[id];
+					
+					// stop
+					delete this.#states[id];
+
+					console.log(`FIRE STOP MOVE ${id}`);
 				}
 			}		
 		}
