@@ -1,35 +1,46 @@
 .vehicle-panel {
 	position: absolute;
 	display: flex;
-	top: 32.5%;
-	transform: translateY(-50%);
-	right: 5%;
+
 	width: 20%;
 	height: 40%;
-	background-color: rgba(0, 0, 0, 0.729411764706);
+
+	top: 32.5%;
+	right: 5%;
+
+	transform: translateY(-50%);
+
 	flex-direction: column;
-	flex-wrap: wrap;
+	flex-wrap: nowrap;
+	
 	justify-content: flex-start;
 
+	background-color: rgba(0, 0, 0, 0.729411764706);
 }
 
 .vehicle-panel .heading {
 	display: flex;
+
+	height: 15%;
+
+	padding: 2% 2% 0% 2%;
+
 	color: rgba(245, 245, 245, 0.960784313725);
 	font-family: Arial, Helvetica, sans-serif;
-	font-size: 2.3em;
-	padding: 2% 2% 0% 2%;
-	height: 15%;
+	font-size: 2.3rem;
+
 	align-items: center;
 }
 
 .vehicle-panel .button {
 	flex-grow: 1;
-	background: none;
-	border: none;
+
+	color:rgba(245, 245, 245, 0.960784313725);
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 2em;
-	color:rgba(245, 245, 245, 0.960784313725);
+
+	background: none;
+	border: none;
 }
 
 .vehicle-panel .button:hover {
