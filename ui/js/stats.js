@@ -3,11 +3,97 @@
  */
 class Stats
 {
-	constructor(...fields)
+	static DEFAULT_NUM_BARS = 5;
+
+	#numBars;
+	#fields;
+
+	/**
+	 * Create a statistics panel
+	 * @param {string} id stats element id
+	 * @param {string[]} fields collection of stat fields
+	 * @param {number} numBars number of stats bar segments
+	 */
+	constructor(id, fields, numBars)
 	{
+		if (id == null)
+		{
+			throw "stats element id is null";
+		}
 
+		if (fields == null || fields.length == 0)
+		{
+			throw "stats must have at least 1 field"
+		}
+
+		this.#numBars = parseInt(numBars);
+
+		if (isNaN(this.#numBars) || this.#numBars <= 0)
+		{
+			this.#numBars = Stats.DEFAULT_NUM_BARS;
+		}
+
+		this.domElement = document.createElement("div");
+
+		this.domElement.id = id;
+		this.domElement.classList.add("stats");
+
+		// add fields
+		for (let i = 0; i < fields.length; i++)
+		{
+			const field = fields[i];
+
+			// skip invalid/empty field
+			if (field == null || field == "")
+			{
+				continue;
+			}
+
+			// store field
+			this.#fields[this.#fields.length] = field;
+
+			// add field to DOM
+			const item = document.createElement("div");
+
+			item.id = `${this.domElement.id}-field-${i}`;
+			item.classList.add("item");
+
+			const label = document.createElement("div");
+
+			label.id = `${item.id}-label`;
+			label.textContent = field;
+
+			item.appendChild(label);
+
+			const bars = document.createElement("div");
+
+			bars.id = `${item.id}-bars`;
+			bars.classList.add("bar-container");
+
+			// add bar segments
+			for (let j = 0; j < this.#numBars; j++)
+			{
+				const bar = document.createElement("div");
+
+				bar.id = `${bars.id}-${j}`;
+				bar.classList.add("bar");
+
+				const fill = document.createElement("div");
+
+				fill.id = `${bar.id}-fill`;
+				fill.classList.add("fill");
+
+				bar.appendChild(fill);
+
+				bars.appendChild(bar);
+			}
+
+			item.appendChild(bars);
+
+			this.domElement.appendChild(item);
+		}
 	}
-
+	
 	load()
 	{
 
