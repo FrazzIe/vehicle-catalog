@@ -63,6 +63,7 @@ class Stats
 			const label = document.createElement("div");
 
 			label.id = `${item.id}-label`;
+			label.classList.add("label");
 			label.textContent = field;
 
 			item.appendChild(label);
