@@ -4,6 +4,7 @@
 class Stats
 {
 	static DEFAULT_NUM_BARS = 5;
+	static MAX_NUM_BARS = 12;
 
 	#numBars;
 	#fields;
@@ -33,8 +34,14 @@ class Stats
 			this.#numBars = Stats.DEFAULT_NUM_BARS;
 		}
 
+		if (this.#numBars > Stats.MAX_NUM_BARS)
+		{
+			this.#numBars = Stats.MAX_NUM_BAR;
+		}
+
 		this.#fields = {};
 
+		// create DOM object
 		this.domElement = document.createElement("div");
 
 		this.domElement.id = id;
