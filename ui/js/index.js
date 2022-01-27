@@ -68,13 +68,13 @@ messages.openCatalog = function(payload)
 		return;
 	}
 
+	if (payload.id == activeCatalog)
+	{
+		return;
+	}
+
 	if (activeCatalog != null)
 	{
-		if (payload.id == activeCatalog.id)
-		{
-			return;
-		}
-
 		// TODO: Hide catalog, show loading screen?
 	}
 
@@ -87,11 +87,7 @@ messages.openCatalog = function(payload)
 	}
 
 	// set active catalog
-	activeCatalog = {
-		id: payload.id,
-		navIdx: 0,
-		sliderIdx: 0
-	};
+	activeCatalog = payload.id;
 
 	navbar.populate(catalog.categories);
 
