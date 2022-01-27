@@ -32,6 +32,12 @@
 	align-items: center;
 }
 
+.vehicle-panel .heading div {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
 .vehicle-panel .button {
 	flex-grow: 1;
 
