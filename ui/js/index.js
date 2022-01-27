@@ -10,6 +10,7 @@ let navbar;
 let sliders;
 let gamepadListener;
 let activeCatalog;
+let sliderFocused;
 
 /*
 	Functions to be called from game script
@@ -261,25 +262,43 @@ function onKeyDown(event)
 		case "w":
 		case "ArrowUp":
 		{
-			// TODO: Switch focus between nav and slider
+			// Switch focus to nav
+			sliderFocused = true;
 			break;
 		}
 		case "s":
 		case "ArrowDown":
 		{
-			// TODO: Switch focus between nav and slider
+			// Switch focus to slider
+			sliderFocused = false;
 			break;
 		}
 		case "a":
 		case "ArrowLeft":
 		{
-			// TODO: decrement nav/slider
+			// decrement nav/slider
+			if (sliderFocused)
+			{
+				sliders[navbar.index].change(-1);
+			}
+			else
+			{
+				navbar.change(-1);
+			}
 			break;
 		}
 		case "d":
 		case "ArrowRight":
 		{
-			// TODO: increment nav/slider
+			// increment nav/slider
+			if (sliderFocused)
+			{
+				sliders[navbar.index].change(-1);
+			}
+			else
+			{
+				navbar.change(-1);
+			}
 			break;
 		}
 		case "Escape":
@@ -311,7 +330,15 @@ function onMouseWheel(event)
 		amount = -1;
 	}
 
-	// TODO: increment/decrement nav/slider
+	// increment/decrement nav/slider
+	if (sliderFocused)
+	{
+		sliders[navbar.index].change(amount);
+	}
+	else
+	{
+		navbar.change(amount);
+	}
 }
 
 /**
@@ -324,22 +351,26 @@ function onGamepadButtonPressed(event)
 	{
 		case 14: // D-PAD LEFT
 		{
-			// TODO: decrement slider
+			// decrement slider
+			sliders[navbar.index].change(-1);
 			break;
 		}
 		case 15: // D-PAD RIGHT
 		{
-			// TODO: increment slider
+			// increment slider
+			sliders[navbar.index].change(1);
 			break;
 		}
 		case 4: // LEFT BUMPER
 		{
-			// TODO: decrement nav
+			// decrement nav
+			navbar.change(-1);
 			break;
 		}
 		case 5: // RIGHT BUMPER
 		{
-			// TODO: increment nav
+			// increment nav
+			navbar.change(1);
 			break;
 		}
 		case 1:	// B or Circle
@@ -361,12 +392,24 @@ function onGamepadAxesMove(event)
 	{
 		case 0: // LEFT STICK X-AXIS
 		{
-			// TODO: increment/decrement nav/slider
+			// increment/decrement nav/slider
+			const amount = event.detail.value > 0 ? 1 : -1;
+
+			if (sliderFocused)
+			{
+				sliders[navbar.index].change(amount);
+			}
+			else
+			{
+				navbar.change(amount);
+			}
+
 			break;
 		}
 		case 3: // RIGHT STICK Y-AXIS
 		{
-			// TODO: Switch focus between nav and slider
+			// Switch focus between nav and slider
+			sliderFocused = event.detail.value > 0;
 			break;
 		}
 	}
@@ -393,6 +436,7 @@ function init()
 	gamepadListener = new GamepadListener();
 
 	activeCatalog = null;
+	sliderFocused = true;
 
 	// event listener for NavbarIndexChanged
 	navbar.domElement.addEventListener(Navbar.INDEX_CHANGED_EVENT, onNavbarIndexChanged);
