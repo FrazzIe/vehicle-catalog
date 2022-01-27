@@ -119,8 +119,8 @@ class Stats
 		}
 
 		fetch(`https://${resourceName}/resolveStatLabels`, {
-			method: "POST"
-			body: JSON.stringify(this.#fields);
+			method: "POST",
+			body: JSON.stringify(this.#fields)
 		})
 		.then(response => response.json())
 		.then(data => {
@@ -138,7 +138,7 @@ class Stats
 			for (let i = 0; i < data.length; i++)
 			{
 				const field = this.domElement.children[i];
-				
+
 				field.children[0].textContent = data[i] ?? this.#fields[i];
 			}
 		});
