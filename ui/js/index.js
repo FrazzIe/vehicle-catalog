@@ -260,15 +260,15 @@ function onKeyDown(event)
 		case "w":
 		case "ArrowUp":
 		{
-			// Switch focus to nav
-			sliderFocused = true;
+			// Switch focus to slider
+			sliderFocused = false;
 			break;
 		}
 		case "s":
 		case "ArrowDown":
 		{
-			// Switch focus to slider
-			sliderFocused = false;
+			// Switch focus to navbar
+			sliderFocused = true;
 			break;
 		}
 		case "a":
@@ -283,6 +283,7 @@ function onKeyDown(event)
 			{
 				navbar.change(-1);
 			}
+
 			break;
 		}
 		case "d":
@@ -291,12 +292,13 @@ function onKeyDown(event)
 			// increment nav/slider
 			if (sliderFocused)
 			{
-				sliders[navbar.index].change(-1);
+				sliders[navbar.index].change(1);
 			}
 			else
 			{
-				navbar.change(-1);
+				navbar.change(1);
 			}
+
 			break;
 		}
 		case "Escape":
