@@ -38,7 +38,7 @@
 }
 
 .stats .item .bar-container .bar {
-	width: 20%;
+	flex: 1;
 	height: 25%;
 	background-color: rgba(240, 240, 240, 0.298039215686);
 }
