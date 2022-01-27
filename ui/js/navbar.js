@@ -27,6 +27,11 @@ class Navbar
 		this.populate(values);
 	}
 
+	get index()
+	{
+		return this.#index;
+	}
+
 	/**
 	 * Set selected item index
 	 * @param {number} idx nav item index

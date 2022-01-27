@@ -54,6 +54,11 @@ class Slider
 		this.populate(values);
 	}
 
+	get index()
+	{
+		return this.#index;
+	}
+
 	/**
 	 * Create a slider arrow
 	 * @param {bool} left arrow direction
@@ -188,7 +193,7 @@ class Slider
 		image.onerror = function()
 		{
 			image.onerror = null;
-			image.src = "img/default.webp";
+			image.src = "img/default.png";
 			image.alt = "A default image";
 		};
 
@@ -198,7 +203,8 @@ class Slider
 			return false;
 		};
 
-		image.src = `img/${data.model}.webp`;
+		image.src = "";
+		// image.src = `img/${data.model}.webp`;
 		image.alt = `An image of a ${data.model ?? "vehicle"}`;
 
 		item.appendChild(image);
