@@ -10,6 +10,7 @@ let app;
 let navbar;
 let sliders;
 let gamepadListener;
+let vehicleStats;
 let activeCatalog;
 let sliderFocused;
 
