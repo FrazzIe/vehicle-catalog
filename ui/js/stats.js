@@ -104,9 +104,44 @@ class Stats
 		}
 	}
 	
+	/**
+	 * Resolve field labels
+	 * 
+	 * Sends field labels to game script to be resolved
+	 */
 	load()
 	{
+		const resourceName = "GetParentResourceName" in window ? window.GetParentResourceName() : null;
 
+		if (resourceName == null)
+		{
+			return;
+		}
+
+		fetch(`https://${resourceName}/resolveStatLabels`, {
+			method: "POST"
+			body: JSON.stringify(this.#fields);
+		})
+		.then(response => response.json())
+		.then(data => {
+			if (data == null)
+			{
+				return;
+			}
+
+			if (data.length != this.#fields.length)
+			{
+				return;
+			}
+
+			// update fields with resolved labels
+			for (let i = 0; i < data.length; i++)
+			{
+				const field = this.domElement.children[i];
+				
+				field.children[0].textContent = data[i] ?? this.#fields[i];
+			}
+		});
 	}
 
 	/**
