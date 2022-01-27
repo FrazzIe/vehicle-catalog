@@ -109,9 +109,78 @@ class Stats
 
 	}
 
-	update()
+	/**
+	 * Update field bars
+	 * @param {number[]} values Array of bar percentages
+	 */
+	update(values)
 	{
+		if (values == null || values.length == 0)
+		{
+			return;
+		}
 
+		let numValues = this.values.length;
+
+		// prevent looping through invalid fields
+		if (numValues > this.#fields.length)
+		{
+			numValues = this.#fields.length;
+		}
+
+		for (let i = 0; i < numValues; i++)
+		{
+			// parse value
+			const value = parseFloat(values[i]);
+
+			// cancel if NaN
+			if (isNaN(value))
+			{
+				break;
+			}
+
+			// cancel if out of bounds
+			if (value < 0.0 || value > 100.0)
+			{
+				break;
+			}
+
+			const field = this.domElement.children[i];
+			const bars = field.children[1];
+
+			const numBars = bars.children.length;
+			const oneFilled = (100.0 / numBars);
+			const floatFilled = value / oneFilled;
+			const numFilled = Math.trunc(floatFilled);
+			const partialFilled = floatFilled % 1;
+			const numEmpty = Math.trunc(numBars - floatFilled);
+
+			// skip if bar is empty
+			if (numEmpty != numBars)
+			{
+				// set filled bars
+				for (let j = 0; j < numFilled; j++)
+				{
+					bars.children[j].children[0].style.width = "100%";
+				}
+
+				// skip if partial is not needed
+				if (numFilled + numEmpty != numBars)
+				{
+					// set partially filled bar
+					if (bars.children[numFilled] != null)
+					{
+						bars.children[numFilled].children[0].style.width = `${Math.trunc(partialFilled * 100.0)}%`;
+					}
+				}
+			}
+
+			// set empty bars
+			for (let j = numBars - numEmpty; j < numEmpty; j++)
+			{
+				bars.children[j].children[0].style.width = "0%";
+			}
+		}
 	}
 }
 
