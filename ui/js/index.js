@@ -1,6 +1,7 @@
 import Navbar from "./navbar.js";
 import Slider from "./slider.js";
 import GamepadListener from "./gamepad.js";
+import Stats from "./stats.js";
 
 const messages = {};
 const catalogs = {};
@@ -435,6 +436,8 @@ function init()
 
 	gamepadListener = new GamepadListener();
 
+	vehicleStats = new Stats("vehicle-stats", [	"FMMC_VEHST_0",	"FMMC_VEHST_1",	"FMMC_VEHST_2",	"FMMC_VEHST_3" ]);
+
 	activeCatalog = null;
 	sliderFocused = true;
 
@@ -450,6 +453,16 @@ function init()
 	}
 	
 	mainContainer.appendChild(navbar.domElement);
+
+	// append vehicle stats to DOM
+	const infoContainer = app.children[1];
+
+	if (infoContainer == null)
+	{
+		throw "Info container is null";
+	}
+
+	infoContainer.insertBefore(vehicleStats.domElement, infoContainer.childNodes[2]);
 
 	// listen for events
 	window.addEventListener("message", onMessage);
