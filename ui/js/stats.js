@@ -33,6 +33,8 @@ class Stats
 			this.#numBars = Stats.DEFAULT_NUM_BARS;
 		}
 
+		this.#fields = {};
+
 		this.domElement = document.createElement("div");
 
 		this.domElement.id = id;
