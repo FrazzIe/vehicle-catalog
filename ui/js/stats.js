@@ -1,4 +1,25 @@
 /**
+ * Class representing a statistics panel
+ */
+class Stats
+{
+	constructor(...fields)
+	{
+
+	}
+
+	load()
+	{
+
+	}
+
+	update()
+	{
+
+	}
+}
+
+/**
  * Update vehicle statstics bars
  * @param {number[]} values Array of bar percentages
  */
