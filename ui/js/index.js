@@ -1,6 +1,7 @@
 import Navbar from "./navbar.js";
 import Slider from "./slider.js";
 import GamepadListener from "./gamepad.js";
+import * as vehiclePanel from "./vehiclePanel.js";
 
 const messages = {};
 const catalogs = {};
@@ -450,6 +451,12 @@ function init()
 	}
 	
 	mainContainer.appendChild(navbar.domElement);
+
+	// create vehicle panel
+	const panelElement = vehiclePanel.create();
+
+	// append vehicle panel to DOM
+	app.appendChild(panelElement);
 
 	// listen for events
 	window.addEventListener("message", onMessage);
