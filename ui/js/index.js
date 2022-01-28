@@ -572,6 +572,19 @@ function init()
 	
 	mainContainer.appendChild(navbar.domElement);
 
+	// setup close button
+	const closeButton = app.children[1];
+
+	if (closeButton == null)
+	{
+		throw "Close button is null";
+	}
+
+	closeButton.onclick = function()
+	{
+		messages.closeCatalog({ id: activeCatalog });
+	}
+
 	// create vehicle panel
 	const panelElement = vehiclePanel.create();
 
