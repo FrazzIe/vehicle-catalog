@@ -174,6 +174,11 @@ messages.openCatalog = function(payload)
  */
 messages.closeCatalog = function(payload)
 {
+	if (activeCatalog == null)
+	{
+		return;
+	}
+
 	// stop listening for Gamepad events
 	gamepadListener.stop();
 
