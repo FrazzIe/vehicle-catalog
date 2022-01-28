@@ -184,6 +184,8 @@ messages.closeCatalog = function(payload)
 
 	// make page invisible
 	app.style.display = "none";
+
+	activeCatalog = null;
 }
 
 /**
