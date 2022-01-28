@@ -417,6 +417,76 @@ function onGamepadAxesMove(event)
 }
 
 /**
+ * Sets the active vehicle
+ * 
+ * Updates game script with selected vehicle
+ * 
+ * Updates UI Information panel for vehicle
+ * 
+ * @param {object} data slider item data
+ * @param {string} data.model vehicle model
+ * @param {string} [data.label] vehicle label
+ * @param {number} [data.price] vehicle price
+ */
+function setActiveVehicle(data)
+{
+	if (data == null)
+	{
+		return;
+	}
+
+	if (data.model == null)
+	{
+		return;
+	}
+
+	// update information panel
+	
+	// set heading
+	if (vehiclePanel.label != null)
+	{
+		vehiclePanel.label.textContent = data.label ?? data.model;
+	}
+
+	// set button text
+	if (vehiclePanel.button != null)
+	{
+		if (data.price != null)
+		{
+			vehiclePanel.button.textContent = "Purchase";
+		}
+		else
+		{
+			vehiclePanel.button.textContent = "Select";
+		}		
+	}
+
+	const resourceName = "GetParentResourceName" in window ? window.GetParentResourceName() : null;
+
+	if (resourceName == null)
+	{
+		return;
+	}
+
+	// update game script with selected vehicle
+	fetch(`https://${resourceName}/indexChanged`, {
+		method: "POST",
+		body: JSON.stringify(data.model)
+	})
+	.then(response => response.json())
+	.then(data => {
+
+		if (data == null || data.length == 0)
+		{
+			return;
+		}
+
+		// update stat bars
+		vehiclePanel.stats.update(data);
+	});
+}
+
+/**
  * Initilaise globals
  * 
  * Add event listeners
