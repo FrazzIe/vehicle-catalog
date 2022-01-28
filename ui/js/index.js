@@ -242,7 +242,14 @@ function onSliderIndexChanged(event)
 		return;
 	}
 
-	// TODO: Vehicle selected callback
+	const catalog = catalogs[activeCatalog];
+
+	if (catalog == null)
+	{
+		return;
+	}
+
+	setActiveVehicle(catalog.vehicles[navbar.index][event.detail.new]);
 }
 
 /**
