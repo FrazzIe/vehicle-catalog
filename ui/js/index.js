@@ -218,12 +218,22 @@ function onNavbarIndexChanged(event)
 		last.domElement.style.display = "none";
 	}
 
-	if (next != null)
+	if (next == null)
 	{
-		next.domElement.style.display = "flex";
+		return;
 	}
 
-	// TODO: Vehicle selected callback
+	// make visible
+	next.domElement.style.display = "flex";	
+
+	const catalog = catalogs[activeCatalog];
+
+	if (catalog == null)
+	{
+		return;
+	}
+
+	setActiveVehicle(catalog.vehicles[event.detail.new][next.index]);	
 }
 
 /**
