@@ -34,8 +34,6 @@ function create()
 
 	panel.appendChild(stats.domElement);
 
-	// TODO: colour panel
-
 	// create panel select button
 	button = document.createElement("button");
 
