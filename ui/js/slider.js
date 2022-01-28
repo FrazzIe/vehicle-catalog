@@ -110,6 +110,12 @@ class Slider
 	 */
 	#setIndex(idx, delay = false)
 	{
+		// prevent setting index if last index
+		if (this.#index == idx)
+		{
+			return;
+		}
+
 		const items = this.domElement.children[1];
 	
 		if (items == null)

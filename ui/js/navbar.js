@@ -38,6 +38,12 @@ class Navbar
 	 */
 	#setIndex(idx)
 	{
+		// prevent setting index if last index
+		if (this.#index == idx)
+		{
+			return;
+		}
+
 		// change selected element
 		const last = this.domElement.children[this.#index];
 		const next = this.domElement.children[idx];
