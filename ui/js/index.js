@@ -179,6 +179,11 @@ messages.closeCatalog = function(payload)
 		return;
 	}
 
+	if (activeCatalog != payload.id)
+	{
+		return;
+	}
+
 	// stop listening for Gamepad events
 	gamepadListener.stop();
 
