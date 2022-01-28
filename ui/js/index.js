@@ -223,6 +223,9 @@ function onNavbarIndexChanged(event)
 		return;
 	}
 
+	// set index to 0
+	next.change(-next.index);
+
 	// make visible
 	next.domElement.style.display = "flex";	
 
