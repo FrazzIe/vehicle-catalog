@@ -1,17 +1,21 @@
 .color-container
 {
 	display: flex;
+
 	height: 15%;
 }
 
 .color-container .item
 {
 	flex: 1;
+
 	border-radius: 0%;
-	background-color: crimson;
 	border: none;
 	border-top: 2px solid rgba(245, 245, 245, 0.960784313725);
 	border-bottom: 2px solid rgba(245, 245, 245, 0.960784313725);
+
+	background-color: crimson;
+
 }
 
 .color-container .item:hover
