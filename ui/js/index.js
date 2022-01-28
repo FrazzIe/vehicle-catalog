@@ -145,8 +145,12 @@ messages.openCatalog = function(payload)
 		}
 	}
 
+	const slider = sliders[0];
+
 	// show first slider
-	sliders[0].domElement.style.display = "flex";
+	slider.domElement.style.display = "flex";
+
+	setActiveVehicle(catalog.vehicles[navbar.index][slider.index]);
 
 	// hide sliders
 	for (let i = 1; i < sliders.length; i++)
