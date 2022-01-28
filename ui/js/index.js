@@ -77,7 +77,8 @@ messages.openCatalog = function(payload)
 
 	if (activeCatalog != null)
 	{
-		// TODO: Hide catalog, show loading screen?
+		app.style.display = "none";
+		// TODO: show loading screen?
 	}
 
 	// get DOM container for sliders
@@ -163,8 +164,6 @@ messages.openCatalog = function(payload)
 
 	// make page visible
 	app.style.display = "block";
-
-	// TODO: Set selected vehicle stats, name etc in info-container
 	// TODO: hide loading screen?
 }
 
