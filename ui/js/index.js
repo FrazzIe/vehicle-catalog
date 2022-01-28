@@ -355,7 +355,7 @@ function onKeyDown(event)
 		case "Escape":
 		case "Backspace":
 		{
-			// TODO: Close catalog
+			messages.closeCatalog({ id: activeCatalog });
 			break;
 		} 
 	}
@@ -427,7 +427,7 @@ function onGamepadButtonPressed(event)
 		case 1:	// B or Circle
 		case 8: // BACK BUTTON
 		{
-			// TODO: Close catalog
+			messages.closeCatalog({ id: activeCatalog });
 			break;
 		} 
 	}
