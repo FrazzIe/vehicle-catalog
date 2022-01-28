@@ -191,6 +191,21 @@ messages.closeCatalog = function(payload)
 	app.style.display = "none";
 
 	activeCatalog = null;
+
+	const resourceName = "GetParentResourceName" in window ? window.GetParentResourceName() : null;
+
+	if (resourceName == null)
+	{
+		return;
+	}
+
+	// notify game script of catalog close
+	fetch(`https://${resourceName}/close`, {
+		method: "POST",
+		body: JSON.stringify(payload.id)
+	})
+	.then(response => response.json())
+	.then(data => { });
 }
 
 /**
