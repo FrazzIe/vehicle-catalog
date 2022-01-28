@@ -1,4 +1,5 @@
-.navbar {
+.navbar
+{
 	display: flex;
 
 	width: 100%;
@@ -10,7 +11,8 @@
 	border-bottom: 2px solid rgba(245, 245, 245, 0.4);
 }
 
-.navbar .item {
+.navbar .item
+{
 	display: flex;
 
 	width: 10%;
@@ -25,58 +27,73 @@
 	justify-content: center;
 }
 
-.navbar .item:hover {
+.navbar .item:hover
+{
 	background-color: rgba(240, 240, 240, 0.4);
 	
 	color: rgba(0, 0, 0, 0.729411764706);
 }
 
-.navbar .item.selected {
+.navbar .item.selected
+{
 	background-color: rgba(240, 240, 240, 0.4);
 	color: black;
 }
 
-.navbar .item.selected.active {
+.navbar .item.selected.active
+{
 	background-color: rgba(240, 240, 240, 0.4);
 	color: black;
 }
 
-@media only screen and (min-width: 768px) {
-	.navbar {
+@media only screen and (min-width: 768px)
+{
+	.navbar
+	{
 		height: 22%;
 	}
 
-	.navbar .item {
+	.navbar .item
+	{
 		font-size: 0.9rem;
 	}
 }
 
-@media screen and (min-width: 1200px) {
-	.navbar {
+@media screen and (min-width: 1200px)
+{
+	.navbar
+	{
 		height: 18%;
 	}
 
-	.navbar .item {
+	.navbar .item
+	{
 		font-size: 1.09rem;
 	}
 }
 
-@media screen and (min-width: 1921px) {
-	.navbar {
+@media screen and (min-width: 1921px)
+{
+	.navbar
+	{
 		height: 15%;
 	}
 
-	.navbar .item {
+	.navbar .item
+	{
 		font-size: 1.4rem;
 	}
 }
 
-@media screen and (min-width: 2561px) {
-	.navbar {
+@media screen and (min-width: 2561px)
+{
+	.navbar
+	{
 		height: 15%;
 	}
 
-	.navbar .item {
+	.navbar .item
+	{
 		font-size: 2.4rem;
 	}
 }

@@ -1,9 +1,11 @@
-.color-container {
+.color-container
+{
 	display: flex;
 	height: 15%;
 }
 
-.color-container .item {
+.color-container .item
+{
 	flex: 1;
 	border-radius: 0%;
 	background-color: crimson;
@@ -12,6 +14,7 @@
 	border-bottom: 2px solid rgba(245, 245, 245, 0.960784313725);
 }
 
-.color-container .item:hover {
+.color-container .item:hover
+{
 	opacity: 0.9;
 }

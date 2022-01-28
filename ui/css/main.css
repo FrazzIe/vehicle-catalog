@@ -1,12 +1,14 @@
-body {
+body 
+{
 	padding: 0px;
 	margin: 0px;
-	/* background-image: url("../img/bg.png"); */
+
 	background-size: auto;
 	overflow: hidden;
 }
 
-.main-container {
+.main-container 
+{
 	position: absolute;
 	bottom: 0%;
 	width: 100%;
@@ -14,14 +16,18 @@ body {
 	background-color: rgba(0, 0, 0, 0.729411764706);
 }
 
-@media screen and (min-width: 1200px) {
-	.main-container {
+@media screen and (min-width: 1200px)
+{
+	.main-container
+	{
 		height: 32%;
 	}
 }
 
-@media screen and (min-width: 1921px) {
-	.main-container {
+@media screen and (min-width: 1921px)
+{
+	.main-container
+	{
 		height: 29%;
 	}
 }
