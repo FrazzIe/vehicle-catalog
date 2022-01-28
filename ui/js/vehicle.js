@@ -2,6 +2,7 @@ import Stats from "./stats.js";
 
 let label;
 let stats;
+let button;
 
 /**
  * Create vehicle information panel
@@ -36,14 +37,14 @@ function create()
 	// TODO: colour panel
 
 	// create panel select button
-	const select = document.createElement("button");
+	button = document.createElement("button");
 
-	select.id = `${panel.id}-select-btn`;
-	select.classList.add("button");
+	button.id = `${panel.id}-select-btn`;
+	button.classList.add("button");
 
-	panel.appendChild(select);
+	panel.appendChild(button);
 
 	return panel;
 }
 
-export { label, stats, create };
+export { label, stats, button, create };
