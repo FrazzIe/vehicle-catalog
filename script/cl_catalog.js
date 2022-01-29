@@ -3,7 +3,16 @@
  */
 function onInit()
 {
+	// TODO: add an await
 
+	// init web ui
+	SendNUIMessage({ type = "init" });
+
+	// register temporary init event
+	onNet("vehicle-catalog:init", onInitResponse);
+
+	// init, sync client to server
+	emitNet("vehicle-catalog:init");
 }
 
 /**
