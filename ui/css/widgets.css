@@ -23,3 +23,11 @@
 {
 	right: 0;
 }
+
+.widget.label
+{
+	align-items: center;
+	justify-content: center;
+
+	font-size: 2.3rem;
+}
