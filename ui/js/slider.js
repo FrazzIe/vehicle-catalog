@@ -1,324 +1,406 @@
-const numVehicles = 5;
-const resourceName = "GetParentResourceName" in window ? GetParentResourceName() : false;
+/**
+ * Class representing a slider
+ */
+class Slider
+{
+	static DEFAULT_NUM_VISIBLE = 5;
+	static INDEX_CHANGED_EVENT = "SliderIndexChanged";
 
-let vehicles = [];
-let imageType = ".webp";
-let imageEndpoint = "";
-let imageLocal = false;
-let currencySymbol = "$";
-let priceLabel = false;
-let vehicleLabels = {};
-let vehicleElements;
-let vehicleIndexes;
-let vehicleIdx;
-let categoryIdx;
-let onVehicleChanged;
+	#index;
+	#min;
+	#max;
+	#numVisible;
 
-function onVehicleClicked(event) {
-	let target = event.currentTarget;
-	let idx = parseInt(target.dataset.idx);
+	/**
+	 * Create a slider
+	 * @param {string} id slider element id
+	 * @param {object[]} [values] collection of slider items
+	 * @param {number} [numVisible] number of items to show by default
+	 */
+	constructor(id, values, numVisible)
+	{
+		if (id == null)
+		{
+			throw "slider element id is null";
+		}
 
-	if (isNaN(idx))
-		return;
+		this.#numVisible = parseInt(numVisible);
 
-	if (!vehicleElements[idx])
-		return;
+		if (isNaN(this.#numVisible) || this.#numVisible <= 0)
+		{
+			this.#numVisible = Slider.DEFAULT_NUM_VISIBLE;
+		}
 
-	let selectedVehicle = vehicleElements[vehicleIdx];
+		this.domElement = document.createElement("div");
 
-	if (target == selectedVehicle)
-		return;
+		this.domElement.id = id;
+		this.domElement.classList.add("slider");
+
+		// left arrow
+		this.#arrow(true);
+
+		// items container
+		const items = document.createElement("div");
+
+		items.id = `${this.domElement.id}-items`;
+		items.classList.add("item-container");
+		items.dataset.visible = this.#numVisible;
+
+		this.domElement.appendChild(items);
+
+		// right arrow
+		this.#arrow(false);
+
+		this.populate(values);
+	}
+
+	get index()
+	{
+		return this.#index;
+	}
+
+	/**
+	 * Create a slider arrow
+	 * @param {bool} left arrow direction
+	 */
+	#arrow(left)
+	{
+		let direction;
+		let amount;
 	
-	selectedVehicle.classList.remove("selected");
-	target.classList.add("selected");
-	setVehicleIdx(idx);
-}
+		if (left)
+		{
+			direction = "left";
+			amount = -1;
+		}
+		else
+		{
+			direction = "right";
+			amount = 1;
+		}
 
-function onImageError(event) {
-	let target = event.currentTarget;
-	target.onerror = null;
-	target.src = "./img/default.png";
-}
+		// create arrow container
+		const container = document.createElement("div");
 
-function onImageDrag() {
-	return false;
-}
+		container.id = `${this.domElement.id}-arrow-${direction}`;
+		container.classList.add("arrow-container");
 
-function setVehicles(data) {
-	vehicles = data;
-}
+		// create arrow
+		// append to container
+		const arrow = document.createElement("div");
 
-function setImageType(fileType) {
-	imageType = fileType;
-}
+		arrow.classList.add("arrow", direction);
 
-function setImageEndpoint(endpoint) {
-	imageEndpoint = endpoint;
-}
+		container.appendChild(arrow);
 
-function setImageLocal(val) {
-	imageLocal = val === true;
-}
+		// container onclick
+		container.onclick = () =>
+		{
+			this.change(amount);
+		};
 
-function setPriceSymbol(symbol) {
-	currencySymbol = symbol;
-}
-
-function showPriceLabel(val) {
-	priceLabel = val === true;
-
-	for (let i = 0; i < vehicleIndexes.length; i++) {
-		let item = vehicleElements[i];
-		let price = item.children[2];
-		let vehicle = vehicles[categoryIdx][vehicleIndexes[i]];
-
-		if (!vehicle)
-			continue;
-
-		price.style.visibility = priceLabel ? "visible" : "hidden";
+		// append to slider
+		this.domElement.appendChild(container);
 	}
-}
 
-function setVehicleLabels(data, initialised) {
-	vehicleLabels = data;
+	/**
+	 * Set selected item index
+	 * @param {number} idx slider item index
+	 * @param {bool} [delay] delay previous item index
+	 */
+	#setIndex(idx, delay = false)
+	{
+		// prevent setting index if last index
+		if (this.#index == idx)
+		{
+			return;
+		}
 
-	if (!initialised)
-		return;
+		const items = this.domElement.children[1];
+	
+		if (items == null)
+		{
+			throw `slider element with id "${this.domElement.id}" doesn't have items container`;
+		}	
 
-	for (let i = 0; i < vehicleIndexes.length; i++) {
-		let item = vehicleElements[i];
-		let label = item.children[1];
-		let vehicle = vehicles[categoryIdx][vehicleIndexes[i]];
+		// change selected element
+		const last = items.children[this.#index];
+		const next = items.children[idx];
+	
+		if (last != null)
+		{
+			last.classList.remove("selected");
+	
+			if (delay)
+			{
+				last.classList.add("previous");
+	
+				setTimeout(() => last.classList.remove("previous"), 20);
+			}
+		}
+	
+		if (next != null)
+		{
+			next.classList.add("selected");
+		}
+	
+		const customEvent = new CustomEvent(Slider.INDEX_CHANGED_EVENT,
+		{
+			detail: {
+				old: this.#index,
+				new: idx
+			}
+		});
 
-		if (!vehicle)
-			continue;
+		// store new index
+		this.#index = idx;
+		items.dataset.index = idx;
 
-		label.textContent = vehicleLabels[vehicle.model] ?? vehicle.model;
+		this.domElement.dispatchEvent(customEvent);
 	}
-}
 
-function setVehicleIdx(idx) {
-	vehicleIdx = idx;
+	/**
+	 * Add item to slider
+	 * @param {object} data slider item data
+	 * @param {string} data.model vehicle model
+	 * @param {string} [data.label] vehicle label
+	 * @param {number} [data.price] vehicle price
+	 * @param {number} idx slider item index
+	 */
+	#add(data, idx)
+	{
+		const items = this.domElement.children[1];
 
-	if (onVehicleChanged)
-		onVehicleChanged(idx);
+		if (items == null)
+		{
+			throw `slider element with id "${this.domElement.id}" doesn't have items container`;
+		}
 
-	if (vehicles[categoryIdx] == null || vehicleIndexes[idx] == null)
-		return;
+		if (idx == null)
+		{
+			throw "slider item index is null";
+		}
 
-	if (resourceName == false)
-		return;
+		// create item
+		const item = document.createElement("div");
 
-	fetch(`https://${resourceName}/indexChanged`, {
-		method: "POST",
-		body: JSON.stringify(vehicles[categoryIdx][vehicleIndexes[idx]] ?? { error: true })
-	}).then(function(response) {
-		return response.json();
-	}).then(function(data) {
-		console.log(data)
-	}).catch(function(err) {
-		console.log(err);
-	});
-}
+		item.classList.add("item");
+		item.id = `${items.id}-${idx}`;
 
-function getImageUrl(vehicle) {
-	if (imageLocal == true)
-		return `./img/${vehicle.model}${vehicle.fileType ?? imageType}`;
-	else if (imageEndpoint != "")
-		return `https://${imageEndpoint}/${resourceName}/images/${vehicle.model}${vehicle.fileType ?? imageType}`;
+		item.onclick = () =>
+		{
+			this.#setIndex(idx);
+		};
 
-	return "./img/default.png";
-}
+		// create image for item
+		const image = document.createElement("img");
 
-// issue: select middle use changeSlider(+4) only item 0,1 should change so [numVehicles - (current index + 1)]
-function changeSlider(increment, _category) {
-	let category = _category;
+		// load default image on error
+		image.onerror = function()
+		{
+			image.onerror = null;
+			image.src = "img/default.png";
+			image.alt = "A default image";
+		};
 
-	if (!_category && categoryIdx != null)
-		category = categoryIdx;
+		// prevent image drag
+		image.ondragstart = function()
+		{
+			return false;
+		};
 
-	if (!vehicles[category])
-		return;
+		image.src = `img/${data.model}.webp`;
+		image.alt = `An image of a ${data.model ?? "vehicle"}`;
 
-	let idx = vehicleIdx + increment;
+		item.appendChild(image);
 
-	if (vehicles[category].length <= numVehicles) {
-		if (idx >= vehicles[category].length)
-			idx = 0;
-		else if (idx < 0)
-			idx = vehicles[category].length - 1;
+		// create text label for item
+		const textLabel = document.createElement("div");
+
+		textLabel.classList.add("name");
+		textLabel.textContent = data.label ?? data.model;
+
+		item.appendChild(textLabel);
+
+		// create price label for item
+		if (data.price != null)
+		{
+			const priceLabel = document.createElement("div");
+
+			priceLabel.classList.add("price");
+			priceLabel.textContent = data.price;
+	
+			item.appendChild(priceLabel);
+		}
+
+		items.appendChild(item);	
+	}
+
+	/**
+	 * Add items to slider
+	 * @param {object[]} values collection of slider items
+	 */
+	populate(values) 
+	{
+		if (values == null || values.length == 0)
+		{
+			return;
+		}
+
+		const items = this.domElement.children[1];
+
+		if (items == null)
+		{
+			throw `slider element with id "${this.domElement.id}" doesn't have items container`;
+		}
+
+		// remove all child elements from items container
+		while (items.firstChild != null)
+		{
+			items.removeChild(items.lastChild);
+		}
+
+		// add items
+		for (let i = 0; i < values.length; i++)
+		{
+			this.#add(values[i], i);
+		}
+
+		this.#index = 0;
+		this.#min = 0;
+
+		// set max
+		if (items.children.length < this.#numVisible)
+		{
+			this.#max = items.children.length - 1;
+		}
+		else
+		{
+			this.#max = this.#numVisible - 1;
+		}
+
+		// add selected class to first child
+		items.firstChild.classList.add("selected");
+
+		// set element data attributes
+		items.dataset.index = this.#index;
+		items.dataset.min = this.#min;
+		items.dataset.max = this.#max;
+
+		// show visible items
+		for (let i = this.#min; i <= this.#max; i++)
+		{
+			items.children[i].classList.add("visible");
+		}
+	}
+
+	/**
+	 * Add/Subtract selected item index
+	 * @param {number} amount amount to change
+	 */
+	change(amount)
+	{
+		// don't accept 0
+		if (amount == 0)
+		{
+			return;
+		}
+
+		const items = this.domElement.children[1];
+
+		if (items == null)
+		{
+			throw `slider element with id "${this.domElement.id}" doesn't have items container`;
+		}
+
+		const numItems = items.children.length;
+		const increment = Math.abs(amount) % numItems;
 		
-		vehicleElements[vehicleIdx].classList.remove("selected");
-		vehicleElements[idx].classList.add("selected");
-		setVehicleIdx(idx);
-		return;
-	}
+		let newIndex;
+		let newMinIndex = this.#min;
+		let newMaxIndex = this.#max;
 
-	if (idx >= 0 && idx < vehicleIndexes.length) {
-		vehicleElements[vehicleIdx].classList.remove("selected");
-		vehicleElements[idx].classList.add("selected");
-		setVehicleIdx(idx);
-		return;
-	}
+		// calc new index
+		if (amount > 0)
+		{
+			newIndex = this.#index + increment;
 
-	//if change will pass max
-	if (idx >= vehicleIndexes.length) {
-		//amount of items to remove from array
-		let deleteCount = increment;
+			// calc new max & min
+			if (newIndex > this.#max)
+			{
+				newMaxIndex = newIndex;
+				newMinIndex = this.#min + (newMaxIndex - this.#max);
+			}
+		}
+		else
+		{
+			newIndex = this.#index - increment;
 
-		//add each new item in
-		for (let i = 0; i < increment; i++) {
-			let lastIdx = vehicleIndexes[vehicleIndexes.length - 1];
-			let newIdx = lastIdx + 1;
-
-			if (newIdx >= vehicles[category].length)
-				newIdx -= vehicles[category].length;
-			
-			vehicleIndexes.push(newIdx);
+			if (newIndex < this.#min)
+			{
+				newMinIndex = newIndex;
+				newMaxIndex = this.#max - (this.#min - newMinIndex);
+			}
 		}
 
-		//delete redundent items
-		vehicleIndexes.splice(0, deleteCount);
+		// clamp index in between 0 and numItems
+		if (newIndex >= numItems)
+		{
+			newIndex -= numItems;
+			newMaxIndex -= numItems;
+			newMinIndex -= numItems;
 
-		idx = vehicleIndexes.length - 1;
-	}
-
-	//if change will pass min
-	if (idx < 0) {
-		//amount of items to remove from array
-		let deleteCount = increment;
-
-		for (let i = increment; i < 0; i++) {
-			let firstIdx = vehicleIndexes[0];
-			let newIdx = firstIdx - 1;
-
-			if (newIdx < 0)
-				newIdx = vehicles[category].length - 1;
-
-			vehicleIndexes.splice(0, 0, newIdx);
+			// prevent min being negative
+			if (newMinIndex < 0)
+			{
+				newMaxIndex -= newMinIndex;
+				newMinIndex -= newMinIndex;
+			}
 		}
+		else if (newIndex < 0)
+		{
+			newIndex = numItems + newIndex;
+			newMinIndex = numItems + newMinIndex;
+			newMaxIndex = numItems + newMaxIndex;
 
-		//delete redundent items
-		vehicleIndexes.splice(deleteCount);
-
-		idx = 0;
-	}
-
-	for (let i = 0; i < vehicleIndexes.length; i++) {
-		let item = vehicleElements[i];
-		let image = item.children[0];
-		let label = item.children[1];
-		let price = item.children[2];
-		let vehicle = vehicles[category][vehicleIndexes[i]];
-
-		if (!vehicle)
-			continue;
-
-		image.onerror = onImageError;
-		image.src = getImageUrl(vehicle);
-
-		label.textContent = vehicleLabels[vehicle.model] ?? vehicle.model;
-		price.style.visibility = priceLabel ? "visible" : "hidden";
-		price.textContent = `${currencySymbol}${vehicle.price ?? 0}`;
-
-		if (i == idx) {
-			vehicleElements[vehicleIdx].classList.remove("selected");
-			item.classList.add("selected");
+			// prevent max being greater than numItems
+			if (newMaxIndex >= numItems)
+			{
+				newMinIndex -= newMaxIndex - newIndex;
+				newMaxIndex = newIndex;
+			}
 		}
-	}
+		
+		let useDelay = false;
 
-	setVehicleIdx(idx);
-}
-
-function populateVehicles(idx) {
-	categoryIdx = idx;
-
-	if (!vehicleElements) {
-		vehicleElements = [];
-		vehicleIndexes = [];
-		vehicleIdx = 0;
-
-		let container = document.querySelector(".item-container");
-
-		for (let i = 0; i < numVehicles; i++) {
-			let item = document.createElement("div");
-			let image = document.createElement("img");
-			let label = document.createElement("div");
-			let price = document.createElement("div");
-			let vehicle = vehicles[idx][i];
-
-			image.onerror = onImageError;
-			image.ondragstart = onImageDrag;
-
-			label.classList.add("name");
-			price.classList.add("price");
-			price.style.visibility = priceLabel ? "visible" : "hidden";
-
-			if (vehicle) {
-				image.src = getImageUrl(vehicle);
-				label.textContent = vehicleLabels[vehicle.model] ?? vehicle.model;
-				price.textContent = `${currencySymbol}${vehicle.price ?? 0}`;
-				vehicleIndexes.push(i);
-				item.style.visibility = "visible";
-			} else {
-				item.style.visibility = "hidden";
+		// change item visibility
+		if (this.#min != newMinIndex || this.#max != newMaxIndex)
+		{
+			// hide visible items
+			for (let i = this.#min; i <= this.#max; i++)
+			{
+				items.children[i].classList.remove("visible");
 			}
 
-			item.classList.add("item");
-			if (i == 0)
-				item.classList.add("selected");
-			item.dataset.idx = i;
-			item.onclick = onVehicleClicked;
-			item.appendChild(image);
-			item.appendChild(label);
-			item.appendChild(price);
-			container.appendChild(item);
-			vehicleElements.push(item);
+			// show visible items
+			for (let i = newMinIndex; i <= newMaxIndex; i++)
+			{
+				items.children[i].classList.add("visible");
+			}
+
+			// set min + max
+			this.#min = newMinIndex;
+			this.#max = newMaxIndex;
+
+			// set element data attributes
+			items.dataset.min = newMinIndex;
+			items.dataset.max = newMaxIndex;
+
+			useDelay = true;
 		}
 
-		if (onVehicleChanged)
-			onVehicleChanged(idx);
-		return;
+		this.#setIndex(newIndex, useDelay);
 	}
-
-	let selectedVehicle = vehicleElements[vehicleIdx];
-	vehicleIndexes = [];
-
-	for (let i = 0; i < vehicleElements.length; i++) {
-		let item = vehicleElements[i];
-		let image = item.children[0];
-		let label = item.children[1];
-		let price = item.children[2];
-		let vehicle = vehicles[idx][i];
-
-		image.onerror = onImageError;
-		price.style.visibility = priceLabel ? "visible" : "hidden";
-		
-		if (vehicle) {
-			image.src = getImageUrl(vehicle);
-			label.textContent = vehicleLabels[vehicle.model] ?? vehicle.model;
-			price.textContent = `${currencySymbol}${vehicle.price ?? 0}`;
-			item.style.visibility = "visible";
-			vehicleIndexes.push(i);
-		} else {
-			item.style.visibility = "hidden";
-		}
-
-		if (i == 0) {
-			selectedVehicle.classList.remove("selected");
-			item.classList.add("selected");
-		}
-	}
-
-	setVehicleIdx(0);
 }
 
-function setOnVehicleChangedCallback(callback) {
-	onVehicleChanged = callback;
-}
-
-function getSelectedVehicleElement() {
-	return vehicleElements[vehicleIdx];
-}
-
-export { setVehicles, setImageType, setImageEndpoint, setImageLocal, setPriceSymbol, showPriceLabel, setVehicleLabels, setVehicleIdx, changeSlider, populateVehicles, setOnVehicleChangedCallback, getSelectedVehicleElement };
+export default Slider;

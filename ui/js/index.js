@@ -1,285 +1,599 @@
-// TODO: Vehicle information panel (stats, name)
-// TODO: Select vehicle button
-// TODO: Exit/Close button
-// TODO: Optional vehicle price support (show price of vehicle next to label)
-import { data } from "./data.js";
-import { startGamepadListener, stopGamepadListener } from "./gamepad.js";
-import { setCategories, changeCategory, populateCategories, setOnCategoryChangedCallback, getSelectedCategoryElement } from "./category.js";
-import { setVehicles, setImageType, setImageEndpoint, setImageLocal, setPriceSymbol, showPriceLabel, setVehicleLabels, setVehicleIdx, changeSlider, populateVehicles, setOnVehicleChangedCallback, getSelectedVehicleElement } from "./slider.js";
-import { generateVehicleLabels, setOnVehicleLabelsGeneratedCallback } from "./label.js";
-import * as stats from "./stats.js";
+import Navbar from "./navbar.js";
+import Slider from "./slider.js";
+import GamepadListener from "./gamepad.js";
+import * as vehicleWidget from "./vehicleWidgets.js";
 
-const buttonInterval = 140;
-const axesInterval = 160;
-const resourceName = "GetParentResourceName" in window ? GetParentResourceName() : false;
-const app = document.getElementById("app");
+const messages = {};
+const catalogs = {};
 
-let initialised = false;
-let serverEndpoint = "";
-let categoryIdx;
-let vehicleIdx;
-let buttonIntervals = [];
-let axesIntervals = [];
-let useSlider = false;
+let app;
+let navbar;
+let sliders;
+let gamepadListener;
+let activeCatalog;
+let sliderFocused;
 
-function getImageType() {
-	switch(data.image.fileType) {
-		case "png":
-		case ".png":
-			return ".png";
-		case ".jpg":		
-		case "jpg":
-			return ".jpg";
-		case ".jpeg":
-		case "jpeg":
-			return ".jpeg";
-		case "webp":
-		case ".webp":
-			return ".webp";
-		default:
-			return ".png";
+/*
+	Functions to be called from game script
+*/
+
+/**
+ * Register a catalog
+ * @param {object} payload Message payload
+ * @param {string} payload.id catalog id
+ * @param {object} payload.data catalog data
+ * @param {string[]} payload.data.categories list of catagories
+ * @param {object[][]} payload.data.vehicles list of vehicles
+ */
+messages.registerCatalog = function(payload)
+{
+	if (payload.id == null)
+	{
+		return;
 	}
+
+	if (payload.data == null)
+	{
+		return;
+	}
+
+	if (payload.data.categories == null || payload.data.categories.length == 0)
+	{
+		return;
+	}
+
+	if (payload.data.vehicles == null || payload.data.vehicles.length == 0)
+	{
+		return;
+	}
+
+	// store catalog
+	catalogs[payload.id] = payload.data;
 }
 
-function toggleHighlight(element) {
-	if (!element)
+/**
+ * Open a catalog
+ * @param {object} payload
+ * @param {string} payload.id catalog id 
+ */
+messages.openCatalog = function(payload)
+{
+	if (payload.id == null)
+	{
 		return;
+	}
+
+	const catalog = catalogs[payload.id];
+
+	if (catalog == null)
+	{
+		return;
+	}
+
+	if (payload.id == activeCatalog)
+	{
+		return;
+	}
+
+	if (activeCatalog != null)
+	{
+		app.style.display = "none";
+		// TODO: show loading screen?
+	}
+
+	// get DOM container for sliders
+	const mainContainer = app.children[0];
+
+	if (mainContainer == null)
+	{
+		throw "Main container is null";
+	}
+
+	// set active catalog
+	activeCatalog = payload.id;
+
+	navbar.populate(catalog.categories);
+
+	const numCategories = catalog.categories.length;
+	const numSliders = sliders.length;
+
+	if (numSliders > numCategories)
+	{
+		// populate existing sliders
+		for (let i = 0; i < numCategories; i++)
+		{
+			sliders[i].populate(catalog.vehicles[i]);
+		}
+
+		// delete unused sliders
+		for (let i = numCategories; i < numSliders; i++)
+		{
+			let slider = sliders[i];
+
+			if (slider != null)
+			{
+				if (slider.domElement.parentElement != null)
+				{
+					slider.domElement.parentElement.removeChild(slider.domElement);
+				}
+
+				slider = null;
+				delete sliders[i];
+			}
+		}
+	}		
+	else
+	{
+		// populate existing sliders
+		for (let i = 0; i < numSliders; i++)
+		{
+			sliders[i].populate(catalog.vehicles[i]);
+		}
+
+		// create sliders
+		for (let i = numSliders; i < numCategories; i++)
+		{
+			const slider = new Slider(`catalog-slider-${i}`, catalog.vehicles[i]);
+			
+			// event listener for SliderIndexChanged
+			slider.domElement.addEventListener(Slider.INDEX_CHANGED_EVENT, onSliderIndexChanged);
+
+			// add slider to DOM
+			mainContainer.appendChild(slider.domElement);
+
+			// store slider
+			sliders[i] = slider;
+		}
+	}
+
+	const slider = sliders[0];
+
+	// show first slider
+	slider.domElement.style.display = "flex";
+
+	setActiveVehicle(catalog.vehicles[navbar.index][slider.index]);
+
+	// hide sliders
+	for (let i = 1; i < sliders.length; i++)
+	{
+		sliders[i].domElement.style.display = "none";
+	}
+
+	// start listening for Gamepad events
+	gamepadListener.start();
+
+	// make page visible
+	app.style.display = "block";
+	// TODO: hide loading screen?
+}
+
+/**
+ * Close a catalog
+ * @param {object} payload
+ * @param {string} payload.id catalog id 
+ */
+messages.closeCatalog = function(payload)
+{
+	if (activeCatalog == null)
+	{
+		return;
+	}
+
+	if (activeCatalog != payload.id)
+	{
+		return;
+	}
+
+	// stop listening for Gamepad events
+	gamepadListener.stop();
+
+	// make page invisible
+	app.style.display = "none";
+
+	activeCatalog = null;
+
+	const resourceName = "GetParentResourceName" in window ? window.GetParentResourceName() : null;
+
+	if (resourceName == null)
+	{
+		return;
+	}
+
+	// notify game script of catalog close
+	fetch(`https://${resourceName}/close`, {
+		method: "POST",
+		body: JSON.stringify(payload.id)
+	})
+	.then(response => response.json())
+	.then(data => { });
+}
+
+/**
+ * Listen for messages received from game script
+ * @param {Event} event 
+ */
+function onMessage(event)
+{
+	const data = event.data || event.detail;
+
+	if (messages[data.type] == null)
+	{
+		return;
+	}
+
+	messages[data.type](data.payload);
+}
+
+/**
+ * Listen for navbar index updates
+ * @param {Event} event 
+ */
+function onNavbarIndexChanged(event)
+{
+	if (event.detail == null)
+	{
+		return;
+	}
+
+	if (event.detail.old == null || event.detail.new == null)
+	{
+		return;
+	}
+
+	const last = sliders[event.detail.old];
+	const next = sliders[event.detail.new];
 	
-	element.classList.add("active");
-
-	setTimeout(function() {
-		element.classList.remove("active");
-	}, 200);
-}
-
-function onWheel(event) {
-	if (event.deltaY < 0) {
-		if (useSlider)
-			changeSlider(-1);
-		else
-			changeCategory(-1);
+	if (last != null)
+	{
+		last.domElement.style.display = "none";
 	}
-	else if (event.deltaY > 0) {
-		if (useSlider)
-			changeSlider(1);
-		else
-			changeCategory(1);
-	}
-}
 
-function onKeyDown(event) {
-	if (event.defaultPrevented)
+	if (next == null)
+	{
 		return;
+	}
 
-	switch(event.key) {
+	// set index to 0
+	next.change(-next.index);
+
+	// make visible
+	next.domElement.style.display = "flex";	
+
+	const catalog = catalogs[activeCatalog];
+
+	if (catalog == null)
+	{
+		return;
+	}
+
+	setActiveVehicle(catalog.vehicles[event.detail.new][next.index]);	
+}
+
+/**
+ * Listen for slider index updates
+ * @param {Event} event 
+ */
+function onSliderIndexChanged(event)
+{
+	if (event.detail == null)
+	{
+		return;
+	}
+
+	if (event.detail.old == null || event.detail.new == null)
+	{
+		return;
+	}
+
+	const catalog = catalogs[activeCatalog];
+
+	if (catalog == null)
+	{
+		return;
+	}
+
+	setActiveVehicle(catalog.vehicles[navbar.index][event.detail.new]);
+}
+
+/**
+ * Listen for key press down
+ * @param {Event} event 
+ */
+function onKeyDown(event)
+{
+	if (event.defaultPrevented)
+	{
+		return;
+	}
+
+	switch(event.key)
+	{
 		case "w":
 		case "ArrowUp":
-			useSlider = false;
-			toggleHighlight(getSelectedCategoryElement());
+		{
+			// Switch focus to slider
+			sliderFocused = false;
 			break;
+		}
 		case "s":
 		case "ArrowDown":
-			useSlider = true;
-			toggleHighlight(getSelectedVehicleElement());
+		{
+			// Switch focus to navbar
+			sliderFocused = true;
 			break;
+		}
 		case "a":
 		case "ArrowLeft":
-			if (useSlider)
-				changeSlider(-1);
+		{
+			// decrement nav/slider
+			if (sliderFocused)
+			{
+				sliders[navbar.index].change(-1);
+			}
 			else
-				changeCategory(-1);
+			{
+				navbar.change(-1);
+			}
+
 			break;
+		}
 		case "d":
 		case "ArrowRight":
-			if (useSlider)
-				changeSlider(1);
+		{
+			// increment nav/slider
+			if (sliderFocused)
+			{
+				sliders[navbar.index].change(1);
+			}
 			else
-				changeCategory(1);
+			{
+				navbar.change(1);
+			}
+
 			break;
+		}
 		case "Escape":
 		case "Backspace":
-			show(false);
+		{
+			messages.closeCatalog({ id: activeCatalog });
 			break;
+		} 
 	}
 
 	event.preventDefault();
 }
 
-function onGamepadButtonPressed(buttonIdx, value, data) {
-	let now = performance.now();
-
-	if (buttonIntervals[buttonIdx] && now - buttonIntervals[buttonIdx] <= buttonInterval) {
+/**
+ * Listen for mouse wheel scroll
+ * @param {Event} event 
+ */
+function onMouseWheel(event)
+{
+	if (event.deltaY == 0)
+	{
 		return;
 	}
 
-	buttonIntervals[buttonIdx] = now;
+	let amount = 1;
 
-	switch(buttonIdx) {
-		case 14:
-			changeSlider(-1);
-			break;
-		case 15:
-			changeSlider(1);
-			break;
-		case 4:
-			changeCategory(-1);
-			break;
-		case 5:
-			changeCategory(1);			
-			break;
-		case 1:
-		case 8:
-			show(false);
-			break;
+	if (event.deltaY < 0)
+	{
+		amount = -1;
+	}
+
+	// increment/decrement nav/slider
+	if (sliderFocused)
+	{
+		sliders[navbar.index].change(amount);
+	}
+	else
+	{
+		navbar.change(amount);
 	}
 }
 
-function onGameButtonReleased(buttonIdx, value, data) {
-	delete buttonIntervals[buttonIdx];
+/**
+ * Listen for gamepad button press down
+ * @param {Event} event 
+ */
+function onGamepadButtonPressed(event)
+{
+	switch(event.detail.button)
+	{
+		case 14: // D-PAD LEFT
+		{
+			// decrement slider
+			sliders[navbar.index].change(-1);
+			break;
+		}
+		case 15: // D-PAD RIGHT
+		{
+			// increment slider
+			sliders[navbar.index].change(1);
+			break;
+		}
+		case 4: // LEFT BUMPER
+		{
+			// decrement nav
+			navbar.change(-1);
+			break;
+		}
+		case 5: // RIGHT BUMPER
+		{
+			// increment nav
+			navbar.change(1);
+			break;
+		}
+		case 1:	// B or Circle
+		case 8: // BACK BUTTON
+		{
+			messages.closeCatalog({ id: activeCatalog });
+			break;
+		} 
+	}
 }
 
-function onGamepadAxisActive(axisId, value) {	
-	let now = performance.now();
+/**
+ * Listen for gamepad axes move
+ * @param {Event} event 
+ */
+function onGamepadAxesMove(event)
+{
+	switch(event.detail.axes)
+	{
+		case 0: // LEFT STICK X-AXIS
+		{
+			// increment/decrement nav/slider
+			const amount = event.detail.value > 0 ? 1 : -1;
 
-	if (axesIntervals[axisId] && now - axesIntervals[axisId] <= axesInterval) {
-		return;
-	}
-
-	axesIntervals[axisId] = now;
-
-	switch(axisId) {
-		case 0:
-			let increment = value < 0 ? -1 : 1;
-			if (useSlider)
-					changeSlider(increment)
-				else
-					changeCategory(increment)
-			break;
-		case 3:
-			if (value < 0) {
-				useSlider = false;
-				toggleHighlight(getSelectedCategoryElement());
-			} else {
-				useSlider = true;
-				toggleHighlight(getSelectedVehicleElement());
+			if (sliderFocused)
+			{
+				sliders[navbar.index].change(amount);
 			}
-			break;			
+			else
+			{
+				navbar.change(amount);
+			}
+
+			break;
+		}
+		case 3: // RIGHT STICK Y-AXIS
+		{
+			// Switch focus between nav and slider
+			sliderFocused = event.detail.value > 0;
+			break;
+		}
 	}
 }
 
-function setupArrows() {
-	let leftArrow = document.getElementById("arrow-left");
-	let rightArrow = document.getElementById("arrow-right");
+/**
+ * Sets the active vehicle
+ * 
+ * Updates game script with selected vehicle
+ * 
+ * Updates UI Information panel for vehicle
+ * 
+ * @param {object} data slider item data
+ * @param {string} data.model vehicle model
+ * @param {string} [data.label] vehicle label
+ * @param {number} [data.price] vehicle price
+ */
+function setActiveVehicle(data)
+{
+	if (data == null)
+	{
+		return;
+	}
 
-	leftArrow.onclick = function() {
-		changeSlider(-1);
+	if (data.model == null)
+	{
+		return;
+	}
+
+	// update information widgets
+
+	// set heading
+	if (vehicleWidget.label != null)
+	{
+		const node = vehicleWidget.label.childNodes[0];
+
+		if (node != null)
+		{
+			node.textContent = data.label ?? data.model;
+		}
+	}
+
+	// set button text
+	if (vehicleWidget.button != null)
+	{
+		if (data.price != null)
+		{
+			vehicleWidget.button.textContent = "Purchase";
+		}
+		else
+		{
+			vehicleWidget.button.textContent = "Select";
+		}		
+	}
+
+	const resourceName = "GetParentResourceName" in window ? window.GetParentResourceName() : null;
+
+	if (resourceName == null)
+	{
+		return;
+	}
+
+	// update game script with selected vehicle
+	fetch(`https://${resourceName}/indexChanged`, {
+		method: "POST",
+		body: JSON.stringify(data.model)
+	})
+	.then(response => response.json())
+	.then(data => {
+		if (data == null || data.length == 0)
+		{
+			return;
+		}
+
+		// update stat bars
+		vehicleWidget.stats.update(data);
+	});
+}
+
+/**
+ * Initilaise globals
+ * 
+ * Add event listeners
+ */
+function init()
+{
+	app = document.getElementById("app");
+
+	if (app == null)
+	{
+		throw "App container is null";
+	}
+
+	navbar = new Navbar("catalog-navbar");
+
+	sliders = [];
+
+	gamepadListener = new GamepadListener();
+
+	activeCatalog = null;
+	sliderFocused = true;
+
+	// event listener for NavbarIndexChanged
+	navbar.domElement.addEventListener(Navbar.INDEX_CHANGED_EVENT, onNavbarIndexChanged);
+	
+	// append navbar to DOM
+	const mainContainer = app.children[0];
+
+	if (mainContainer == null)
+	{
+		throw "Main container is null";
 	}
 	
-	rightArrow.onclick = function() {
-		changeSlider(1);
+	mainContainer.appendChild(navbar.domElement);
+
+	// create vehicle panel
+	const widgetContainer = vehicleWidget.create();
+
+	// close widget onclick
+	vehicleWidget.close.onclick = function()
+	{
+		messages.closeCatalog({ id: activeCatalog });
 	}
-}
 
-function onCategoryChanged(idx) {
-	categoryIdx = idx;
-	populateVehicles(idx);
-}
+	// append vehicle widgets to DOM
+	app.appendChild(widgetContainer);
 
-function onVehicleChanged(idx) {
-	vehicleIdx = idx;
-}
-
-function onVehicleLabelsGenerated(result) {
-	setVehicleLabels(result, initialised);
-
-	if (!initialised) {
-		populateCategories();
-		initialised = true;
-	}
-}
-
-function show(val, preventRequest = false) {
-	let show = val === true;
-	if (show) {
-		app.style.display = "block";
-		window.addEventListener("keydown", onKeyDown, false);
-		window.addEventListener("wheel", onWheel, false);
-		startGamepadListener({
-			onGamepadButtonPressed: onGamepadButtonPressed,
-			onGameButtonReleased: onGameButtonReleased,
-			onGamepadAxisActive: onGamepadAxisActive
-		});
-		setVehicleIdx(vehicleIdx);
-	} else {
-		app.style.display = "none";
-		window.removeEventListener("keydown", onKeyDown);
-		window.removeEventListener("wheel", onWheel);
-		stopGamepadListener();
-
-		if (resourceName == false || preventRequest)
-			return;
-
-		fetch(`https://${resourceName}/close`, {
-			method: "POST",
-		}).then(function(response) {
-			return response.json();
-		}).then(function(data) {
-			console.log(data);
-		}).catch(function(err) {
-			console.log(err);
-		});
-	}
-}
-
-function onNuiMessage(event) {
-	const item = event.data || event.detail;
-
-	switch(item.type) {
-		case "Init":
-			if (initialised)
-				break;
-
-			if (item.payload.endpoint == null) {
-				console.log("Invalid endpoint received, the script may not work as intended!");
-			} else {
-				serverEndpoint = item.payload.endpoint;
-				setImageEndpoint(serverEndpoint);
-			}
-
-			if (item.payload.labels != null) {
-				stats.init(item.payload.labels);
-			}
-			
-			generateVehicleLabels(data.vehicles);			
-			break;
-		case "Show":
-			showPriceLabel(item.payload.showPrice);
-			show(item.payload.visible);
-			break;
-		case "GenerateVehicleLabels":
-			generateVehicleLabels(data.vehicles);
-			break;
-	}
-}
-
-function init() {
-	window.addEventListener("message", onNuiMessage, false);
-
-	show(false, true);
-	setCategories(data.categories);
-	setVehicles(data.vehicles);
-	setImageType(getImageType());
-	setImageLocal(!data.image.server);
-	setPriceSymbol(data.currencySymbol);
-	setOnCategoryChangedCallback(onCategoryChanged);
-	setOnVehicleChangedCallback(onVehicleChanged);
-	setOnVehicleLabelsGeneratedCallback(onVehicleLabelsGenerated);
-	setupArrows();
-
-	if (resourceName == false) {
-		show(true);
-		populateCategories();
-	}
+	// listen for events
+	window.addEventListener("message", onMessage);
+	window.addEventListener("keydown", onKeyDown);
+	window.addEventListener("wheel", onMouseWheel);
+	window.addEventListener(GamepadListener.BUTTON_PRESSED_EVENT, onGamepadButtonPressed);
+	window.addEventListener(GamepadListener.AXES_MOVE_EVENT, onGamepadAxesMove);
 }
 
 init();

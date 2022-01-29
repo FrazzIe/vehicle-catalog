@@ -1,50 +1,98 @@
-.stats-container {
-	position: relative;
+.stats 
+{
 	display: flex;
-	height: 40%;
-	/* background-color: rgba(0, 0, 0, 0.729411764706); */
+
 	flex-direction: column;
 	flex-wrap: wrap;
-	gap: 2%;
-	padding: 0% 2% 0% 2%;
+
+	gap: 0.8rem;
+	padding: 0.5rem;
 }
 
-.stats-container .item {
+.stats .item 
+{
 	display: flex;
-	width: 100%;
-	height: 23%;
+
 	flex-direction: row;
-	flex-wrap: nowrap;
+	flex-wrap: wrap;
+
 	align-items: center;
 	justify-content: space-between;
+
+	gap: 10px;
 }
 
-.stats-container .item .label {
+.stats .item .label 
+{
+	flex: 1;
+
 	color:rgba(245, 245, 245, 0.960784313725);
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 1.3rem;
-	flex: 1;
+
+	white-space: nowrap;
 }
 
-.stats-container .item .bar-container {
+.stats .item .bar-container 
+{
 	display: flex;
-	height: 100%;
+
+	flex: 1;
 	flex-direction: row;
-	flex-wrap: nowrap;
+	flex-wrap: wrap;
+
 	align-items: center;
 	justify-content: space-evenly;
+
 	gap: 2px;
-	flex: 1;
 }
 
-.stats-container .item .bar-container .bar {
-	width: 20%;
-	height: 25%;
+.stats .item .bar-container .bar 
+{
+	width: 35px;
+	height: 8px;
+
+	flex: 1;
+
 	background-color: rgba(240, 240, 240, 0.298039215686);
 }
 
-.stats-container .item .bar-container .bar .fill {
+.stats .item .bar-container .bar .fill 
+{
 	width: 0%;
 	height: 100%;
+
 	background-color: rgb(240, 240, 240);
+}
+
+@media only screen and (min-width: 768px)
+{
+	.stats .item .label
+	{
+		font-size: 1.1rem;
+	}
+}
+
+@media screen and (min-width: 1000px)
+{
+	.stats .item .label
+	{
+		font-size: 1.1rem;
+	}
+}
+
+@media screen and (min-width: 1921px)
+{
+	.stats .item .label
+	{
+		font-size: 1.3rem;
+	}
+}
+
+@media screen and (min-width: 2561px)
+{
+	.stats .item .label
+	{
+		font-size: 2.0rem;
+	}
 }

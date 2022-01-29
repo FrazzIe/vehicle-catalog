@@ -1,0 +1,218 @@
+.widget
+{
+	display: flex;
+
+	color: rgba(245, 245, 245, 0.960784313725);
+	font-family: Arial, Helvetica, sans-serif;
+
+	padding: 0.4rem;
+
+	background-color: rgba(0, 0, 0, 0.729411764706);
+}
+
+.widget.transparent
+{
+	background-color: transparent;
+}
+
+.widget.no-padding
+{
+	padding: 0;
+}
+
+.widget.gap
+{
+	gap: 8px;
+}
+
+.widget.bottom
+{
+	position: absolute;
+
+	bottom: var(--main-width);
+
+	margin: 8px;
+}
+
+.widget.right
+{
+	right: 0;
+}
+
+.widget.label
+{
+	align-items: center;
+	justify-content: center;
+
+	font-size: 2.3rem;
+}
+
+.widget.price
+{
+	display: flex;
+
+	height: fit-content;
+
+	align-self: flex-end;
+	align-items: center;
+	justify-content: center;
+
+	font-size: 2.8rem;
+
+	text-shadow:
+		1px 1px 1px #2D2A2E,
+		-1px -1px 1px #2D2A2E,
+		1px -1px 1px #2D2A2E,
+		-1px 1px 1px #2D2A2E,
+		1px 1px 1px #2D2A2E;
+}
+
+.widget.stats
+{
+	width: 25%;
+
+	flex: 1;
+	flex-direction: column;
+	flex-wrap: nowrap;
+
+	font-size: 2.1rem;
+}
+
+.widget.select-btn
+{
+	width: 15%;
+
+	align-items: center;
+	justify-content: center;
+
+	font-size: 2.8rem;
+
+	border: none;
+}
+
+.widget.select-btn:hover
+{
+	color: rgba(245, 245, 245, 0.298039215686);
+}
+
+.widget.close-btn
+{
+	position: absolute;
+
+	width: 4%;
+
+	align-items: center;
+	justify-content: center;
+
+	font-size: 2.3rem;
+
+	border: none;
+}
+
+.widget.close-btn div
+{
+	transform: rotate(45deg);
+}
+
+.widget.close-btn:hover
+{
+	color: rgba(245, 245, 245, 0.298039215686);
+}
+
+@media only screen and (min-width: 768px)
+{
+	.widget.close-btn
+	{
+		font-size: 1.8rem;
+	}
+
+	.widget.stats
+	{
+		width: 12%;
+	}
+
+	.widget.select-btn
+	{
+		width: 25%;
+
+		font-size: 2.1rem;
+	}
+}
+
+@media screen and (min-width: 1000px)
+{
+	.widget.close-btn
+	{
+		font-size: 2.0rem;
+	}
+
+	.widget.stats
+	{
+		width: 27%;
+	}
+}
+
+@media screen and (min-width: 1200px)
+{
+	.widget.stats
+	{
+		width: 25%;
+	}
+
+	.widget.select-btn
+	{
+		width: 20%;
+
+		font-size: 2.5rem;
+	}
+}
+
+@media screen and (min-width: 1440px)
+{
+	.widget.stats
+	{
+		width: 18%;
+	}
+}
+
+@media screen and (min-width: 1921px)
+{
+	.widget.stats
+	{
+		width: 13%;
+	}
+
+	.widget.select-btn
+	{
+		width: 18%;
+
+		font-size: 2.8rem;
+	}
+}
+
+@media screen and (min-width: 2561px)
+{
+	.widget.label
+	{
+		font-size: 3.8rem;
+	}
+
+	.widget.close-btn
+	{
+		font-size: 3.8rem;
+	}
+
+	.widget.select-btn
+	{
+		width: 20%;
+
+		font-size: 4.8rem;
+	}
+
+	.widget.stats
+	{
+		width: 14%;
+
+		font-size: 2.5rem;
+	}
+}
