@@ -18,6 +18,15 @@ let sliderFocused;
 */
 
 /**
+ * Initialise globals that require the game script initialised
+ */
+messages.init = function()
+{
+	// load stats labels
+	vehicleWidget.stats.load();
+}
+
+/**
  * Register a catalog
  * @param {object} payload Message payload
  * @param {string} payload.id catalog id
