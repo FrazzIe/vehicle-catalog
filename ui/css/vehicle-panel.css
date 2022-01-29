@@ -3,18 +3,18 @@
 	position: absolute;
 	display: flex;
 
-	width: 20%;
-	height: 40%;
-
-	top: 32.5%;
-	right: 5%;
-
-	transform: translateY(-50%);
+	min-width: 15%;
+	
+	bottom: var(--main-width);
+	right: 0%;
 
 	flex-direction: column;
 	flex-wrap: nowrap;
 	
 	justify-content: flex-start;
+
+	margin: 8px;
+	padding: 8px 0px;
 
 	background-color: rgba(0, 0, 0, 0.729411764706);
 }
