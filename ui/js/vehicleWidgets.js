@@ -28,7 +28,13 @@ function create()
 
 	close.id = `${widgets.id}-close`;
 	close.classList.add("widget", "right", "transparent", "close-btn");
-	close.textContent = "+";
+	
+	// constrain transform rotate
+	const innerClose = document.createElement("div");
+
+	innerClose.textContent = "+";
+
+	close.appendChild(innerClose);
 
 	label.appendChild(close);
 
