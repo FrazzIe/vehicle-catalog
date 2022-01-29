@@ -1,7 +1,7 @@
 import Navbar from "./navbar.js";
 import Slider from "./slider.js";
 import GamepadListener from "./gamepad.js";
-import * as vehiclePanel from "./vehiclePanel.js";
+import * as vehicleWidget from "./vehicleWidgets.js";
 
 const messages = {};
 const catalogs = {};
@@ -493,21 +493,21 @@ function setActiveVehicle(data)
 	// update information panel
 	
 	// set heading
-	if (vehiclePanel.label != null)
+	if (vehicleWidget.label != null)
 	{
-		vehiclePanel.label.textContent = data.label ?? data.model;
+		vehicleWidget.label.textContent = data.label ?? data.model;
 	}
 
 	// set button text
-	if (vehiclePanel.button != null)
+	if (vehicleWidget.button != null)
 	{
 		if (data.price != null)
 		{
-			vehiclePanel.button.textContent = "Purchase";
+			vehicleWidget.button.textContent = "Purchase";
 		}
 		else
 		{
-			vehiclePanel.button.textContent = "Select";
+			vehicleWidget.button.textContent = "Select";
 		}		
 	}
 
@@ -532,7 +532,7 @@ function setActiveVehicle(data)
 		}
 
 		// update stat bars
-		vehiclePanel.stats.update(data);
+		vehicleWidget.stats.update(data);
 	});
 }
 
@@ -586,10 +586,10 @@ function init()
 	}
 
 	// create vehicle panel
-	const panelElement = vehiclePanel.create();
+	const widgetContainer = vehicleWidget.create();
 
-	// append vehicle panel to DOM
-	app.appendChild(panelElement);
+	// append vehicle widgets to DOM
+	app.appendChild(widgetContainer);
 
 	// listen for events
 	window.addEventListener("message", onMessage);
