@@ -43,7 +43,7 @@ function onInit()
 	const src = global.source;
 
 	// send registered catalogs to client
-	emitNet("vehicle-catalog:registerCatalogs", src, catalogs);
+	emitNet("vehicle-catalog:init", src, catalogs);
 }
 
 on("vehicle-catalog:registerCatalog", onRegisterCatalog);
