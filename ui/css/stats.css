@@ -64,3 +64,35 @@
 
 	background-color: rgb(240, 240, 240);
 }
+
+@media only screen and (min-width: 768px)
+{
+	.stats .item .label
+	{
+		font-size: 1.1rem;
+	}
+}
+
+@media screen and (min-width: 1000px)
+{
+	.stats .item .label
+	{
+		font-size: 1.1rem;
+	}
+}
+
+@media screen and (min-width: 1921px)
+{
+	.stats .item .label
+	{
+		font-size: 1.3rem;
+	}
+}
+
+@media screen and (min-width: 2561px)
+{
+	.stats .item .label
+	{
+		font-size: 2.0rem;
+	}
+}
