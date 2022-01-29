@@ -121,6 +121,11 @@
 
 @media only screen and (min-width: 768px)
 {
+	.widget.close-btn
+	{
+		font-size: 1.8rem;
+	}
+
 	.widget.stats
 	{
 		width: 12%;
@@ -129,6 +134,11 @@
 
 @media screen and (min-width: 1000px)
 {
+	.widget.close-btn
+	{
+		font-size: 2.0rem;
+	}
+
 	.widget.stats
 	{
 		width: 27%;
