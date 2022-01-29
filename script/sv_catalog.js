@@ -47,4 +47,4 @@ function onInit()
 }
 
 on("vehicle-catalog:registerCatalog", onRegisterCatalog);
-on("vehicle-catalog:init", onInit);
+onNet("vehicle-catalog:init", onInit);
