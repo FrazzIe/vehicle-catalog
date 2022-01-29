@@ -15,6 +15,11 @@
 	background-color: transparent;
 }
 
+.widget.no-padding
+{
+	padding: 0;
+}
+
 .widget.gap
 {
 	gap: 8px;

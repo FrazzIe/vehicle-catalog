@@ -37,7 +37,7 @@ function create()
 	// stats + price container
 	const container = document.createElement("div");
 
-	container.classList.add("widget", "bottom", "transparent", "gap");
+	container.classList.add("widget", "bottom", "transparent", "gap", "no-padding");
 
 	// stats widget
 	const statsContainer = document.createElement("div");
