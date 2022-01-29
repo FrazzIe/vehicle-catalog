@@ -490,12 +490,17 @@ function setActiveVehicle(data)
 		return;
 	}
 
-	// update information panel
-	
+	// update information widgets
+
 	// set heading
 	if (vehicleWidget.label != null)
 	{
-		vehicleWidget.label.textContent = data.label ?? data.model;
+		const node = vehicleWidget.label.childNodes[0];
+
+		if (node != null)
+		{
+			node.textContent = data.label ?? data.model;
+		}
 	}
 
 	// set button text
@@ -572,21 +577,14 @@ function init()
 	
 	mainContainer.appendChild(navbar.domElement);
 
-	// setup close button
-	const closeButton = app.children[1];
+	// create vehicle panel
+	const widgetContainer = vehicleWidget.create();
 
-	if (closeButton == null)
-	{
-		throw "Close button is null";
-	}
-
-	closeButton.onclick = function()
+	// close widget onclick
+	vehicleWidget.close.onclick = function()
 	{
 		messages.closeCatalog({ id: activeCatalog });
 	}
-
-	// create vehicle panel
-	const widgetContainer = vehicleWidget.create();
 
 	// append vehicle widgets to DOM
 	app.appendChild(widgetContainer);

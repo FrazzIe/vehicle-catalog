@@ -1,6 +1,7 @@
 import Stats from "./stats.js";
 
 let label;
+let close;
 let stats;
 let price;
 let button;
@@ -22,6 +23,15 @@ function create()
 	label.classList.add("widget", "label");
 	label.textContent = "VEHICLE_NAME_PLACEHOLDER";
 	
+	// close widget
+	close = document.createElement("button");
+
+	close.id = `${widgets.id}-close`;
+	close.classList.add("widget", "right", "transparent", "close-btn");
+	close.textContent = "+";
+
+	label.appendChild(close);
+
 	widgets.appendChild(label);
 
 	// stats + price container
@@ -67,4 +77,4 @@ function create()
 	return widgets;
 }
 
-export { label, stats, price, button, create };
+export { label, close, stats, price, button, create };

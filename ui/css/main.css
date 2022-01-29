@@ -20,40 +20,6 @@ body
 	background-color: rgba(0, 0, 0, 0.729411764706);
 }
 
-.close
-{
-	position: absolute;
-
-	width: 50px;
-	height: 50px;
-
-	right: 8px;
-	top: 8px;
-
-	color: rgba(245, 245, 245, 0.960784313725);
-	background-color: rgba(0, 0, 0, 0.729411764706);
-	border-radius: 0.3rem;
-}
-
-.close div
-{
-	position: absolute;
-
-	left: 50%;
-	top: 50%;
-	transform: translate(-50%, -50%) rotate(45deg);
-
-	font-size: 2em;
-	font-family: Arial, Helvetica, sans-serif;
-
-	user-select: none;
-}
-
-.close:hover
-{
-	color: rgba(245, 245, 245, 0.298039215686);
-}
-
 @media screen and (min-width: 1200px)
 {
 	body
