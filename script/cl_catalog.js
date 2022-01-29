@@ -61,4 +61,38 @@ function onInitResponse(catalogs)
 	removeEventListener("vehicle-catalog:init", this);
 }
 
+/**
+ * Registers a catalog
+ * @param {string} id catalog id
+ * @param {object} data catalog data
+ * @param {string[]} data.categories list of catagories
+ * @param {object[][]} data.vehicles list of vehicles
+ */
+function onRegisterCategory(id, data)
+{
+	// get resolved vehicle label for each vehicle
+	for (let i = 0; i < data.vehicles.length; i++)
+	{
+		for (let j = 0; j < data.vehicles[i]; j++)
+		{
+			const vehicle = data.vehicles[i][j];
+
+			if (vehicle != null)
+			{
+				vehicle.label = getVehicleName(vehicle.model);
+			}
+		}
+	}
+
+	// send catalog to web ui
+	SendNUIMessage({
+		type = "registerCatalog",
+		payload = {
+			id: id,
+			data: data
+		}
+	});
+}
+
 on("onClientResourceStart", onInit);
+onNet("vehicle-catalog:registerCatalog", onRegisterCategory);
