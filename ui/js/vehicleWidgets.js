@@ -77,6 +77,7 @@ function create()
 
 	button.id = `${widgets.id}-select-btn`;
 	button.classList.add("widget", "bottom", "right", "select-btn");
+	button.textContent = "Select";
 
 	widgets.appendChild(button);
 
