@@ -27,6 +27,27 @@ function onInitResponse(catalogs)
 	// register each catalog
 	for (const id in catalogs)
 	{
+		const catalog = catalogs[id];
+
+		if (catalog == null)
+		{
+			continue;
+		}
+
+		// get resolved vehicle label for each vehicle
+		for (let i = 0; i < catalog.vehicles.length; i++)
+		{
+			for (let j = 0; j < catalog.vehicles[i]; j++)
+			{
+				const vehicle = catalog.vehicles[i][j];
+
+				if (vehicle != null)
+				{
+					vehicle.label = getVehicleName(vehicle.model);
+				}
+			}
+		}
+
 		// send catalog to web ui
 		SendNUIMessage({
 			type = "registerCatalog",
