@@ -42,6 +42,26 @@
 	font-size: 2.3rem;
 }
 
+.widget.price
+{
+	display: flex;
+
+	height: fit-content;
+
+	align-self: flex-end;
+	align-items: center;
+	justify-content: center;
+
+	font-size: 2.8rem;
+
+	text-shadow:
+		1px 1px 1px #2D2A2E,
+		-1px -1px 1px #2D2A2E,
+		1px -1px 1px #2D2A2E,
+		-1px 1px 1px #2D2A2E,
+		1px 1px 1px #2D2A2E;
+}
+
 .widget.stats
 {
 	width: 25%;
