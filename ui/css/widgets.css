@@ -1,0 +1,25 @@
+.widget
+{
+	display: flex;
+
+	color: rgba(245, 245, 245, 0.960784313725);
+	font-family: Arial, Helvetica, sans-serif;
+
+	padding: 0.4rem;
+
+	background-color: rgba(0, 0, 0, 0.729411764706);
+}
+
+.widget.bottom
+{
+	position: absolute;
+
+	bottom: var(--main-width);
+
+	margin: 8px;
+}
+
+.widget.bottom.right
+{
+	right: 0;
+}
