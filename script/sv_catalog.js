@@ -35,4 +35,16 @@ function onRegisterCatalog(id, data)
 	emitNet("vehicle-catalog:registerCatalog", -1, id, data);
 }
 
+/**
+ * Listen for init event from client
+ */
+function onInit()
+{
+	const src = global.source;
+
+	// send registered catalogs to client
+	emitNet("vehicle-catalog:registerCatalogs", src, catalogs);
+}
+
 on("vehicle-catalog:registerCatalog", onRegisterCatalog);
+on("vehicle-catalog:init", onInit);
