@@ -533,7 +533,7 @@ function setActiveVehicle(data)
 	}
 
 	// update game script with selected vehicle
-	fetch(`https://${resourceName}/indexChanged`, {
+	fetch(`https://${resourceName}/setActiveVehicle`, {
 		method: "POST",
 		body: JSON.stringify(data.model)
 	})
