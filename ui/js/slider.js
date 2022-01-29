@@ -209,8 +209,7 @@ class Slider
 			return false;
 		};
 
-		image.src = "";
-		// image.src = `img/${data.model}.webp`;
+		image.src = `img/${data.model}.webp`;
 		image.alt = `An image of a ${data.model ?? "vehicle"}`;
 
 		item.appendChild(image);
