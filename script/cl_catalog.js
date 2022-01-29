@@ -27,6 +27,8 @@ function onInitResponse(catalogs)
 			}
 		});
 	}
+
+	removeEventListener("vehicle-catalog:init", this);
 }
 
 on("onClientResourceStart", onInit);
