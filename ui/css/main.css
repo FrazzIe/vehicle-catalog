@@ -1,5 +1,7 @@
 body 
 {
+	--main-width: 25%;
+
 	padding: 0px;
 	margin: 0px;
 
@@ -11,7 +13,7 @@ body
 	position: absolute;
 
 	width: 100%;
-	height: 25%;
+	height: var(--main-width);
 
 	bottom: 0%;
 
@@ -30,6 +32,7 @@ body
 
 	color: rgba(245, 245, 245, 0.960784313725);
 	background-color: rgba(0, 0, 0, 0.729411764706);
+	border-radius: 0.3rem;
 }
 
 .close div
@@ -53,16 +56,16 @@ body
 
 @media screen and (min-width: 1200px)
 {
-	.main-container
+	body
 	{
-		height: 32%;
+		--main-width: 32%;
 	}
 }
 
 @media screen and (min-width: 1921px)
 {
-	.main-container
+	body
 	{
-		height: 29%;
+		--main-width: 29%;
 	}
 }
