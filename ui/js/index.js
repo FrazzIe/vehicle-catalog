@@ -530,7 +530,6 @@ function setActiveVehicle(data)
 	})
 	.then(response => response.json())
 	.then(data => {
-
 		if (data == null || data.length == 0)
 		{
 			return;
