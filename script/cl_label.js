@@ -19,3 +19,30 @@ function getVehicleName(model)
 	
 	return GetLabelText(label);
 }
+
+/**
+ * Resolve a list of stat labels
+ * @param {string[]} data stat fields
+ * @param {function} callback callback func
+ */
+function onResolveStatLabels(data, callback)
+{
+	if (data == null || data.length == 0)
+	{
+		callback("ok");
+
+		return;
+	}
+
+	const fields = [];
+
+	// resolve labels
+	for (let i = 0; i < data.length; i++)
+	{
+		fields[i] = GetLabelText(data[i]);
+	}
+
+	callback(fields);
+}
+
+on("__cfx_nui:resolveStatLabels", onResolveStatLabels);
