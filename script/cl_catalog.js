@@ -10,7 +10,7 @@ function onInit()
 	// TODO: add an await
 
 	// init web ui
-	SendNUIMessage({ type = "init" });
+	SendNUIMessage({ type: "init" });
 
 	// register temporary init event
 	onNet("vehicle-catalog:init", onInitResponse);
@@ -65,8 +65,8 @@ function onRegisterCategory(id, data)
 
 	// send catalog to web ui
 	SendNUIMessage({
-		type = "registerCatalog",
-		payload = {
+		type: "registerCatalog",
+		payload: {
 			id: id,
 			data: data
 		}
@@ -155,7 +155,7 @@ function onOpenCatalog(options)
 	SetNuiFocus(true, true);
 
 	// open catalog
-	SendNUIMessage({ type = "openCatalog", id = options.id });
+	SendNUIMessage({ type: "openCatalog", id: options.id });
 }
 
 /**
@@ -199,7 +199,7 @@ function onCloseCatalog(id, callback)
 	}
 	else
 	{
-		SendNUIMessage({ type = "closeCatalog", id = id });
+		SendNUIMessage({ type: "closeCatalog", id: id });
 	}
 }
 
