@@ -138,6 +138,17 @@ function onOpenCatalog(options)
 	options.camera.attach.length = options.camera.attach.length == true;
 	options.camera.attach.breadth = options.camera.attach.breadth == true;
 	options.camera.update = options.camera.update == true;
+
+	// set active catalog
+	activeCatalog = options;
+
+	// TODO: Setup camera
+
+	// take focus
+	SetNuiFocus(true, true);
+
+	// open catalog
+	SendNUIMessage({ type = "openCatalog", id = options.id });
 }
 
 on("onClientResourceStart", onInit);
