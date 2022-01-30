@@ -22,7 +22,11 @@ function onSetActiveVehicle(data, callback)
 		DeleteEntity(entities.pop());
 	}
 	
-	// TODO: Load model
+	// check if model is valid
+	if (!IsModelInCdimage(model))
+	{
+		return;
+	}
 	
 	if (activeCatalog.position == null)
 	{
