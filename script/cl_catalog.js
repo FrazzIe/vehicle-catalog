@@ -96,7 +96,21 @@ function onRegisterCategory(id, data)
  */
 function onOpenCatalog(options)
 {
-	// TODO
+	if (options == null)
+	{
+		return;
+	}
+
+	if (options.id == null || options.id == "")
+	{
+		return;
+	}
+
+	// ensure catalog exists
+	if (!catalogs[options.id])
+	{
+		return;
+	}
 }
 
 on("onClientResourceStart", onInit);
