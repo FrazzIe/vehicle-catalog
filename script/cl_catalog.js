@@ -34,7 +34,7 @@ function onInitResponse(catalogs)
 		onRegisterCategory(id, catalogs[data]);
 	}
 
-	removeEventListener("vehicle-catalog:init", this);
+	removeEventListener("vehicle-catalog:init", onInitResponse);
 }
 
 /**
