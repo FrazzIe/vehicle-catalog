@@ -37,6 +37,15 @@ async function onSetActiveVehicle(data, callback)
 		await delay(50);
 	}
 	
+	// cancel if model has changed between loading
+	if (activeCatalog.model != model)
+	{
+		SetModelAsNoLongerNeeded(model);
+
+		return;
+	}
+
+	// cancel on invalid position
 	if (activeCatalog.position == null)
 	{
 		return;
@@ -50,8 +59,18 @@ async function onSetActiveVehicle(data, callback)
 	SetEntityCollision(handle, false, true);
 	SetModelAsNoLongerNeeded(model);
 
+	// cancel if model has changed after creation
+	if (activeCatalog.model != model)
+	{
+		DeleteEntity(handle);
+
+		return;
+	}
+
 	// add created vehicle to entity list
 	entities.push(handle);
+
+	// TODO: attach & point camera at entity
 }
 
 on("__cfx_nui:setActiveVehicle", onSetActiveVehicle);
