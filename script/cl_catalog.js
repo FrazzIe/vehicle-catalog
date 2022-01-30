@@ -93,6 +93,7 @@ function onRegisterCategory(id, data)
  * @param {number} options.camera.point.x x
  * @param {number} options.camera.point.y y
  * @param {number} options.camera.point.z z
+ * @param {bool} options.camera.update use ATTACH_CAM_TO_ENTITY & POINT_CAM_AT_ENTITY on each vehicle
  */
 function onOpenCatalog(options)
 {
@@ -134,17 +135,9 @@ function onOpenCatalog(options)
 		options.position.heading = 0;
 	}
 
-	if (options.camera.attach.length == null)
-	{
-		options.camera.attach.length = false;
-	}
-
-	if (options.camera.attach.breadth == null)
-	{
-		options.camera.attach.breadth = false;
-	}
-
-	
+	options.camera.attach.length = options.camera.attach.length == true;
+	options.camera.attach.breadth = options.camera.attach.breadth == true;
+	options.camera.update = options.camera.update == true;
 }
 
 on("onClientResourceStart", onInit);
