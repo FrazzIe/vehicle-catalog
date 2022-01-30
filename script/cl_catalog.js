@@ -155,6 +155,48 @@ function onOpenCatalog(options)
 	SendNUIMessage({ type = "openCatalog", id = options.id });
 }
 
+/**
+ * Close catalog
+ * @param {string} id catalog id 
+ */
+function onCloseCatalog(id, callback)
+{
+	if (activeCatalog == null)
+	{
+		if (callback != null)
+		{
+			callback("ok");
+		}
+
+		return;
+	}
+
+	// delete previous vehicles
+	while (entities.length > 0)
+	{
+		DeleteEntity(entities.pop());
+	}
+
+	// reset camera
+	SetCamActive(activeCatalog.camera.handle, false);
+	RenderScriptCams(false, false, 0, true, false);
+	DestroyCam(activeCatalog.camera.handle, false);
+
+	// release focus
+	SetNuiFocus(false, false);
+
+	activeCatalog = null;
+
+	if (callback != null)
+	{
+		callback("ok");
+	}
+	else
+	{
+		SendNUIMessage({ type = "closeCatalog", id = id });
+	}
+}
+
 on("onClientResourceStart", onInit);
 onNet("vehicle-catalog:registerCatalog", onRegisterCategory);
 onNet("vehicle-catalog:openCatalog", onOpenCatalog);
