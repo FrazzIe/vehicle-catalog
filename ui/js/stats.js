@@ -39,7 +39,7 @@ class Stats
 			this.#numBars = Stats.MAX_NUM_BAR;
 		}
 
-		this.#fields = {};
+		this.#fields = [];
 
 		// create DOM object
 		this.domElement = document.createElement("div");
