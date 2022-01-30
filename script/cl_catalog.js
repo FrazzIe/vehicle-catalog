@@ -1,3 +1,5 @@
+const catalogs = {};
+
 let activeCatalog;
 
 /**
@@ -44,6 +46,9 @@ function onInitResponse(catalogs)
  */
 function onRegisterCategory(id, data)
 {
+	// store catalog
+	catalogs[id] = true;
+
 	// get resolved vehicle label for each vehicle
 	for (let i = 0; i < data.vehicles.length; i++)
 	{
