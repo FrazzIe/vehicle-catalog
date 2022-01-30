@@ -180,8 +180,9 @@ messages.openCatalog = function(payload)
  * Close a catalog
  * @param {object} payload
  * @param {string} payload.id catalog id 
+ * @param {bool} local is func being called locally (not from gamescript)
  */
-messages.closeCatalog = function(payload)
+messages.closeCatalog = function(payload, local)
 {
 	if (activeCatalog == null)
 	{
@@ -200,6 +201,11 @@ messages.closeCatalog = function(payload)
 	app.style.display = "none";
 
 	activeCatalog = null;
+
+	if (!local)
+	{
+		return;
+	}
 
 	const resourceName = "GetParentResourceName" in window ? window.GetParentResourceName() : null;
 
@@ -364,7 +370,7 @@ function onKeyDown(event)
 		case "Escape":
 		case "Backspace":
 		{
-			messages.closeCatalog({ id: activeCatalog });
+			messages.closeCatalog({ id: activeCatalog }, true);
 			break;
 		} 
 	}
@@ -436,7 +442,7 @@ function onGamepadButtonPressed(event)
 		case 1:	// B or Circle
 		case 8: // BACK BUTTON
 		{
-			messages.closeCatalog({ id: activeCatalog });
+			messages.closeCatalog({ id: activeCatalog }, true);
 			break;
 		} 
 	}
@@ -591,7 +597,7 @@ function init()
 	// close widget onclick
 	vehicleWidget.close.onclick = function()
 	{
-		messages.closeCatalog({ id: activeCatalog });
+		messages.closeCatalog({ id: activeCatalog }, true);
 	}
 
 	// append vehicle widgets to DOM
