@@ -29,7 +29,7 @@ async function onSetActiveVehicle(data, callback)
 	}
 
 	// request model
-	RequestModel(model)
+	RequestModel(model);
 
 	// wait for model to load
 	while (!HasModelLoaded(model))
