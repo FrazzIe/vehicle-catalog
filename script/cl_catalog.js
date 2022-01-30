@@ -68,5 +68,31 @@ function onRegisterCategory(id, data)
 	});
 }
 
+/**
+ * Open a catalog
+ * @param {object} options 
+ * @param {number} options.id catalog id
+ * @param {object} options.position vehicle position
+ * @param {number} options.position.x x
+ * @param {number} options.position.y y
+ * @param {number} options.position.z z
+ * @param {number} options.position.heading heading
+ * @param {object} options.camera camera offsets
+ * @param {object} options.camera.attach ATTACH_CAM_TO_ENTITY offset
+ * @param {number} options.camera.attach.x x
+ * @param {number} options.camera.attach.y y
+ * @param {number} options.camera.attach.z z
+ * @param {bool} options.camera.attach.length adds the length of the model to the offset
+ * @param {bool} options.camera.attach.breadth adds the breadth of the model to the offset
+ * @param {object} options.camera.point POINT_CAM_AT_ENTITY offset
+ * @param {number} options.camera.point.x x
+ * @param {number} options.camera.point.y y
+ * @param {number} options.camera.point.z z
+ */
+function onOpenCatalog(options)
+{
+	// TODO
+}
+
 on("onClientResourceStart", onInit);
 onNet("vehicle-catalog:registerCatalog", onRegisterCategory);
