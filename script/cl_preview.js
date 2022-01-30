@@ -27,6 +27,9 @@ function onSetActiveVehicle(data, callback)
 	{
 		return;
 	}
+
+	// request model
+	RequestModel(model)
 	
 	if (activeCatalog.position == null)
 	{
