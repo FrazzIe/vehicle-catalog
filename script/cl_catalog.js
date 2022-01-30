@@ -200,3 +200,4 @@ function onCloseCatalog(id, callback)
 on("onClientResourceStart", onInit);
 onNet("vehicle-catalog:registerCatalog", onRegisterCategory);
 onNet("vehicle-catalog:openCatalog", onOpenCatalog);
+onNet("vehicle-catalog:closeCatalog", onCloseCatalog);
