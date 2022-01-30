@@ -5,7 +5,7 @@ const entities = [];
  * @param {string} data vehicle model
  * @param {function} callback 
  */
-function onSetActiveVehicle(data, callback)
+async function onSetActiveVehicle(data, callback)
 {
 	const model = data;
 
@@ -30,6 +30,12 @@ function onSetActiveVehicle(data, callback)
 
 	// request model
 	RequestModel(model)
+
+	// wait for model to load
+	while (!HasModelLoaded(model))
+	{
+		await delay(50);
+	}
 	
 	if (activeCatalog.position == null)
 	{
