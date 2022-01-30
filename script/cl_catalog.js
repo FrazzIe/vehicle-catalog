@@ -142,6 +142,9 @@ function onOpenCatalog(options)
 	// set active catalog
 	activeCatalog = options;
 
+	// set camera focus
+	SetFocusPosAndVel(options.position.x, options.position.y, options.position.z, 0.0, 0.0, 0.0);
+
 	// setup camera
 	activeCatalog.camera.handle = CreateCam("DEFAULT_SCRIPTED_CAMERA", true);
 
@@ -176,6 +179,9 @@ function onCloseCatalog(id, callback)
 	{
 		DeleteEntity(entities.pop());
 	}
+
+	// clear camera focus
+	ClearFocus();
 
 	// reset camera
 	SetCamActive(activeCatalog.camera.handle, false);
