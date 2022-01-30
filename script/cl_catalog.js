@@ -1,3 +1,5 @@
+let activeCatalog;
+
 /**
  * Listen for init event
  */

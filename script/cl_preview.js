@@ -31,6 +31,13 @@ function createPreview(model, position)
  */
 function onSetActiveVehicle(data, callback)
 {
+	if (activeCatalog == null)
+	{
+		return;
+	}
+
+	activeCatalog.model = data;
+
 	// delete previous vehicles
 	while (entities.length > 0)
 	{
