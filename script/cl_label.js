@@ -45,4 +45,6 @@ function onResolveStatLabels(data, callback)
 	callback(fields);
 }
 
+RegisterNuiCallbackType("resolveStatLabels");
+
 on("__cfx_nui:resolveStatLabels", onResolveStatLabels);

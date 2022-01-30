@@ -104,4 +104,6 @@ async function onSetActiveVehicle(data, callback)
 	}
 }
 
+RegisterNuiCallbackType("setActiveVehicle");
+
 on("__cfx_nui:setActiveVehicle", onSetActiveVehicle);

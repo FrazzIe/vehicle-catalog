@@ -203,6 +203,8 @@ function onCloseCatalog(id, callback)
 	}
 }
 
+RegisterNuiCallbackType("close");
+
 on("onClientResourceStart", onInit);
 onNet("vehicle-catalog:registerCatalog", onRegisterCategory);
 onNet("vehicle-catalog:openCatalog", onOpenCatalog);
