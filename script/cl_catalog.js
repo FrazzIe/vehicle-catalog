@@ -142,7 +142,11 @@ function onOpenCatalog(options)
 	// set active catalog
 	activeCatalog = options;
 
-	// TODO: Setup camera
+	// setup camera
+	activeCatalog.camera.handle = CreateCam("DEFAULT_SCRIPTED_CAMERA", true);
+
+	SetCamActive(activeCatalog.camera.handle, true);
+	RenderScriptCams(true, false, 0, true, false);
 
 	// take focus
 	SetNuiFocus(true, true);
