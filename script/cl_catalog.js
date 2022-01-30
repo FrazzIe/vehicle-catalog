@@ -5,9 +5,9 @@ let activeCatalog;
 /**
  * Listen for init event
  */
-function onInit()
+async function onInit()
 {
-	// TODO: add an await
+	await delay(1000);
 
 	// init web ui
 	SendNUIMessage({ type: "init" });
