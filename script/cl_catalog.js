@@ -81,14 +81,14 @@ function onRegisterCategory(id, data)
  * @param {number} options.position.x x
  * @param {number} options.position.y y
  * @param {number} options.position.z z
- * @param {number} options.position.heading heading
+ * @param {number} [options.position.heading] heading
  * @param {object} options.camera camera offsets
  * @param {object} options.camera.attach ATTACH_CAM_TO_ENTITY offset
  * @param {number} options.camera.attach.x x
  * @param {number} options.camera.attach.y y
  * @param {number} options.camera.attach.z z
- * @param {bool} options.camera.attach.length adds the length of the model to the offset
- * @param {bool} options.camera.attach.breadth adds the breadth of the model to the offset
+ * @param {bool} [options.camera.attach.length] adds the length of the model to the offset
+ * @param {bool} [options.camera.attach.breadth] adds the breadth of the model to the offset
  * @param {object} options.camera.point POINT_CAM_AT_ENTITY offset
  * @param {number} options.camera.point.x x
  * @param {number} options.camera.point.y y
@@ -96,12 +96,13 @@ function onRegisterCategory(id, data)
  */
 function onOpenCatalog(options)
 {
+	// prevent execution on invalid options structure
 	if (options == null)
 	{
 		return;
 	}
 
-	if (options.id == null || options.id == "")
+	if (options.id == null || options.id == "" || options.position == null || options.camera == null)
 	{
 		return;
 	}
@@ -111,6 +112,39 @@ function onOpenCatalog(options)
 	{
 		return;
 	}
+
+	if (isNaN(options.position.x) || isNaN(options.position.y) || isNaN(options.position.z))
+	{
+		return;
+	}
+
+	if (options.camera.attach == null || options.camera.point == null)
+	{
+		return;
+	}
+
+	if (isNaN(options.camera.attach.x) || isNaN(optionscamera.attach.y) || isNaN(options.camera.attach.z) || isNaN(options.camera.point.x) || isNaN(optionscamera.point.y) || isNaN(options.camera.point.z))
+	{
+		return;
+	}
+
+	// default values for optional options
+	if (isNaN(options.position.heading))
+	{
+		options.position.heading = 0;
+	}
+
+	if (options.camera.attach.length == null)
+	{
+		options.camera.attach.length = false;
+	}
+
+	if (options.camera.attach.breadth == null)
+	{
+		options.camera.attach.breadth = false;
+	}
+
+	
 }
 
 on("onClientResourceStart", onInit);
