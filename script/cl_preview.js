@@ -71,6 +71,14 @@ async function onSetActiveVehicle(data, callback)
 	entities.push(handle);
 
 	// TODO: attach & point camera at entity
+
+	// send vehicle stats to web ui
+	const [success, stats] = getVehicleStats(vehicleClassStats, handle);
+
+	if (success)
+	{
+		callback(stats);
+	}
 }
 
 on("__cfx_nui:setActiveVehicle", onSetActiveVehicle);
