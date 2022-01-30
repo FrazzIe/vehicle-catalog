@@ -70,7 +70,30 @@ async function onSetActiveVehicle(data, callback)
 	// add created vehicle to entity list
 	entities.push(handle);
 
-	// TODO: attach & point camera at entity
+	// attach & point camera at entity
+	if (activeCatalog.camera.offset == null || activeCatalog.camera.update)
+	{
+		let length = 0;
+		let breadth = 0;
+
+		if (activeCatalog.camera.attach.length || activeCatalog.camera.attach.breadth)
+		{
+			const dimensions = GetModelDimensions(model);
+
+			if (activeCatalog.camera.attach.length)
+			{
+				length = (dimensions[1][1] - dimensions[0][1]) / 2;
+			}
+
+			if (activeCatalog.camera.attach.breadth)
+			{
+				breadth = (dimensions[1][0] - dimensions[0][0]) / 2;
+			}
+		}
+
+		AttachCamToEntity(activeCatalog.camera.handle, handle, breadth + activeCatalog.camera.attach.x, length + activeCatalog.camera.attach.y, activeCatalog.camera.attach.z, true);
+		PointCamAtEntity(activeCatalog.camera.handle, handle, activeCatalog.camera.point.x, activeCatalog.camera.point.y, activeCatalog.camera.point.z, true);
+	}
 
 	// send vehicle stats to web ui
 	const [success, stats] = getVehicleStats(vehicleClassStats, handle);
