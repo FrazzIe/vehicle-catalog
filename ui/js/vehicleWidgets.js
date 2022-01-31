@@ -5,6 +5,8 @@ let close;
 let stats;
 let price;
 let button;
+let loader;
+let loaderLabel;
 
 /**
  * Create vehicle information widgets
@@ -82,6 +84,33 @@ function create()
 		button.textContent = "Select";
 
 		widgets.appendChild(button);
+	}
+
+	{ // simple loader
+		loader = document.createElement("div");
+
+		loader.classList.add("overlay");
+		loader.style.display = "none";
+
+		const container = document.createElement("div");
+
+		container.classList.add("content");
+
+		loader.appendChild(container);
+
+		const spinner = document.createElement("div");
+
+		spinner.classList.add("loader");
+
+		container.appendChild(spinner);
+
+		loaderLabel = document.createElement("div");
+
+		loaderLabel.textContent = "LOADER_PLACEHOLDER";
+
+		container.appendChild(loaderLabel);
+
+		widgets.appendChild(loader);
 	}
 
 	return widgets;
