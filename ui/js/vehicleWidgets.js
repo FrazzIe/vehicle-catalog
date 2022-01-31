@@ -116,4 +116,4 @@ function create()
 	return widgets;
 }
 
-export { label, close, stats, price, button, create };
+export { label, close, stats, price, button, loader, loaderLabel, create };
