@@ -52,7 +52,7 @@ function onRegisterCategory(id, data)
 	// get resolved vehicle label for each vehicle
 	for (let i = 0; i < data.vehicles.length; i++)
 	{
-		for (let j = 0; j < data.vehicles[i]; j++)
+		for (let j = 0; j < data.vehicles[i].length; j++)
 		{
 			const vehicle = data.vehicles[i][j];
 
