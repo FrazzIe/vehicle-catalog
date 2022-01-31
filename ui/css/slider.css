@@ -137,7 +137,7 @@
 	top: 50%;
 	left: 50%;
 
-	border: solid rgba(0, 0, 0, 0.5);
+	border: solid rgba(245, 245, 245, 0.5);;
 	border-width: 0 10px 10px 0;
 	
 	padding: 5px;
@@ -147,7 +147,7 @@
 
 .slider .arrow-container:hover .arrow
 {
-	border-color: rgba(0, 0, 0, 0.8);
+	border-color: rgba(245, 245, 245, 0.7);
 }
 
 .slider .arrow-container .arrow.left
