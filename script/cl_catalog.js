@@ -155,7 +155,12 @@ function onOpenCatalog(options)
 	SetNuiFocus(true, true);
 
 	// open catalog
-	SendNUIMessage({ type: "openCatalog", id: options.id });
+	SendNUIMessage({
+		type: "openCatalog",
+		payload: {
+			id: options.id
+		}
+	});
 }
 
 /**
@@ -199,7 +204,12 @@ function onCloseCatalog(id, callback)
 	}
 	else
 	{
-		SendNUIMessage({ type: "closeCatalog", id: id });
+		SendNUIMessage({
+			type: "closeCatalog",
+			payload: {
+				id: id
+			}
+		});
 	}
 }
 
