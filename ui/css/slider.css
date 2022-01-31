@@ -46,7 +46,7 @@
 
 .slider .item-container .item:hover
 {
-	border-color: #3498DB;
+	border-color: rgba(52, 152, 219, 0.75);
 }
 
 .slider .item-container .item.visible
@@ -107,14 +107,9 @@
 	background-color: #3498DB;
 }
 
-.slider .item-container .item.selected.active div
-{
-	background-color: rgba(25, 117, 179, 70);
-}
-
 .slider .item-container .item:hover div
 {
-	background-color: #3498DB;
+	background-color: rgba(52, 152, 219, 0.75);;
 }
 
 .slider .arrow-container
