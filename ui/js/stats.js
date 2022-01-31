@@ -211,7 +211,7 @@ class Stats
 			}
 
 			// set empty bars
-			for (let j = numBars - numEmpty; j < numEmpty; j++)
+			for (let j = numBars - numEmpty; j < (numBars - numEmpty) + numEmpty; j++)
 			{
 				bars.children[j].children[0].style.width = "0%";
 			}
