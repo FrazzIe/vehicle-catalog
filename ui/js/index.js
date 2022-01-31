@@ -624,6 +624,73 @@ function init()
 		messages.closeCatalog({ id: activeCatalog }, true);
 	}
 
+	// select-btn widget onclick
+	vehicleWidget.button.onclick = function()
+	{
+		// prevent if loader is shown
+		if (vehicleWidget.loader.style.display != "none")
+		{
+			return;
+		}
+
+		// get current catalog, category & vehicle
+		const catalog = activeCatalog;
+		const catagory = navbar.index;
+		const vehicle = sliders[catagory].index;
+
+		// prevent going further
+		if (catalog == null || catagory == null || vehicle == null)
+		{
+			return;
+		}
+
+		// get vehicle data
+		const data = catalogs[catalog].vehicles[catagory][vehicle];
+
+		// prevent going further
+		if (data == null)
+		{
+			return;
+		}
+
+		// update loader label
+		if (vehicleWidget.loaderLabel != null)
+		{
+			vehicleWidget.loaderLabel.textContent = data.price == null ? "Selecting" : "Purchasing";
+		}
+
+		// show loader
+		vehicleWidget.loader.style.display = "block";
+
+		const resourceName = "GetParentResourceName" in window ? window.GetParentResourceName() : null;
+
+		if (resourceName == null)
+		{
+			vehicleWidget.loader.style.display = "none";
+
+			return;
+		}
+	
+		// notify game script of vehicle select
+		fetch(`https://${resourceName}/select`, {
+			method: "POST",
+			body: JSON.stringify({
+				catalog: catalog,
+				catagory: catagory,
+				vehicle: vehicle
+			})
+		})
+		.then(response => response.json())
+		.then(data => {
+			if (data == true)
+			{
+				messages.closeCatalog({ id: activeCatalog }, true);
+			}
+
+			vehicleWidget.loader.style.display = "none";
+		});
+	}
+
 	// append vehicle widgets to DOM
 	app.appendChild(widgetContainer);
 
