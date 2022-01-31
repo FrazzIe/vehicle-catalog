@@ -93,8 +93,8 @@ function getClassStats()
  */
 function getVehicleStats(classStats, vehicle)
 {
-	const vehicleClass = GetVehicleClass(vehicle);
-	const vehicleModel = GetEntityModel(vehicle);
+	const _class = GetVehicleClass(vehicle);
+	const model = GetEntityModel(vehicle);
 
 	if (classStats == null || classStats.length != numVehicleClasses)
 	{
