@@ -31,7 +31,7 @@ function onInitResponse(catalogs)
 	// register each catalog
 	for (const id in catalogs)
 	{
-		onRegisterCategory(id, catalogs[data]);
+		onRegisterCategory(id, catalogs[id]);
 	}
 
 	removeEventListener("vehicle-catalog:init", onInitResponse);
