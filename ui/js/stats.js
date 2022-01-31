@@ -155,7 +155,7 @@ class Stats
 			return;
 		}
 
-		let numValues = this.values.length;
+		let numValues = values.length;
 
 		// prevent looping through invalid fields
 		if (numValues > this.#fields.length)
