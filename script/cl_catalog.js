@@ -76,7 +76,7 @@ function onRegisterCategory(id, data)
 /**
  * Open a catalog
  * @param {object} options 
- * @param {number} options.id catalog id
+ * @param {string} options.id catalog id
  * @param {object} options.position vehicle position
  * @param {number} options.position.x x
  * @param {number} options.position.y y
