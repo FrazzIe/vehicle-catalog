@@ -321,6 +321,12 @@ function onKeyDown(event)
 		return;
 	}
 
+	// prevent if loader is shown
+	if (vehicleWidget.loader.style.display == "none")
+	{
+		return;
+	}
+
 	switch(event.key)
 	{
 		case "w":
@@ -384,6 +390,12 @@ function onKeyDown(event)
  */
 function onMouseWheel(event)
 {
+	// prevent if loader is shown
+	if (vehicleWidget.loader.style.display == "none")
+	{
+		return;
+	}
+
 	if (event.deltaY == 0)
 	{
 		return;
@@ -413,6 +425,12 @@ function onMouseWheel(event)
  */
 function onGamepadButtonPressed(event)
 {
+	// prevent if loader is shown
+	if (vehicleWidget.loader.style.display == "none")
+	{
+		return;
+	}
+
 	switch(event.detail.button)
 	{
 		case 14: // D-PAD LEFT
@@ -454,6 +472,12 @@ function onGamepadButtonPressed(event)
  */
 function onGamepadAxesMove(event)
 {
+	// prevent if loader is shown
+	if (vehicleWidget.loader.style.display == "none")
+	{
+		return;
+	}
+
 	switch(event.detail.axes)
 	{
 		case 0: // LEFT STICK X-AXIS
