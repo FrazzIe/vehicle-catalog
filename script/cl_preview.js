@@ -73,6 +73,8 @@ async function onSetActiveVehicle(data, callback)
 	// attach & point camera at entity
 	if (activeCatalog.camera.offset == null || activeCatalog.camera.update)
 	{
+		activeCatalog.camera.offset = true;
+
 		let length = 0;
 		let breadth = 0;
 
