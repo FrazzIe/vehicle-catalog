@@ -322,7 +322,7 @@ function onKeyDown(event)
 	}
 
 	// prevent if loader is shown
-	if (vehicleWidget.loader.style.display == "none")
+	if (vehicleWidget.loader.style.display != "none")
 	{
 		return;
 	}
@@ -391,7 +391,7 @@ function onKeyDown(event)
 function onMouseWheel(event)
 {
 	// prevent if loader is shown
-	if (vehicleWidget.loader.style.display == "none")
+	if (vehicleWidget.loader.style.display != "none")
 	{
 		return;
 	}
@@ -426,7 +426,7 @@ function onMouseWheel(event)
 function onGamepadButtonPressed(event)
 {
 	// prevent if loader is shown
-	if (vehicleWidget.loader.style.display == "none")
+	if (vehicleWidget.loader.style.display != "none")
 	{
 		return;
 	}
@@ -473,7 +473,7 @@ function onGamepadButtonPressed(event)
 function onGamepadAxesMove(event)
 {
 	// prevent if loader is shown
-	if (vehicleWidget.loader.style.display == "none")
+	if (vehicleWidget.loader.style.display != "none")
 	{
 		return;
 	}
