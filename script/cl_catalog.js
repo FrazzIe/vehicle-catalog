@@ -124,7 +124,7 @@ function onOpenCatalog(options)
 		return;
 	}
 
-	if (isNaN(options.camera.attach.x) || isNaN(optionscamera.attach.y) || isNaN(options.camera.attach.z) || isNaN(options.camera.point.x) || isNaN(optionscamera.point.y) || isNaN(options.camera.point.z))
+	if (isNaN(options.camera.attach.x) || isNaN(options.camera.attach.y) || isNaN(options.camera.attach.z) || isNaN(options.camera.point.x) || isNaN(options.camera.point.y) || isNaN(options.camera.point.z))
 	{
 		return;
 	}
