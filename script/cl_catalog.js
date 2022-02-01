@@ -4,9 +4,16 @@ let activeCatalog;
 
 /**
  * Listen for init event
+ * @param resourceName name of resource that was started
  */
-async function onInit()
+async function onInit(resourceName)
 {
+	// only handle init of this resource
+	if (GetCurrentResourceName() != resourceName)
+	{
+		return;
+	}
+
 	await delay(1000);
 
 	// init web ui
