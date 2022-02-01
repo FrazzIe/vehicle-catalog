@@ -635,17 +635,17 @@ function init()
 
 		// get current catalog, category & vehicle
 		const catalog = activeCatalog;
-		const catagory = navbar.index;
-		const vehicle = sliders[catagory].index;
+		const category = navbar.index;
+		const vehicle = sliders[category].index;
 
 		// prevent going further
-		if (catalog == null || catagory == null || vehicle == null)
+		if (catalog == null || category == null || vehicle == null)
 		{
 			return;
 		}
 
 		// get vehicle data
-		const data = catalogs[catalog].vehicles[catagory][vehicle];
+		const data = catalogs[catalog].vehicles[category][vehicle];
 
 		// prevent going further
 		if (data == null)
@@ -676,7 +676,7 @@ function init()
 			method: "POST",
 			body: JSON.stringify({
 				catalog: catalog,
-				catagory: catagory,
+				category: category,
 				vehicle: vehicle
 			})
 		})
