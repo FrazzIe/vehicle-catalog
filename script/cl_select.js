@@ -18,6 +18,24 @@ function onSelectVehicle(data, callback)
 	emitNet("vehicle-catalog:selectStart", data);
 }
 
+/**
+ * Event listener for finsing select vehicle
+ * 
+ * Ends vehicle selected transaction
+ * 
+ * If success close catalog
+ * 
+ * Else disable loading screen
+ * @param {bool} success 
+ */
+function onSelectEnd(success)
+{
+	if (selectCallback != null)
+	{
+		selectCallback(success == true);
+
+		selectCallback = null;
+	}
 }
 
 RegisterNuiCallbackType("select");
