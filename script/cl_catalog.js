@@ -186,6 +186,8 @@ function onCloseCatalog(id, callback)
 		return;
 	}
 
+	selectCallback = null;
+
 	// delete previous vehicles
 	while (entities.length > 0)
 	{
