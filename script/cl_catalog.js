@@ -1,197 +1,231 @@
-const catalog = {
-	data: null,
-	tick: null,
-	camera: null,
-	visible: false,
-	offset: false,
-	preview: {
-		current: null,
-		entities: []
-	}
-}
+const catalogs = {};
 
-function isCatalogDataValid(data) {
-	if (data == null) {
-		return "No data received";
-	}
+let activeCatalog;
 
-	if (data.vehicle == null || isNaN(data.vehicle.x) == true || isNaN(data.vehicle.y) == true || isNaN(data.vehicle.z) == true || isNaN(data.vehicle.w) == true) {
-		return "No vehicle position received";
-	}
-
-	if (data.offset == null) {
-		return "No offsets received";
-	}
-
-	if (data.offset.attach == null || isNaN(data.offset.attach.x) == true || isNaN(data.offset.attach.y) == true || isNaN(data.offset.attach.z) == true) {
-		return "No attach offset position received";
-	}
-
-	if (data.offset.point == null || isNaN(data.offset.point.x) == true || isNaN(data.offset.point.y) == true || isNaN(data.offset.point.z) == true) {
-		return "No point offset position received";
-	}
-
-	if (data.updateOffset == null) {
-		data.updateOffset = false;
-	}		
-
-	if (data.offsetLength == null) {
-		data.offsetLength = false;
-	}
-
-	if (data.showPrice == null) {
-		data.showPrice = false;
-	}
-
-	catalog.data = data;
-
-	return true;
-}
-
-async function showVehicle(model) {
-	while (catalog.preview.entities.length) {
-		DeleteEntity(catalog.preview.entities.pop());
-	}
-
-	const [loaded, err] = await loadModel(model);
-
-	if (loaded == false) {
-		console.log(`${err}, skipping...`);
-		return;
-	}
-
-	if (catalog.preview.current != model) {
-		console.log(`"${model}" is no longer active, unloading..`);
-		SetModelAsNoLongerNeeded(model);
-		return;
-	}
-
-	const handle = spawnVehicle(model, catalog.data.vehicle);
-
-	if (catalog.preview.current != model) {
-		console.log(`"${model}" is no longer active, deleting..`);
-		DeleteEntity(handle);
-		return;
-	}
-
-	catalog.preview.entities.push(handle);
-
-	if (catalog.offset == null || catalog.data.updateOffset == true) {
-		catalog.offset = true;
-		let length = 0;
-
-		if (catalog.data.offsetLength == true) {
-			let dimensions = GetModelDimensions(model);
-			length = (dimensions[1][1] - dimensions[0][1]) / 2;
-		}
-
-		AttachCamToEntity(catalog.camera, handle, catalog.data.offset.attach.x, length + catalog.data.offset.attach.y, catalog.data.offset.attach.z, true);
-		PointCamAtEntity(catalog.camera, handle, catalog.data.offset.point.x, catalog.data.offset.point.y, catalog.data.offset.point.z, true);
-	}
-}
-
-function onCatalogTick() {
-	removeHud();
-}
-
-async function onInit(resourceName) {
-	if (config.resourceName != resourceName) {
+/**
+ * Listen for init event
+ * @param resourceName name of resource that was started
+ */
+async function onInit(resourceName)
+{
+	// only handle init of this resource
+	if (GetCurrentResourceName() != resourceName)
+	{
 		return;
 	}
 
 	await delay(1000);
 
-	let onServerInit;
+	// init web ui
+	SendNUIMessage({ type: "init" });
 
-	onServerInit = function(url) {
-		const endpoint = url == "" ? getServerEndpoint() : url;
-		
-		SendNUIMessage({
-			type: "Init",
-			payload: { 
-				endpoint: endpoint,
-				labels: getStatLabels()
-			}
-		});
+	// register temporary init event
+	onNet("vehicle-catalog:init", onInitResponse);
 
-		removeEventListener(`${config.resourceName}:onInit`, onServerInit);
-		emit(`${config.resourceName}:onInit`);			
-	}
-
-	onNet(`${config.resourceName}:onInit`, onServerInit);
-	emitNet(`${config.resourceName}:onInit`);
+	// init, sync client to server
+	emitNet("vehicle-catalog:init");
 }
 
-function onOpen(data) {
-	if (catalog.visible == true) {
-		onClose();
+/**
+ * Listen for init response from server
+ * 
+ * Synchronises registered catalogs with server
+ * 
+ * @param {object[]} catalogs collection of catalog objects
+ */
+function onInitResponse(catalogs)
+{
+	// register each catalog
+	for (const id in catalogs)
+	{
+		onRegisterCategory(id, catalogs[id]);
 	}
 
-	const result = isCatalogDataValid(data);
+	removeEventListener("vehicle-catalog:init", onInitResponse);
+}
 
-	if (result != true) {
-		console.log("%s, unable to open.", result);
-		return;
+/**
+ * Registers a catalog
+ * @param {string} id catalog id
+ * @param {object} data catalog data
+ * @param {string[]} data.categories list of catagories
+ * @param {object[][]} data.vehicles list of vehicles
+ */
+function onRegisterCategory(id, data)
+{
+	// store catalog
+	catalogs[id] = true;
+
+	// get resolved vehicle label for each vehicle
+	for (let i = 0; i < data.vehicles.length; i++)
+	{
+		for (let j = 0; j < data.vehicles[i].length; j++)
+		{
+			const vehicle = data.vehicles[i][j];
+
+			if (vehicle != null)
+			{
+				vehicle.label = getVehicleName(vehicle.model);
+			}
+		}
 	}
 
-	catalog.visible = true;
-	catalog.tick = setTick(onCatalogTick);
-	catalog.camera = setupCamera();
-
-	SetNuiFocus(true, true);
-	SetFocusPosAndVel(catalog.data.vehicle.x, catalog.data.vehicle.y, catalog.data.vehicle.z, 0.0, 0.0, 0.0);
-
+	// send catalog to web ui
 	SendNUIMessage({
-		type: "Show",
+		type: "registerCatalog",
 		payload: {
-			visible: true,
-			showPrice: catalog.data.showPrice
+			id: id,
+			data: data
 		}
 	});
 }
 
-function onClose(data, cb) {
-	const ped = PlayerPedId();
-	const pos = GetEntityCoords(ped);
-
-	while (catalog.preview.entities.length) {
-		DeleteEntity(catalog.preview.entities.pop());
-	}
-
-	removeCamera(cameraHandle);
-
-	if (catalog.tick != null) {
-		clearTick(catalog.tick);
-		catalog.tick = null;
-	}
-
-	SetNuiFocus(false, false);
-	SetFocusPosAndVel(pos[0], pos[1], pos[2], 0.0, 0.0, 0.0);
-
-	catalog.offset = false;
-	catalog.visible = false;
-
-	if (cb != null) {
-		cb("ok");
-	}
-}
-
-function onIndexChanged(data, cb) {
-	if (data.error != null) {
-		cb("error");
+/**
+ * Open a catalog
+ * @param {object} options 
+ * @param {string} options.id catalog id
+ * @param {object} options.position vehicle position
+ * @param {number} options.position.x x
+ * @param {number} options.position.y y
+ * @param {number} options.position.z z
+ * @param {number} [options.position.heading] heading
+ * @param {object} options.camera camera offsets
+ * @param {object} options.camera.attach ATTACH_CAM_TO_ENTITY offset
+ * @param {number} options.camera.attach.x x
+ * @param {number} options.camera.attach.y y
+ * @param {number} options.camera.attach.z z
+ * @param {bool} [options.camera.attach.length] adds the length of the model to the offset
+ * @param {bool} [options.camera.attach.breadth] adds the breadth of the model to the offset
+ * @param {object} options.camera.point POINT_CAM_AT_ENTITY offset
+ * @param {number} options.camera.point.x x
+ * @param {number} options.camera.point.y y
+ * @param {number} options.camera.point.z z
+ * @param {bool} options.camera.update use ATTACH_CAM_TO_ENTITY & POINT_CAM_AT_ENTITY on each vehicle
+ */
+function onOpenCatalog(options)
+{
+	// prevent execution on invalid options structure
+	if (options == null)
+	{
 		return;
 	}
 
-	catalog.preview.current = data.model;
+	if (options.id == null || options.id == "" || options.position == null || options.camera == null)
+	{
+		return;
+	}
 
-	showVehicle(data.model);
+	// ensure catalog exists
+	if (!catalogs[options.id])
+	{
+		return;
+	}
 
-	cb("ok");
+	if (isNaN(options.position.x) || isNaN(options.position.y) || isNaN(options.position.z))
+	{
+		return;
+	}
+
+	if (options.camera.attach == null || options.camera.point == null)
+	{
+		return;
+	}
+
+	if (isNaN(options.camera.attach.x) || isNaN(options.camera.attach.y) || isNaN(options.camera.attach.z) || isNaN(options.camera.point.x) || isNaN(options.camera.point.y) || isNaN(options.camera.point.z))
+	{
+		return;
+	}
+
+	// default values for optional options
+	if (isNaN(options.position.heading))
+	{
+		options.position.heading = 0;
+	}
+
+	options.camera.attach.length = options.camera.attach.length == true;
+	options.camera.attach.breadth = options.camera.attach.breadth == true;
+	options.camera.update = options.camera.update == true;
+
+	// set active catalog
+	activeCatalog = options;
+
+	// set camera focus
+	SetFocusPosAndVel(options.position.x, options.position.y, options.position.z, 0.0, 0.0, 0.0);
+
+	// setup camera
+	activeCatalog.camera.handle = CreateCam("DEFAULT_SCRIPTED_CAMERA", true);
+
+	SetCamActive(activeCatalog.camera.handle, true);
+	RenderScriptCams(true, false, 0, true, false);
+
+	// take focus
+	SetNuiFocus(true, true);
+
+	// open catalog
+	SendNUIMessage({
+		type: "openCatalog",
+		payload: {
+			id: options.id
+		}
+	});
+}
+
+/**
+ * Close catalog
+ * @param {string} id catalog id 
+ */
+function onCloseCatalog(id, callback)
+{
+	if (activeCatalog == null)
+	{
+		if (callback != null)
+		{
+			callback("ok");
+		}
+
+		return;
+	}
+
+	selectCallback = null;
+
+	// delete previous vehicles
+	while (entities.length > 0)
+	{
+		DeleteEntity(entities.pop());
+	}
+
+	// clear camera focus
+	ClearFocus();
+
+	// reset camera
+	SetCamActive(activeCatalog.camera.handle, false);
+	RenderScriptCams(false, false, 0, true, false);
+	DestroyCam(activeCatalog.camera.handle, false);
+
+	// release focus
+	SetNuiFocus(false, false);
+
+	activeCatalog = null;
+
+	if (callback != null)
+	{
+		callback("ok");
+	}
+	else
+	{
+		SendNUIMessage({
+			type: "closeCatalog",
+			payload: {
+				id: id
+			}
+		});
+	}
 }
 
 RegisterNuiCallbackType("close");
-RegisterNuiCallbackType("indexChanged");
 
 on("onClientResourceStart", onInit);
-on("__cfx_nui:close", onClose);
-on("__cfx_nui:indexChanged", onIndexChanged);
+onNet("vehicle-catalog:registerCatalog", onRegisterCategory);
+onNet("vehicle-catalog:openCatalog", onOpenCatalog);
+onNet("vehicle-catalog:closeCatalog", onCloseCatalog);
+on("__cfx_nui:close", onCloseCatalog);

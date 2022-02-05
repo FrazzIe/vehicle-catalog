@@ -18,6 +18,15 @@ let sliderFocused;
 */
 
 /**
+ * Initialise globals that require the game script initialised
+ */
+messages.init = function()
+{
+	// load stats labels
+	vehicleWidget.stats.load();
+}
+
+/**
  * Register a catalog
  * @param {object} payload Message payload
  * @param {string} payload.id catalog id
@@ -171,8 +180,9 @@ messages.openCatalog = function(payload)
  * Close a catalog
  * @param {object} payload
  * @param {string} payload.id catalog id 
+ * @param {bool} local is func being called locally (not from gamescript)
  */
-messages.closeCatalog = function(payload)
+messages.closeCatalog = function(payload, local)
 {
 	if (activeCatalog == null)
 	{
@@ -191,6 +201,11 @@ messages.closeCatalog = function(payload)
 	app.style.display = "none";
 
 	activeCatalog = null;
+
+	if (!local)
+	{
+		return;
+	}
 
 	const resourceName = "GetParentResourceName" in window ? window.GetParentResourceName() : null;
 
@@ -306,6 +321,12 @@ function onKeyDown(event)
 		return;
 	}
 
+	// prevent if loader is shown
+	if (vehicleWidget.loader.style.display != "none")
+	{
+		return;
+	}
+
 	switch(event.key)
 	{
 		case "w":
@@ -355,7 +376,7 @@ function onKeyDown(event)
 		case "Escape":
 		case "Backspace":
 		{
-			messages.closeCatalog({ id: activeCatalog });
+			messages.closeCatalog({ id: activeCatalog }, true);
 			break;
 		} 
 	}
@@ -369,6 +390,12 @@ function onKeyDown(event)
  */
 function onMouseWheel(event)
 {
+	// prevent if loader is shown
+	if (vehicleWidget.loader.style.display != "none")
+	{
+		return;
+	}
+
 	if (event.deltaY == 0)
 	{
 		return;
@@ -398,6 +425,12 @@ function onMouseWheel(event)
  */
 function onGamepadButtonPressed(event)
 {
+	// prevent if loader is shown
+	if (vehicleWidget.loader.style.display != "none")
+	{
+		return;
+	}
+
 	switch(event.detail.button)
 	{
 		case 14: // D-PAD LEFT
@@ -427,7 +460,7 @@ function onGamepadButtonPressed(event)
 		case 1:	// B or Circle
 		case 8: // BACK BUTTON
 		{
-			messages.closeCatalog({ id: activeCatalog });
+			messages.closeCatalog({ id: activeCatalog }, true);
 			break;
 		} 
 	}
@@ -439,6 +472,12 @@ function onGamepadButtonPressed(event)
  */
 function onGamepadAxesMove(event)
 {
+	// prevent if loader is shown
+	if (vehicleWidget.loader.style.display != "none")
+	{
+		return;
+	}
+
 	switch(event.detail.axes)
 	{
 		case 0: // LEFT STICK X-AXIS
@@ -524,7 +563,7 @@ function setActiveVehicle(data)
 	}
 
 	// update game script with selected vehicle
-	fetch(`https://${resourceName}/indexChanged`, {
+	fetch(`https://${resourceName}/setActiveVehicle`, {
 		method: "POST",
 		body: JSON.stringify(data.model)
 	})
@@ -582,7 +621,74 @@ function init()
 	// close widget onclick
 	vehicleWidget.close.onclick = function()
 	{
-		messages.closeCatalog({ id: activeCatalog });
+		messages.closeCatalog({ id: activeCatalog }, true);
+	}
+
+	// select-btn widget onclick
+	vehicleWidget.button.onclick = function()
+	{
+		// prevent if loader is shown
+		if (vehicleWidget.loader.style.display != "none")
+		{
+			return;
+		}
+
+		// get current catalog, category & vehicle
+		const catalog = activeCatalog;
+		const category = navbar.index;
+		const vehicle = sliders[category].index;
+
+		// prevent going further
+		if (catalog == null || category == null || vehicle == null)
+		{
+			return;
+		}
+
+		// get vehicle data
+		const data = catalogs[catalog].vehicles[category][vehicle];
+
+		// prevent going further
+		if (data == null)
+		{
+			return;
+		}
+
+		// update loader label
+		if (vehicleWidget.loaderLabel != null)
+		{
+			vehicleWidget.loaderLabel.textContent = data.price == null ? "Selecting" : "Purchasing";
+		}
+
+		// show loader
+		vehicleWidget.loader.style.display = "block";
+
+		const resourceName = "GetParentResourceName" in window ? window.GetParentResourceName() : null;
+
+		if (resourceName == null)
+		{
+			vehicleWidget.loader.style.display = "none";
+
+			return;
+		}
+	
+		// notify game script of vehicle select
+		fetch(`https://${resourceName}/select`, {
+			method: "POST",
+			body: JSON.stringify({
+				catalog: catalog,
+				category: category,
+				vehicle: vehicle
+			})
+		})
+		.then(response => response.json())
+		.then(data => {
+			if (data == true)
+			{
+				messages.closeCatalog({ id: activeCatalog }, true);
+			}
+
+			vehicleWidget.loader.style.display = "none";
+		});
 	}
 
 	// append vehicle widgets to DOM

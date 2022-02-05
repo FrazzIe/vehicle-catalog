@@ -39,7 +39,7 @@ class Stats
 			this.#numBars = Stats.MAX_NUM_BAR;
 		}
 
-		this.#fields = {};
+		this.#fields = [];
 
 		// create DOM object
 		this.domElement = document.createElement("div");
@@ -155,7 +155,7 @@ class Stats
 			return;
 		}
 
-		let numValues = this.values.length;
+		let numValues = values.length;
 
 		// prevent looping through invalid fields
 		if (numValues > this.#fields.length)
@@ -211,7 +211,7 @@ class Stats
 			}
 
 			// set empty bars
-			for (let j = numBars - numEmpty; j < numEmpty; j++)
+			for (let j = numBars - numEmpty; j < (numBars - numEmpty) + numEmpty; j++)
 			{
 				bars.children[j].children[0].style.width = "0%";
 			}

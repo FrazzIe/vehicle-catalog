@@ -1,27 +1,50 @@
-function onGetLabels(data, cb) {
-	const labels = {};
+/**
+ * Get name of a vehicle
+ * @param {string} model vehicle model
+ * @returns {string} vehicle name
+ */
+function getVehicleName(model)
+{
+	if (model == null || model == "")
+	{
+		return null;
+	}
 
-	if (data == null) {
-		cb({ error: true });
+	if (!IsModelInCdimage(model))
+	{
+		return null;
+	}
+
+	const label = GetDisplayNameFromVehicleModel(model);
+	
+	return GetLabelText(label);
+}
+
+/**
+ * Resolve a list of stat labels
+ * @param {string[]} data stat fields
+ * @param {function} callback callback func
+ */
+function onResolveStatLabels(data, callback)
+{
+	if (data == null || data.length == 0)
+	{
+		callback("ok");
+
 		return;
 	}
 
-	for (let i = 0; i < data.length; i++) {
-		for (let j = 0; j < data[i].length; j++) {
-			const vehicle = data[i][j];
+	const fields = [];
 
-			if (vehicle != null && vehicle.model != null) {
-				const name = GetDisplayNameFromVehicleModel(vehicle.model);
-				const text = GetLabelText(name);
-
-				labels[vehicle.model] = text;
-			}
-		}
+	// resolve labels
+	for (let i = 0; i < data.length; i++)
+	{
+		fields[i] = GetLabelText(data[i]);
 	}
 
-	cb(labels);
+	callback(fields);
 }
 
-RegisterNuiCallbackType("getLabels");
+RegisterNuiCallbackType("resolveStatLabels");
 
-on("__cfx_nui:getLabels", onGetLabels);
+on("__cfx_nui:resolveStatLabels", onResolveStatLabels);
