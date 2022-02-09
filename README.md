@@ -145,3 +145,7 @@ on("vehicle-catalog:selectVehicle", function(src, catalog, model, price, callbac
 	}
 });
 ```
+
+# Preview
+
+![Preview image of resource](./docs/preview.png)
