@@ -199,7 +199,7 @@ class Slider
 		image.onerror = function()
 		{
 			image.onerror = null;
-			image.src = "img/default.png";
+			image.src = "img/default.webp";
 			image.alt = "A default image";
 		};
 
