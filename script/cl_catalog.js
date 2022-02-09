@@ -149,6 +149,12 @@ function onOpenCatalog(options)
 	// set active catalog
 	activeCatalog = options;
 
+	// hide hud
+	if (hudTick == null)
+	{
+		hudTick = setTick(onHudTick);
+	}
+
 	// set camera focus
 	SetFocusPosAndVel(options.position.x, options.position.y, options.position.z, 0.0, 0.0, 0.0);
 
@@ -192,6 +198,12 @@ function onCloseCatalog(id, callback)
 	while (entities.length > 0)
 	{
 		DeleteEntity(entities.pop());
+	}
+
+	// show hud
+	if (hudTick != null)
+	{
+		clearTick(hudTick);
 	}
 
 	// clear camera focus
