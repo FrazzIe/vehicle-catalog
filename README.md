@@ -101,3 +101,47 @@ emit("vehicle-catalog:registerCatalog", "catalog_id", {
 	]
 });
 ```
+
+# Event Listeners
+
+## Server
+
+### Select Vehicle
+
+- name: `vehicle-catalog:selectVehicle`
+- payload: string | number, string, string, number | undefined, function
+
+#### Example (node)
+
+```js
+/**
+ * Event listener that's triggered when a vehicle is selected
+ * @param {string | number} src player id
+ * @param {string} catalog catalog id
+ * @param {string} model vehicle model
+ * @param {number | undefined} [price] vehicle price
+ * @param {function} callback tell the script to continue or close
+ */
+on("vehicle-catalog:selectVehicle", function(src, catalog, model, price, callback)
+{
+	// simple price check
+	
+	// if vehicle is free or not priced everything is ok
+	if (!price)
+	{
+		callback(true); // tells the catalog to close
+	}
+
+	const playerMoney = 5000; // fake player money
+
+	if (playerMoney >= price)
+	{
+		// we can buy
+		callback(true); // tells the catalog to close
+	}
+	else
+	{
+		callback(false); // tells the catalog to stay open, but closes the loading screen
+	}
+});
+```
